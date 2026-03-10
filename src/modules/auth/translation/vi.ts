@@ -9,6 +9,7 @@ export default {
     passwordPlaceholder: "Nhập mật khẩu...",
     passwordFeedback: "Mật khẩu không được để trống!",
     submitBtn: "Đăng nhập",
+    bannerAlt: "Ảnh nền đăng nhập",
   },
   errors: {
     invalidEmail: "Email chưa đúng định dạng. Vd: abc@gmail.com",

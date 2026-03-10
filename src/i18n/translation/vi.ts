@@ -5,5 +5,14 @@ export default {
   users: "Người dùng",
   settings: "Cài đặt",
   login: "Đăng nhập",
-  logout: "Đăng xuất"
+  logout: "Đăng xuất",
+  customers: "Khách hàng",
+  employees: "Nhân viên",
+  orders: "Đơn hàng",
+  appointments: "Lịch hẹn",
+  profile: "Hồ sơ",
+  darkMode: "Chế độ Tối",
+  lightMode: "Chế độ Sáng",
+  logoMini: "A",
+  logoFull: "SPA Thanh Xuân",
 };

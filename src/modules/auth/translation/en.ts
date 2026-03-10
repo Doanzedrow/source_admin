@@ -9,6 +9,7 @@ export default {
     passwordPlaceholder: "Enter your password...",
     passwordFeedback: "Password cannot be empty!",
     submitBtn: "Log in",
+    bannerAlt: "Login Banner Background",
   },
   errors: {
     invalidEmail: "Invalid email format. Ex: abc@gmail.com",

@@ -1,8 +1,9 @@
 import { Outlet } from 'react-router-dom';
+import './AuthLayout.less';
 
 const AuthLayout = () => {
   return (
-    <div style={{ width: '100vw', height: '100vh', display: 'flex', backgroundColor: 'var(--bg-color)' }}>
+    <div className="auth-layout-container">
       <Outlet />
     </div>
   );

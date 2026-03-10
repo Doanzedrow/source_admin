@@ -1,4 +1,4 @@
-/* src/modules/auth/styles/login.less */
+@import "../../../styles/variables.less";
 
 .login-page-container {
   display: flex;
@@ -8,9 +8,9 @@
   
   /* Left panel for branding or image */
   .login-banner {
-    flex: 1;
+    flex: 1.2; // Tỉ lệ 1.2 cho banner (Khoảng ~55% màn hình)
     display: none; // Hidden on mobile
-    background-color: var(--primary-color);
+    background-color: @primary-color;
     position: relative;
     
     @media (min-width: 900px) {
@@ -21,6 +21,14 @@
       color: #fff;
     }
 
+    .banner-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
     .banner-content {
       position: absolute;
       top: 50%;
@@ -41,46 +49,49 @@
       }
     }
     
-    /* Overlay to make text readable if using background image */
-    .banner-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(24,144,255,0.8) 0%, rgba(0,21,41,0.9) 100%);
-      z-index: 1;
-    }
+
   }
 
   /* Right panel for login form */
   .login-form-wrapper {
-    flex: 1;
+    flex: 1; // Form sẽ lấy nốt không gian còn lại (Tỉ lệ 1 tức ~45% màn hình)
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 24px;
     
     @media (min-width: 900px) {
-      flex: 0 0 450px;
+      flex: 0 0 500px; /* Đảm bảo form đủ to trên màn hình vừa */
       background-color: var(--body-bg);
       box-shadow: -10px 0 30px rgba(0,0,0,0.05);
       z-index: 5;
     }
 
+    @media (min-width: 1200px) {
+      flex: 0 0 45%; /* Trên màn hình to thì form chiếm hẳn 45% diện tích */
+    }
+
     .login-form-box {
       width: 100%;
-      max-width: 400px;
+      max-width: 480px; /* Nới rộng kích thước nội tại của form */
       
       .login-header {
-        margin-bottom: 32px;
+        margin-bottom: 40px;
         text-align: center;
         
         h2 {
-           color: var(--primary-color) !important;
-           margin-bottom: 8px !important;
+           color: @primary-color !important;
+           margin-bottom: 12px !important;
+           font-size: 2rem !important;
         }
         p {
-           font-size: 14px;
+           font-size: 16px;
            color: var(--text-secondary);
         }
+      }
+
+      .login-submit-wrapper {
+        margin-top: 32px;
       }
     }
   }

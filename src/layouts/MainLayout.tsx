@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Button, Avatar, Dropdown, Space } from 'antd';
+import React from 'react';
+import { Layout, Menu, Avatar, Dropdown, Space } from 'antd';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -11,25 +11,24 @@ import {
   ShopOutlined,
   TransactionOutlined
 } from '@ant-design/icons';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useMainLayout } from './hooks/useMainLayout';
+import { AppButton } from '@/components/common/AppButton';
 import './MainLayout.less';
 
 const { Header, Sider, Content } = Layout;
 
 export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [collapsed, setCollapsed] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
-  }, [isDarkMode]);
-
-  const toggleTheme = () => setIsDarkMode(!isDarkMode);
-  const toggleLanguage = () => i18n.changeLanguage(i18n.language === 'en' ? 'vi' : 'en');
+  const {
+    collapsed,
+    setCollapsed,
+    isDarkMode,
+    toggleTheme,
+    toggleLanguage,
+    t,
+    i18n,
+    location,
+    onMenuClick,
+  } = useMainLayout();
 
   const menuItems = [
     { key: '/dashboard', icon: <DashboardOutlined />, label: t('dashboard') },
@@ -40,51 +39,51 @@ export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }
       icon: <UserOutlined />,
       label: t('users'),
       children: [
-        { key: '/users/customers', label: 'Khách hàng' },
-        { key: '/users/employees', label: 'Nhân viên' },
+        { key: '/users/customers', label: t('customers') },
+        { key: '/users/employees', label: t('employees') },
       ],
     },
-    { key: '/orders', icon: <TransactionOutlined />, label: 'Đơn hàng' },
-    { key: '/appointments', icon: <ShopOutlined />, label: 'Lịch hẹn' },
+    { key: '/orders', icon: <TransactionOutlined />, label: t('orders') },
+    { key: '/appointments', icon: <ShopOutlined />, label: t('appointments') },
     { key: '/system/settings', icon: <SettingOutlined />, label: t('settings') },
   ];
 
   return (
     <Layout className="app-container main-layout">
       <Sider trigger={null} collapsible collapsed={collapsed} theme={isDarkMode ? 'dark' : 'light'} width={250}>
-        <div className="logo-container flex-center">
-          <h2 style={{ margin: 0, color: 'var(--primary-color)' }}>{collapsed ? 'A' : 'Zinisoft'}</h2>
+        <div className="logo-container">
+          <h2>{collapsed ? t('logoMini') : t('logoFull')}</h2>
         </div>
         <Menu
           theme={isDarkMode ? 'dark' : 'light'}
           mode="inline"
           selectedKeys={[location.pathname]}
           items={menuItems}
-          onClick={(e) => navigate(e.key)}
+          onClick={(e) => onMenuClick(e.key)}
         />
       </Sider>
       <Layout>
-        <Header className="layout-header flex-between" style={{ padding: '0 24px', background: 'var(--body-bg)' }}>
-          <Button
+        <Header className="layout-header">
+          <AppButton
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
-            style={{ fontSize: '16px', width: 64, height: 64 }}
+            className="header-toggle-btn"
           />
           <Space size="middle">
-            <Button onClick={toggleLanguage} icon={<GlobalOutlined />}>
+            <AppButton onClick={toggleLanguage} icon={<GlobalOutlined />}>
               {i18n.language.toUpperCase()}
-            </Button>
-            <Button onClick={toggleTheme}>
-              {isDarkMode ? 'Light Mode' : 'Dark Mode'}
-            </Button>
+            </AppButton>
+            <AppButton onClick={toggleTheme}>
+              {isDarkMode ? t('lightMode') : t('darkMode')}
+            </AppButton>
             <Dropdown menu={{
               items: [
-                { key: 'profile', label: 'Hồ sơ' },
+                { key: 'profile', label: t('profile') },
                 { key: 'logout', label: t('logout'), danger: true }
               ]
             }} placement="bottomRight">
-              <Avatar style={{ backgroundColor: 'var(--primary-color)', cursor: 'pointer' }} icon={<UserOutlined />} />
+              <Avatar className="user-avatar" icon={<UserOutlined />} />
             </Dropdown>
           </Space>
         </Header>

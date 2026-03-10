@@ -5,5 +5,14 @@ export default {
   users: "Users",
   settings: "Settings",
   login: "Login",
-  logout: "Logout"
+  logout: "Logout",
+  customers: "Customers",
+  employees: "Employees",
+  orders: "Orders",
+  appointments: "Appointments",
+  profile: "Profile",
+  darkMode: "Dark Mode",
+  lightMode: "Light Mode",
+  logoMini: "A",
+  logoFull: "Thanh Xuan SPA",
 };

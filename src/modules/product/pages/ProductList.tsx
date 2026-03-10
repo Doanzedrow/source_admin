@@ -1,4 +1,5 @@
-import { Table, Button, Space } from 'antd';
+import { Table, Space } from 'antd';
+import { AppButton } from '@/components/common/AppButton';
 import { useTranslation } from 'react-i18next';
 import { useProductList } from '@/modules/product/hooks/useProductList';
 import type { ProductMock } from '@/modules/product/data/productMockData';
@@ -22,12 +23,12 @@ const ProductList = () => {
       key: 'action',
       render: (_: unknown, record: ProductMock) => (
         <Space size="middle">
-          <Button type="link" onClick={() => handleEdit(record.key)}>
+          <AppButton type="link" onClick={() => handleEdit(record.key)}>
             {t('actions.edit')}
-          </Button>
-          <Button danger type="link" onClick={() => handleDelete(record.key)}>
+          </AppButton>
+          <AppButton danger type="link" onClick={() => handleDelete(record.key)}>
             {t('actions.delete')}
-          </Button>
+          </AppButton>
         </Space>
       ),
     },
@@ -37,7 +38,7 @@ const ProductList = () => {
     <div className="product-list-wrapper">
       <div className="flex-between product-header">
         <h2>{t('title')}</h2>
-        <Button type="primary">{t('addProduct')}</Button>
+        <AppButton type="primary">{t('addProduct')}</AppButton>
       </div>
       <Table 
         className="product-table" 
