@@ -28,3 +28,15 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'vi', label: 'Tiếng Việt', flag: '<span class="fi fi-vn"></span>' },
   { code: 'en', label: 'English', flag: '<span class="fi fi-us"></span>' },
 ];
+
+// ==========================================
+// API CONFIGS
+// ==========================================
+export const FRONTEND_MODULE_NAME = 'app';
+export const HTTP_METHOD = {
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  DELETE: 'DELETE',
+  PATCH: 'PATCH',
+} as const;

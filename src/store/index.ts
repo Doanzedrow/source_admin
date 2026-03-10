@@ -1,11 +1,11 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { baseApi } from './baseApi';
-// Import các slice: import authReducer from '@/modules/auth/slice';
+import authReducer from '@/modules/auth/slice/authSlice';
 
 const rootReducer = combineReducers({
   [baseApi.reducerPath]: baseApi.reducer,
-  // auth: authReducer, 
+  auth: authReducer, 
 });
 
 export const store = configureStore({

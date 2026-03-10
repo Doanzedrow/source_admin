@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { getBaseApiUrl } from '@/config/api';
+import { tokenUtil } from './token';
+import { RouteKey, rc } from '@/routes/routeConfig';
 
 // Create a professional Axios Instance customized for Admin App
 const axiosInstance = axios.create({
-  baseURL: getBaseApiUrl(), // ==> Tự động gắn thành https://api.spa.test.zinisoft.net/api/v1.0
+  baseURL: getBaseApiUrl(), 
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -13,8 +15,7 @@ const axiosInstance = axios.create({
 // Request Interceptor: Attach Token
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Read from localStorage or wherever stored
-    const token = localStorage.getItem('accessToken');
+    const token = tokenUtil.getToken();
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -25,19 +26,22 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Response Interceptor: Handle Refresh token & Global Errors
+// Response Interceptor: Handle Global Errors
 axiosInstance.interceptors.response.use(
   (response) => {
-    // Unwrap response data if consistent API response body wrapper
     return response;
   },
   async (error) => {
     const originalRequest = error.config;
-    // Bắt lỗi 401 (Hết Session / Sai Token) để đá văng ra ngoài Login
+    
+    // Unauthorized access (401) - Clear token and redirect to Login
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      localStorage.removeItem('accessToken');
-      window.location.href = '/login';
+      tokenUtil.removeToken();
+      tokenUtil.removeLoggedUser();
+      
+      // Navigate to login
+      window.location.href = rc(RouteKey.Login).path;
     }
     return Promise.reject(error);
   }

@@ -1,24 +1,25 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppNotify } from '@/hooks/useAppNotify';
 import { useAppNavigate } from '@/hooks/useAppNavigate';
-import { useStorage } from '@/hooks/useStorage';
+import { useToken } from '@/hooks/useToken';
+import { useLoginMutation } from '../api/authApi';
 
 export const useLogin = () => {
   const { t } = useTranslation('auth');
   const { goToDashboard } = useAppNavigate();
   const { message: antMessage, notification } = useAppNotify();
-  const { setToken } = useStorage();
-  const [loading, setLoading] = useState(false);
+  const { setToken } = useToken();
+  
+  // RTK Query: useLoginMutation provides the trigger function and state
+  const [login, { isLoading: loading }] = useLoginMutation();
 
-  const handleLogin = async (_values: any) => {
-    setLoading(true);
-
-
+  const handleLogin = async (values: any) => {
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      setToken('mock-token');
+      // RTK Query: Call actual API login and unwrap result
+      const result = await login(values).unwrap();
+      
+      // Store token from API response
+      setToken(result?.accessToken || 'mock-token');
 
       antMessage.success({
         content: t('welcome'),
@@ -31,8 +32,6 @@ export const useLogin = () => {
         message: t('errors.loginFailed'),
         description: t('errors.checkCredentials'),
       });
-    } finally {
-      setLoading(false);
     }
   };
 
