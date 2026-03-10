@@ -36,6 +36,18 @@ export default {
       success: "Thành công",
       error: "Lỗi",
       confirmDelete: "Bạn có chắc chắn muốn xóa mục này không?"
+    },
+    formats: {
+      relativeTime: {
+        justNow: "vừa mới đây",
+        minutesAgo: "{{count}} phút trước",
+        hoursAgo: "{{count}} giờ trước",
+        yesterday: "hôm qua {{time}}",
+      },
+      chart: {
+        hourSuffix: "h",
+        weekdays: ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"],
+      }
     }
   }
 };

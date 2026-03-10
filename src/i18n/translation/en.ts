@@ -36,6 +36,20 @@ export default {
       success: "Success",
       error: "Error",
       confirmDelete: "Are you sure you want to delete this item?"
+    },
+    formats: {
+      relativeTime: {
+        justNow: "just now",
+        minutesAgo_one: "1 minute ago",
+        minutesAgo_other: "{{count}} minutes ago",
+        hoursAgo_one: "1 hour ago",
+        hoursAgo_other: "{{count}} hours ago",
+        yesterday: "yesterday {{time}}",
+      },
+      chart: {
+        hourSuffix: "h",
+        weekdays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      }
     }
   }
 };

@@ -1,8 +1,22 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useGetTodayStatisticsQuery, useGetRecentActivitiesQuery } from '../api/dashboardApi';
+import dayjs from 'dayjs';
+import { 
+  useGetTodayStatisticsQuery, 
+  useGetRecentActivitiesQuery,
+  useGetChartNetRevenueQuery 
+} from '../api/dashboardApi';
+import type { NetRevenueParams } from '../data/dashboard.types';
 
 export const useDashboard = () => {
   const { t } = useTranslation('dashboard');
+  const today = dayjs().format('YYYY-MM-DD');
+
+  const [chartParams, setChartParams] = useState<NetRevenueParams>({
+    startDate: today,
+    endDate: today,
+    type: 'day'
+  });
 
   const { 
     data: stats, 
@@ -16,15 +30,26 @@ export const useDashboard = () => {
     refetch: refetchActivities
   } = useGetRecentActivitiesQuery({ page: 1, limit: 10 });
 
+  const {
+    data: chartData,
+    isLoading: isChartLoading,
+    refetch: refetchChart
+  } = useGetChartNetRevenueQuery(chartParams);
+
   return {
     t,
     stats: stats?.result || {},
     activities: activities?.result?.data || [],
     isStatsLoading,
     isActivitiesLoading,
+    isChartLoading,
+    chartData: chartData?.result || { totalNetRevenue: 0, datas: [] },
+    chartParams,
+    setChartParams,
     refetch: () => {
       refetchStats();
       refetchActivities();
+      refetchChart();
     }
   };
 };

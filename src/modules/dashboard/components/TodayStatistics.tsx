@@ -1,11 +1,14 @@
 import type { TFunction } from 'i18next';
 import { AppCard } from '@/components/common/AppCard';
+import { formatCurrency } from '@/utils/format';
 import type { TodayStatisticsResult } from '../data/dashboard.types';
 import { 
   DollarOutlined, 
   RollbackOutlined, 
   PercentageOutlined, 
-  ArrowDownOutlined 
+  ArrowDownOutlined,
+  ArrowUpOutlined,
+  MinusOutlined
 } from '@ant-design/icons';
 import { TodayStatisticsSkeleton } from './skeletons';
 
@@ -28,8 +31,8 @@ export const TodayStatistics: React.FC<TodayStatisticsProps> = ({ stats, t, isLo
             </div>
             <div className="item-info">
               <span className="label">{t('revenueLabel')}</span>
-              <span className="value">{(stats.revenue || 0).toLocaleString()} đ</span>
-              <span className="sub-value">{stats.orders || 0} {t('ordersValue')}</span>
+              <span className="value">{formatCurrency(stats.totalSaleRevenue || 0)}</span>
+              <span className="sub-value">{stats.totalSaleOrders || 0} {t('ordersValue')}</span>
             </div>
           </div>
 
@@ -39,8 +42,8 @@ export const TodayStatistics: React.FC<TodayStatisticsProps> = ({ stats, t, isLo
             </div>
             <div className="item-info">
               <span className="label">{t('refundsLabel')}</span>
-              <span className="value">{(stats.refunds || 0).toLocaleString()} đ</span>
-              <span className="sub-value">{stats.refundCount || 0} {t('refundsValue')}</span>
+              <span className="value">{formatCurrency(stats.totalReturnRevenue || 0)}</span>
+              <span className="sub-value">{stats.totalReturnOrders || 0} {t('refundsValue')}</span>
             </div>
           </div>
 
@@ -50,18 +53,18 @@ export const TodayStatistics: React.FC<TodayStatisticsProps> = ({ stats, t, isLo
             </div>
             <div className="item-info">
               <span className="label">{t('depositLabel')}</span>
-              <span className="value">{(stats.deposits || 0).toLocaleString()} đ</span>
-              <span className="sub-value">{stats.depositCount || 0} {t('depositValue')}</span>
+              <span className="value">{formatCurrency(stats.totalDepositRevenue || 0)}</span>
+              <span className="sub-value">{stats.totalDepositOrders || 0} {t('depositValue')}</span>
             </div>
           </div>
 
           <div className="stat-item">
-            <div className="item-icon net-revenue">
-              <ArrowDownOutlined />
+            <div className={`item-icon ${!stats.percentChangeYesterday ? 'neutral' : (stats.percentChangeYesterday > 0 ? 'trend-up' : 'trend-down')}`}>
+              {!stats.percentChangeYesterday ? <MinusOutlined /> : (stats.percentChangeYesterday > 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />)}
             </div>
             <div className="item-info">
               <span className="label">{t('netRevenueLabel')}</span>
-              <span className="value">{(stats.netGrowth || 0).toFixed(2)} %</span>
+              <span className="value">{(stats.percentChangeYesterday || 0).toFixed(2)} %</span>
               <span className="sub-value">{t('comparedToYesterday')}</span>
             </div>
           </div>

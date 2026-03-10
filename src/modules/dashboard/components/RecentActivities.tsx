@@ -1,5 +1,6 @@
 import type { TFunction } from 'i18next';
 import { AppCard } from '@/components/common/AppCard';
+import { formatRelativeTime, formatCurrency } from '@/utils/format';
 import type { RecentActivity } from '../data/dashboard.types';
 import { Typography, Flex, Avatar } from 'antd';
 import { HistoryOutlined, NotificationOutlined } from '@ant-design/icons';
@@ -34,15 +35,15 @@ export const RecentActivities: React.FC<RecentActivitiesProps> = ({ activities, 
                 size={32}
                 icon={<NotificationOutlined style={{ fontSize: 13 }} />}
                 className="activity-icon-wrapper"
-                style={{ backgroundColor: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}
               />
               <Flex vertical className="activity-content" style={{ flex: 1 }}>
-                <span 
-                  className="description"
-                  dangerouslySetInnerHTML={{ __html: item.description || '' }}
-                />
+                <span className="description">
+                  <strong>{item.implementer?.fullname || t('unknownUser')}</strong>{' '}
+                  {item.action} {item.activity} <strong>{item.orderCode}</strong>{' '}
+                  {item.description} <strong>{formatCurrency(item.value || 0)}</strong>
+                </span>
                 <Text type="secondary" className="time">
-                  {item.createdAt}
+                  {formatRelativeTime(item.createdAt)}
                 </Text>
               </Flex>
             </Flex>

@@ -34,7 +34,7 @@ export const LayoutHeader: React.FC<LayoutHeaderProps> = ({
         className="header-toggle-btn"
       />
       <Space size="middle">
-        {/* <LanguageSwitcher /> */}
+        <LanguageSwitcher />
         {/* <AppButton onClick={toggleTheme}>
           {isDarkMode ? t('lightMode') : t('darkMode')}
         </AppButton> */}

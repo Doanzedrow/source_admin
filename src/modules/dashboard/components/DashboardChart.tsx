@@ -1,17 +1,47 @@
-import React, { useState } from 'react';
+import React from 'react';
 import type { TFunction } from 'i18next';
 import { Typography, Select, Flex } from 'antd';
+import dayjs from 'dayjs';
 import { AppCard } from '@/components/common/AppCard';
 import { DashboardChartSkeleton } from './skeletons';
+import type { ChartNetRevenueResult, NetRevenueParams } from '../data/dashboard.types';
+import { formatCurrency, formatChartLabel } from '@/utils/format';
 
 interface DashboardChartProps {
   t: TFunction;
-  revenue?: number;
+  data: ChartNetRevenueResult;
   isLoading?: boolean;
+  params: NetRevenueParams;
+  onParamsChange: (params: NetRevenueParams) => void;
 }
 
-export const DashboardChart: React.FC<DashboardChartProps> = ({ t, revenue = 0, isLoading = false }) => {
-  const [activeTab, setActiveTab] = useState('daily');
+export const DashboardChart: React.FC<DashboardChartProps> = ({ 
+  t, 
+  data, 
+  isLoading = false,
+  params,
+  onParamsChange
+}) => {
+  const activeTab = params.type;
+
+  const handleFilterChange = (value: string) => {
+    let startDate = dayjs().format('YYYY-MM-DD');
+    let endDate = dayjs().format('YYYY-MM-DD');
+
+    if (value === 'yesterday') {
+      startDate = dayjs().subtract(1, 'day').format('YYYY-MM-DD');
+      endDate = dayjs().subtract(1, 'day').format('YYYY-MM-DD');
+    } else if (value === 'thisWeek') {
+      startDate = dayjs().startOf('week').format('YYYY-MM-DD');
+      endDate = dayjs().endOf('week').format('YYYY-MM-DD');
+    }
+
+    onParamsChange({ ...params, startDate, endDate });
+  };
+
+  const handleTypeChange = (type: 'day' | 'hour' | 'weekday') => {
+    onParamsChange({ ...params, type });
+  };
 
   return (
     <AppCard className="revenue-chart-card">
@@ -24,9 +54,14 @@ export const DashboardChart: React.FC<DashboardChartProps> = ({ t, revenue = 0, 
               <Typography.Title level={5} style={{ margin: 0 }}>
                 {t('revenueLabel')}
               </Typography.Title>
-              <span className="revenue-badge">{revenue.toLocaleString()} đ</span>
+              <span className="revenue-badge">{formatCurrency(data.totalNetRevenue)}</span>
             </Flex>
-            <Select defaultValue="today" size="small" style={{ width: 120 }}>
+            <Select 
+              defaultValue="today" 
+              size="small" 
+              style={{ width: 120 }}
+              onChange={handleFilterChange}
+            >
               <Select.Option value="today">{t('filter.today')}</Select.Option>
               <Select.Option value="yesterday">{t('filter.yesterday')}</Select.Option>
               <Select.Option value="thisWeek">{t('filter.thisWeek')}</Select.Option>
@@ -35,20 +70,20 @@ export const DashboardChart: React.FC<DashboardChartProps> = ({ t, revenue = 0, 
 
           <Flex className="chart-tabs" gap={24}>
             <div 
-              className={`tab-item ${activeTab === 'daily' ? 'active' : ''}`}
-              onClick={() => setActiveTab('daily')}
+              className={`tab-item ${activeTab === 'day' ? 'active' : ''}`}
+              onClick={() => handleTypeChange('day')}
             >
               {t('tabs.byDay')}
             </div>
             <div 
-              className={`tab-item ${activeTab === 'hourly' ? 'active' : ''}`}
-              onClick={() => setActiveTab('hourly')}
+              className={`tab-item ${activeTab === 'hour' ? 'active' : ''}`}
+              onClick={() => handleTypeChange('hour')}
             >
               {t('tabs.byHour')}
             </div>
             <div 
               className={`tab-item ${activeTab === 'weekday' ? 'active' : ''}`}
-              onClick={() => setActiveTab('weekday')}
+              onClick={() => handleTypeChange('weekday')}
             >
               {t('tabs.byWeekday')}
             </div>
@@ -56,16 +91,14 @@ export const DashboardChart: React.FC<DashboardChartProps> = ({ t, revenue = 0, 
 
           <div className="chart-placeholder">
             <div className="grid-lines">
-              <div />
-              <div />
-              <div />
-              <div />
-              <div />
-              <div />
+              {[...Array(6)].map((_, i) => <div key={i} />)}
             </div>
-            <div className="x-axis">
-              {new Date().toLocaleDateString('vi-VN')}
-            </div>
+            <Flex className="x-axis-labels" justify="space-around" style={{ padding: '8px 0', color: 'var(--text-secondary)', fontSize: 12 }}>
+              {data.datas.map((item, index) => (
+                <div key={index}>{formatChartLabel(item.label, params.type)}</div>
+              ))}
+              {data.datas.length === 0 && <div>{formatChartLabel(params.startDate, 'day')}</div>}
+            </Flex>
           </div>
         </>
       )}
