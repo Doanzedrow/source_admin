@@ -10,6 +10,7 @@ export default {
     passwordFeedback: "Mật khẩu không được để trống!",
     submitBtn: "Đăng nhập",
     bannerAlt: "Ảnh nền đăng nhập",
+    logoAlt: "Logo ứng dụng",
   },
   errors: {
     invalidEmail: "Email chưa đúng định dạng. Vd: abc@gmail.com",

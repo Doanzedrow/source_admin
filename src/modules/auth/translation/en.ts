@@ -10,6 +10,7 @@ export default {
     passwordFeedback: "Password cannot be empty!",
     submitBtn: "Log in",
     bannerAlt: "Login Banner Background",
+    logoAlt: "Application Logo",
   },
   errors: {
     invalidEmail: "Invalid email format. Ex: abc@gmail.com",

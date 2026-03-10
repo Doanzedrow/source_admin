@@ -26,6 +26,11 @@ const Login = () => {
         <div className="login-form-box">
 
           <div className="login-header">
+            <CachedImage 
+              src={APP_ASSETS.LOGO_PRIMARY}
+              alt={t('form.logoAlt')}
+              className="login-logo"
+            />
             <h2>{t('title')}</h2>
             <p>{t('welcome')}</p>
           </div>
