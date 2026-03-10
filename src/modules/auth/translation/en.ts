@@ -2,9 +2,9 @@ export default {
   title: "LOGIN CRM - {{appName}}",
   welcome: "Welcome back! Please enter your details below to continue.",
   form: {
-    email: "Email Address",
-    emailPlaceholder: "Enter your email...",
-    emailFeedback: "Email cannot be empty!",
+    username: "Username",
+    usernamePlaceholder: "Enter your username...",
+    usernameFeedback: "Username cannot be empty!",
     password: "Password",
     passwordPlaceholder: "Enter your password...",
     passwordFeedback: "Password cannot be empty!",
@@ -13,7 +13,7 @@ export default {
     logoAlt: "Application Logo",
   },
   errors: {
-    invalidEmail: "Invalid email format. Ex: abc@gmail.com",
+    invalidUsername: "Username cannot contain special characters",
     invalidPassword: "Password must be at least 6 characters",
     loginFailed: "Login failed. Please check your credentials."
   }

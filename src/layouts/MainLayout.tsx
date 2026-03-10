@@ -7,12 +7,12 @@ import {
   ShoppingOutlined,
   UserOutlined,
   SettingOutlined,
-  GlobalOutlined,
   ShopOutlined,
   TransactionOutlined
 } from '@ant-design/icons';
 import { useMainLayout } from './hooks/useMainLayout';
 import { AppButton } from '@/components/common/AppButton';
+import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import './MainLayout.less';
 
 const { Header, Sider, Content } = Layout;
@@ -23,9 +23,7 @@ export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }
     setCollapsed,
     isDarkMode,
     toggleTheme,
-    toggleLanguage,
     t,
-    i18n,
     location,
     onMenuClick,
   } = useMainLayout();
@@ -71,9 +69,7 @@ export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }
             className="header-toggle-btn"
           />
           <Space size="middle">
-            <AppButton onClick={toggleLanguage} icon={<GlobalOutlined />}>
-              {i18n.language.toUpperCase()}
-            </AppButton>
+            <LanguageSwitcher />
             <AppButton onClick={toggleTheme}>
               {isDarkMode ? t('lightMode') : t('darkMode')}
             </AppButton>

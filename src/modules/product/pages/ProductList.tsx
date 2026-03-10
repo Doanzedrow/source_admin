@@ -4,16 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { useProductList } from '@/modules/product/hooks/useProductList';
 import type { ProductMock } from '@/modules/product/data/productMockData';
 
-// Import CSS less riêng của module
 import '../styles/product.less';
 
 const ProductList = () => {
-  // Trỏ 'product' là namespace trong i18next
   const { t } = useTranslation('product');
-  // Kéo Data & Logic từ Hook riêng ra
   const { data, handleDelete, handleEdit } = useProductList();
 
-  // Khai báo columns cho UI. Chức năng render không nằm chung logic thao tác data
   const columns = [
     { title: t('columns.name'), dataIndex: 'name', key: 'name' },
     { title: t('columns.category'), dataIndex: 'category', key: 'category' },

@@ -2,6 +2,7 @@ import { Form } from 'antd';
 import { AppButton } from '@/components/common/AppButton';
 import { AppInput, AppPassword } from '@/components/common/AppInput';
 import CachedImage from '@/components/common/CachedImage/CachedImage';
+import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import { useLogin } from '../hooks/useLogin';
 import { APP_ASSETS } from '@/config/assets';
 import { APP_NAME } from '@/config/constants';
@@ -22,6 +23,9 @@ const Login = () => {
       </div>
 
       <div className="login-form-wrapper">
+        <div className="language-toggle">
+           <LanguageSwitcher />
+        </div>
         <div className="login-form-box">
           <div className="login-header">
             <CachedImage 
@@ -37,13 +41,13 @@ const Login = () => {
 
           <Form layout="vertical" onFinish={handleLogin} requiredMark={false}>
             <AppInput
-              name="email"
-              label={t('form.email')}
-              placeholder={t('form.emailPlaceholder')}
-              rules={[{ required: true, message: t('form.emailFeedback') }]}
+              name="username"
+              label={t('form.username')}
+              placeholder={t('form.usernamePlaceholder')}
+              rules={[{ required: true, message: t('form.usernameFeedback') }]}
 
-              regex={/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i}
-              regexMessage={t('errors.invalidEmail')}
+              regex={/^[a-zA-Z0-9_]+$/i}
+              regexMessage={t('errors.invalidUsername')}
             />
 
             <AppPassword

@@ -1,22 +1,14 @@
-.dashboard-container {
-  h1 {
-    color: var(--text-primary);
-  }
-}
+@import "../../../styles/variables.less";
 
-.dashboard-stats-list {
-  list-style-type: none;
-  padding: 0;
-  
-  .dashboard-stat-item {
-    background: var(--bg-color);
-    padding: var(--space-md);
-    margin-bottom: var(--space-md);
-    border-radius: var(--border-radius-lg, 8px);
-    
-    h3 {
-      margin: 0;
-      color: var(--primary-color);
+.dashboard-container {
+  .stat-card {
+    background: var(--body-bg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: @box-shadow-base;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
     }
   }
 }

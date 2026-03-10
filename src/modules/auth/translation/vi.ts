@@ -2,9 +2,9 @@ export default {
   title: "ĐĂNG NHẬP CRM - {{appName}}",
   welcome: "Chào mừng trở lại! Vui lòng điền thông tin bên dưới để tiếp tục.",
   form: {
-    email: "Địa chỉ Email",
-    emailPlaceholder: "Nhập email của bạn...",
-    emailFeedback: "Email không được để trống!",
+    username: "Tên đăng nhập",
+    usernamePlaceholder: "Nhập tài khoản của bạn...",
+    usernameFeedback: "Tên đăng nhập không được để trống!",
     password: "Mật khẩu",
     passwordPlaceholder: "Nhập mật khẩu...",
     passwordFeedback: "Mật khẩu không được để trống!",
@@ -13,7 +13,7 @@ export default {
     logoAlt: "Logo ứng dụng",
   },
   errors: {
-    invalidEmail: "Email chưa đúng định dạng. Vd: abc@gmail.com",
+    invalidUsername: "Tên đăng nhập không được chứa ký tự đặc biệt",
     invalidPassword: "Mật khẩu phải từ 6 kí tự trở lên",
     loginFailed: "Đăng nhập thất bại. Kiểm tra lại thông tin."
   }

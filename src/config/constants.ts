@@ -20,3 +20,11 @@ export const DEFAULT_VERSION = '1.0';
 // ==========================================
 export const APP_COLOR_PRIMARY = '#d3929a';
 export const APP_NAME = 'SPA Thanh Xuân';
+
+// ==========================================
+// I18N CONFIGURATION (SUPPORTED LANGUAGES)
+// ==========================================
+export const SUPPORTED_LANGUAGES = [
+  { code: 'vi', label: 'Tiếng Việt', flag: '/images/flag-vi.png' },
+  { code: 'en', label: 'English', flag: '/images/flag-en.png' },
+];
