@@ -15,4 +15,6 @@ export default {
   lightMode: "Light Mode",
   logoMini: "A",
   logoFull: "Thanh Xuan SPA",
+  loading: "Loading data...",
+  forbidden: "403 Forbidden - You do not have permission to access this module!"
 };

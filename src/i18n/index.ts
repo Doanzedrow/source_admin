@@ -10,17 +10,21 @@ import productEn from '@/modules/product/translation/en';
 import productVi from '@/modules/product/translation/vi';
 import authEn from '@/modules/auth/translation/en';
 import authVi from '@/modules/auth/translation/vi';
+import dashboardEn from '@/modules/dashboard/translation/en';
+import dashboardVi from '@/modules/dashboard/translation/vi';
 
 const resources = {
   en: { 
     translation: translationEn,
     product: productEn,
-    auth: authEn
+    auth: authEn,
+    dashboard: dashboardEn
   },
   vi: { 
     translation: translationVi,
     product: productVi,
-    auth: authVi
+    auth: authVi,
+    dashboard: dashboardVi
   }
 };
 

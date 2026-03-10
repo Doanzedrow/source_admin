@@ -10,10 +10,10 @@ interface PageHeaderProps {
 
 export const PageHeader: React.FC<PageHeaderProps> = ({ title, actions, subTitle }) => {
   return (
-    <div className="page-header flex-between" style={{ marginBottom: 24 }}>
+    <div className="page-header flex-between">
       <div className="page-header-title">
-        <h2 style={{ margin: 0 }}>{title}</h2>
-        {subTitle && <span style={{ color: 'var(--text-secondary)', fontSize: 'var(--h5-size)' }}>{subTitle}</span>}
+        <h2>{title}</h2>
+        {subTitle && <span className="page-header-subtitle">{subTitle}</span>}
       </div>
       {actions && (
         <Space size="middle" className="page-header-actions">

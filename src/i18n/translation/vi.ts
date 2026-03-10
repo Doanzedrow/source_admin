@@ -15,4 +15,6 @@ export default {
   lightMode: "Chế độ Sáng",
   logoMini: "A",
   logoFull: "SPA Thanh Xuân",
+  loading: "Đang tải dữ liệu...",
+  forbidden: "403 Bị chối từ - Bạn không có quyền truy cập module này!"
 };

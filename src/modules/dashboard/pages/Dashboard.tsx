@@ -1,13 +1,18 @@
+import { useDashboard } from '../hooks/useDashboard';
+import '../styles/dashboard.less';
+
 const Dashboard = () => {
+  const { t, data } = useDashboard();
+
   return (
-    <div>
-      <h1>Báo cáo tổng hợp</h1>
-      <ul style={{ listStyleType: 'none', padding: 0 }}>
-        <li style={{ background: 'var(--bg-color)', padding: 16, marginBottom: 16, borderRadius: 8 }}>
-          <h3>Doanh thu: 50.000.000đ</h3>
+    <div className="dashboard-container">
+      <h1>{t('title')}</h1>
+      <ul className="dashboard-stats-list">
+        <li className="dashboard-stat-item">
+          <h3>{t('revenue', { amount: data.revenue })}</h3>
         </li>
-        <li style={{ background: 'var(--bg-color)', padding: 16, marginBottom: 16, borderRadius: 8 }}>
-          <h3>Đơn hàng mới: 120</h3>
+        <li className="dashboard-stat-item">
+          <h3>{t('newOrders', { count: data.orders })}</h3>
         </li>
       </ul>
     </div>

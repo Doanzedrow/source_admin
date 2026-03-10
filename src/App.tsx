@@ -23,7 +23,7 @@ function App() {
   return (
     <Provider store={store}>
       <ThemeProvider isDarkMode={isDarkMode}>
-        <Suspense fallback={<div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Loading...</div>}>
+        <Suspense fallback={<div className="app-suspense-fallback">Loading...</div>}>
           <AppRouter />
         </Suspense>
       </ThemeProvider>
