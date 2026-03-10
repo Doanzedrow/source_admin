@@ -12,43 +12,47 @@ const { Text } = Typography;
 
 export const RecentActivities: React.FC = () => {
   const { t } = useTranslation('dashboard');
-  const { data, isLoading } = useGetRecentActivitiesQuery({ page: 1, limit: 10 });
+  const { data, isLoading } = useGetRecentActivitiesQuery({});
   const activities = data?.result?.data || [];
 
   return (
-    <AppCard
-      title={
-        <Flex align="center" gap={8}>
-          {t('recentActivities')}
-        </Flex>
-      }
-      className="activity-sidebar"
-    >
-      {isLoading ? (
-        <RecentActivitiesSkeleton />
-      ) : (
-        <Flex vertical gap={16} className="activity-list">
-          {activities.map((item: RecentActivity, index: number) => (
-            <Flex key={item._id || index} gap={12} align="flex-start" className="activity-item">
-              <Avatar
-                size={32}
-                icon={<NotificationOutlined style={{ fontSize: 13 }} />}
-                className="activity-icon-wrapper"
-              />
-              <Flex vertical className="activity-content" style={{ flex: 1 }}>
-                <span className="description">
-                  <strong>{item.implementer?.fullname || t('unknownUser')}</strong> {item.action}{' '}
-                  {item.activity} <strong>{item.orderCode}</strong> {item.description}{' '}
-                  <strong>{formatCurrency(item.value || 0)}</strong>
-                </span>
-                <Text type="secondary" className="time">
-                  {formatRelativeTime(item.createdAt)}
-                </Text>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <AppCard
+        title={
+          <Flex align="center" gap={8}>
+            {t('recentActivities')}
+          </Flex>
+        }
+        className="activity-sidebar"
+        style={{ height: '100%', display: 'flex', flexDirection: 'column', margin: 0 }}
+        bodyStyle={{ flex: 1, overflowY: 'auto' }}
+      >
+        {isLoading ? (
+          <RecentActivitiesSkeleton />
+        ) : (
+          <Flex vertical gap={16} className="activity-list">
+            {activities.map((item: RecentActivity, index: number) => (
+              <Flex key={item._id || index} gap={12} align="flex-start" className="activity-item">
+                <Avatar
+                  size={32}
+                  icon={<NotificationOutlined style={{ fontSize: 13 }} />}
+                  className="activity-icon-wrapper"
+                />
+                <Flex vertical className="activity-content" style={{ flex: 1 }}>
+                  <span className="description">
+                    <strong>{item.implementer?.fullname || t('unknownUser')}</strong> {item.action}{' '}
+                    {item.activity} <strong>{item.orderCode}</strong> {item.description}{' '}
+                    <strong>{formatCurrency(item.value || 0)}</strong>
+                  </span>
+                  <Text type="secondary" className="time">
+                    {formatRelativeTime(item.createdAt)}
+                  </Text>
+                </Flex>
               </Flex>
-            </Flex>
-          ))}
-        </Flex>
-      )}
-    </AppCard>
+            ))}
+          </Flex>
+        )}
+      </AppCard>
+    </div>
   );
 };

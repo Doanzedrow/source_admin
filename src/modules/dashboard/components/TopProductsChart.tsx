@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Select, Flex, Spin } from 'antd';
+import { Select, Flex, Spin, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import { AppCard } from '@/components/common/AppCard';
 import { formatCurrency } from '@/utils/format';
@@ -71,14 +71,19 @@ export const TopProductsChart: React.FC = () => {
                   <div key={index} className="bar-item">
                     <div className="bar-label" title={item.label}>{item.label}</div>
                     <div className="bar-container">
-                      <div 
-                        className="bar-fill" 
-                        style={{ width: `${width}%` }}
+                      <Tooltip 
+                        title={`${item.label}: ${params.type === 'revenue' ? formatCurrency(value) : value}`} 
+                        placement="topRight"
                       >
-                         <span className="bar-value">
-                           {params.type === 'revenue' ? formatCurrency(value) : value}
-                         </span>
-                      </div>
+                        <div 
+                          className="bar-fill" 
+                          style={{ width: `${width}%` }}
+                        >
+                           <span className="bar-value">
+                             {params.type === 'revenue' ? formatCurrency(value) : value}
+                           </span>
+                        </div>
+                      </Tooltip>
                     </div>
                   </div>
                 );

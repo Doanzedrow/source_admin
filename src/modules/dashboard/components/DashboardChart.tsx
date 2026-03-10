@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Flex, Spin } from 'antd';
+import { Flex, Spin, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import { AppCard } from '@/components/common/AppCard';
 import { DateFilter } from '@/components/common/DateFilter';
@@ -87,11 +87,15 @@ export const DashboardChart: React.FC = () => {
                   const height = (item.total / maxValue) * 100;
                   return (
                     <div key={index} className="bar-column-wrapper">
-                      <div 
-                        className="bar-column" 
-                        style={{ height: `${height}%` }}
+                      <Tooltip 
                         title={`${formatChartLabel(item.label, params.type)}: ${formatCurrency(item.total)}`}
-                      />
+                        placement="top"
+                      >
+                        <div 
+                          className="bar-column" 
+                          style={{ height: `${height}%` }}
+                        />
+                      </Tooltip>
                     </div>
                   );
                 })}

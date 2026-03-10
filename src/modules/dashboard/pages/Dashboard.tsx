@@ -17,7 +17,7 @@ const Dashboard = () => {
     <div className="dashboard-page">
       <SEO title={t('seoTitle')} description={t('seoDescription')} />
       
-      <Row gutter={[24, 24]}>
+      <Row gutter={[24, 24]} align="stretch">
         <Col xs={24} lg={16}>
           <TodayStatistics />
           <DashboardChart />
@@ -31,8 +31,10 @@ const Dashboard = () => {
             </Col>
           </Row>
         </Col>
-        <Col xs={24} lg={8}>
-          <RecentActivities />
+        <Col xs={24} lg={8} style={{ position: 'relative' }}>
+          <div style={{ position: 'absolute', top: 0, left: 12, right: 12, bottom: 0 }}>
+            <RecentActivities />
+          </div>
         </Col>
       </Row>
     </div>

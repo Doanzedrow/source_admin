@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Flex, Spin } from 'antd';
+import { Flex, Spin, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import { AppCard } from '@/components/common/AppCard';
 import { formatCurrency } from '@/utils/format';
@@ -57,12 +57,14 @@ export const TopCustomersChart: React.FC = () => {
                   <div key={index} className="bar-item">
                     <div className="bar-label" title={item.label}>{item.label}</div>
                     <div className="bar-container">
-                      <div 
-                        className="bar-fill" 
-                        style={{ width: `${width}%` }}
-                      >
-                         <span className="bar-value">{formatCurrency(value)}</span>
-                      </div>
+                      <Tooltip title={`${item.label}: ${formatCurrency(value)}`} placement="topRight">
+                        <div 
+                          className="bar-fill" 
+                          style={{ width: `${width}%` }}
+                        >
+                           <span className="bar-value">{formatCurrency(value)}</span>
+                        </div>
+                      </Tooltip>
                     </div>
                   </div>
                 );

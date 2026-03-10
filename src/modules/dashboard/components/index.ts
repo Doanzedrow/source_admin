@@ -3,4 +3,3 @@ export * from './RecentActivities';
 export * from './DashboardChart';
 export * from './TopProductsChart';
 export * from './TopCustomersChart';
-export * from './DashboardDateFilter';
