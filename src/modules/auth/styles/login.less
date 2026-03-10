@@ -54,13 +54,14 @@
     justify-content: center;
     align-items: center;
     padding: var(--space-lg);
-    position: relative; /* Thêm position relative để định vị icon góc phải */
-    
+    position: relative;
+    /* Thêm position relative để định vị icon góc phải */
+
     .language-toggle {
-       position: absolute;
-       top: var(--space-lg);
-       right: var(--space-lg);
-       z-index: 10;
+      position: absolute;
+      top: var(--space-lg);
+      right: var(--space-lg);
+      z-index: 10;
     }
 
     @media (min-width: 900px) {
@@ -104,7 +105,57 @@
       }
 
       .login-submit-wrapper {
-        margin-top: var(--space-xl);
+        margin-top: var(--space-lg);
+      }
+
+
+      .remembered-user-section {
+        display: flex;
+        align-items: center;
+        gap: var(--space-md);
+        padding: var(--space-md) var(--space-lg);
+        background: var(--bg-color);
+        border-radius: var(--border-radius-lg);
+        margin-bottom: var(--space-lg);
+        border: 1px solid var(--border-color);
+
+        .remembered-avatar {
+          background-color: var(--primary-color);
+          flex-shrink: 0;
+        }
+
+        .remembered-info {
+          display: flex;
+          flex-direction: column;
+          min-width: 0;
+
+          .remembered-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.4;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          .remembered-username {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.3;
+          }
+        }
+      }
+
+      .switch-account-link {
+        text-align: center;
+        margin-top: var(--space-sm);
+
+        .ant-btn-link {
+          font-size: 14px;
+          padding: 0;
+          height: auto;
+        }
       }
     }
   }

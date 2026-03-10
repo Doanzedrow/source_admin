@@ -3,6 +3,7 @@ export default {
   seoTitle: "Đăng nhập hệ thống",
   seoDescription: "Truy cập hệ thống quản trị CRM SPA Thanh Xuân.",
   welcome: "Chào mừng trở lại! Vui lòng điền thông tin bên dưới để tiếp tục.",
+  welcomeBack: "Nhập mật khẩu để tiếp tục đăng nhập.",
   form: {
     username: "Tên đăng nhập",
     usernamePlaceholder: "Nhập tài khoản của bạn...",
@@ -11,6 +12,9 @@ export default {
     passwordPlaceholder: "Nhập mật khẩu...",
     passwordFeedback: "Mật khẩu không được để trống!",
     submitBtn: "Đăng nhập",
+    rememberAccount: "Nhớ tài khoản",
+    switchAccount: "Đăng nhập bằng tài khoản khác",
+    backToRemembered: "Đăng nhập với {{name}}",
     bannerAlt: "Ảnh nền đăng nhập",
     logoAlt: "Logo ứng dụng",
   },

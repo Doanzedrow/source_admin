@@ -3,6 +3,7 @@ export default {
   seoTitle: "Login Portal",
   seoDescription: "Access the CRM SPA Thanh Xuan Admin Portal.",
   welcome: "Welcome back! Please enter your details below to continue.",
+  welcomeBack: "Enter your password to continue.",
   form: {
     username: "Username",
     usernamePlaceholder: "Enter your username...",
@@ -11,6 +12,9 @@ export default {
     passwordPlaceholder: "Enter your password...",
     passwordFeedback: "Password cannot be empty!",
     submitBtn: "Log in",
+    rememberAccount: "Remember account",
+    switchAccount: "Sign in with a different account",
+    backToRemembered: "Sign in as {{name}}",
     bannerAlt: "Login Banner Background",
     logoAlt: "Application Logo",
   },

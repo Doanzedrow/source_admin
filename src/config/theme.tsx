@@ -50,6 +50,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode; isDarkMode: bo
           Menu: {
             itemBorderRadius: 4,
           },
+          Form: {
+            itemMarginBottom: 16,
+          },
         },
       }}
     >
