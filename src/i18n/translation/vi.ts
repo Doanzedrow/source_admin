@@ -1,5 +1,7 @@
 export default {
   welcome: "Chào mừng đến với Bảng điều khiển Quản trị",
+  seoDashboardTitle: "Bảng điều khiển - Quản trị SPA Thanh Xuân",
+  seoDashboardDescription: "Quản lý doanh thu, khách hàng và lịch hẹn tại SPA Thanh Xuân.",
   dashboard: "Bảng điều khiển",
   products: "Sản phẩm",
   users: "Người dùng",

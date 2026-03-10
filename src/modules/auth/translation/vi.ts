@@ -1,5 +1,7 @@
 export default {
   title: "ĐĂNG NHẬP CRM - {{appName}}",
+  seoTitle: "Đăng nhập hệ thống",
+  seoDescription: "Truy cập hệ thống quản trị CRM SPA Thanh Xuân.",
   welcome: "Chào mừng trở lại! Vui lòng điền thông tin bên dưới để tiếp tục.",
   form: {
     username: "Tên đăng nhập",

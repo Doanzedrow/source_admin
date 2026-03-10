@@ -1,6 +1,7 @@
 import { Card, Col, Row, Statistic } from 'antd';
 import { ArrowUpOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { useDashboard } from '../hooks/useDashboard';
+import { SEO } from '@/components/common/SEO/SEO';
 import '../styles/dashboard.less';
 
 const Dashboard = () => {
@@ -8,6 +9,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
+      <SEO title={t('seoDashboardTitle')} description={t('seoDashboardDescription')} />
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>
           <Card bordered={false} className="stat-card">

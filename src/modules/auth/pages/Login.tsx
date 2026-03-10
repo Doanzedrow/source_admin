@@ -3,6 +3,7 @@ import { AppButton } from '@/components/common/AppButton';
 import { AppInput, AppPassword } from '@/components/common/AppInput';
 import CachedImage from '@/components/common/CachedImage/CachedImage';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
+import { SEO } from '@/components/common/SEO/SEO';
 import { useLogin } from '../hooks/useLogin';
 import { APP_ASSETS } from '@/config/assets';
 import { APP_NAME } from '@/config/constants';
@@ -14,6 +15,7 @@ const Login = () => {
 
   return (
     <div className="login-page-container">
+      <SEO title={t('seoTitle')} description={t('seoDescription')} />
       <div className="login-banner">
         <CachedImage
           src={APP_ASSETS.BANNER_LOGIN}
@@ -41,6 +43,7 @@ const Login = () => {
 
           <Form layout="vertical" onFinish={handleLogin} requiredMark={false}>
             <AppInput
+              id="username"
               name="username"
               label={t('form.username')}
               placeholder={t('form.usernamePlaceholder')}
@@ -51,6 +54,7 @@ const Login = () => {
             />
 
             <AppPassword
+              id="password"
               name="password"
               label={t('form.password')}
               placeholder={t('form.passwordPlaceholder')}
@@ -62,6 +66,7 @@ const Login = () => {
 
             <Form.Item className="login-submit-wrapper">
               <AppButton
+                id="login-submit"
                 type="primary"
                 htmlType="submit"
                 size="large"

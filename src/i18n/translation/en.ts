@@ -1,5 +1,7 @@
 export default {
   welcome: "Welcome to Admin Dashboard",
+  seoDashboardTitle: "Dashboard - Thanh Xuan SPA Admin",
+  seoDashboardDescription: "Manage revenue, customers and appointments at Thanh Xuan SPA.",
   dashboard: "Dashboard",
   products: "Products",
   users: "Users",

@@ -1,5 +1,7 @@
 export default {
   title: "LOGIN CRM - {{appName}}",
+  seoTitle: "Login Portal",
+  seoDescription: "Access the CRM SPA Thanh Xuan Admin Portal.",
   welcome: "Welcome back! Please enter your details below to continue.",
   form: {
     username: "Username",
