@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import * as Icon from '@ant-design/icons';
+import type { Role } from '@/types';
 
 /**
  * @file App route configuration system.
@@ -23,36 +24,53 @@ export interface RouteConfig {
   subPath?: string;
   icon?: React.ReactElement;
   pather?(...args: Array<any>): string;
+  component?: React.ComponentType<any>;
+  layout?: 'main' | 'auth' | 'none';
+  allowedRoles?: Role[];
 }
 
-const routesArray: RouteConfig[] = [
+export const routesArray: RouteConfig[] = [
   {
     id: RouteKey.Login,
     name: 'Login',
     path: '/login',
+    layout: 'auth',
+    component: lazy(() => import('@/modules/auth/pages/Login')),
   },
   {
     id: RouteKey.Dashboard,
     name: 'Dashboard',
     path: '/dashboard',
     icon: <Icon.DashboardOutlined />,
+    layout: 'main',
+    allowedRoles: ['superadmin', 'admin'],
+    component: lazy(() => import('@/modules/dashboard/pages/Dashboard')),
   },
   {
     id: RouteKey.Products,
     name: 'Products',
     path: '/products',
     icon: <Icon.ShoppingOutlined />,
+    layout: 'main',
+    allowedRoles: ['superadmin', 'admin'],
+    component: lazy(() => import('@/modules/product/pages/ProductList')),
   },
   {
     id: RouteKey.Settings,
     name: 'Settings',
     path: '/system/settings',
     icon: <Icon.SettingOutlined />,
+    layout: 'main',
+    allowedRoles: ['superadmin'],
+    component: lazy(() => Promise.resolve({
+      default: () => <div className="page-content">System Settings / Hệ thống Cài đặt chuyên môn</div>
+    })),
   },
   {
     id: RouteKey.NotFound,
     name: '404 Not Found',
     path: '*',
+    layout: 'none'
   },
 ];
 

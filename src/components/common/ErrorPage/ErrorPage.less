@@ -1,0 +1,26 @@
+.error-page-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--body-bg);
+  z-index: 9999;
+
+  .ant-result {
+    padding: 48px 32px;
+    background: var(--body-bg);
+    border-radius: var(--border-radius-lg);
+
+    .ant-result-title {
+      color: var(--text-primary);
+    }
+
+    .ant-result-subtitle {
+      color: var(--text-secondary);
+    }
+  }
+}

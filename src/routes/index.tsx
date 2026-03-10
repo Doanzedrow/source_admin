@@ -1,63 +1,75 @@
-import { lazy, Suspense } from 'react';
+import { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import type { RouteObject } from 'react-router-dom';
 import { PrivateRoute } from './PrivateRoute';
 import AuthLayout from '@/layouts/AuthLayout';
-import { rc, RouteKey } from './routeConfig';
-import { AppLoader } from '@/components/common/AppLoader/AppLoader';
-
-const Dashboard = lazy(() => import('@/modules/dashboard/pages/Dashboard'));
-const ProductList = lazy(() => import('@/modules/product/pages/ProductList'));
-const Login = lazy(() => import('@/modules/auth/pages/Login'));
+import { routesArray } from './routeConfig';
+import { PageLoader } from '@/components/common/PageLoader/PageLoader';
+import type { Role } from '@/types';
+import { ErrorPage } from '@/components/common/ErrorPage';
 
 
-const Loadable = (Component: React.ComponentType<any>) => (props: any) =>
-(
-  <Suspense fallback={<AppLoader />}>
-    <Component {...props} />
-  </Suspense>
-);
+const generateRoutes = (): RouteObject[] => {
+  const routerRoutes: RouteObject[] = [];
+  const mainRoutesByRole = new Map<string, { roles: Role[], routes: RouteObject[] }>();
 
-// Shared UI fragments with i18n
-const NotFoundPage = () => {
-  const { t } = useTranslation();
-  return <div style={{ padding: '24px', textAlign: 'center' }}>{t('notFound')}</div>;
+  routesArray.forEach((route) => {
+    if (route.layout === 'none' || !route.component) return;
+
+    const Component = route.component;
+    const element = (
+      <Suspense fallback={<PageLoader />}>
+        <Component />
+      </Suspense>
+    );
+
+    if (route.layout === 'auth') {
+      routerRoutes.push({
+        path: route.path,
+        element: <AuthLayout />,
+        children: [{ path: '', element }]
+      });
+    } else if (route.layout === 'main') {
+      const roles = route.allowedRoles || ['superadmin', 'admin'];
+      const key = roles.slice().sort().join(',');
+
+      if (!mainRoutesByRole.has(key)) {
+        mainRoutesByRole.set(key, { roles, routes: [] });
+      }
+
+      mainRoutesByRole.get(key)!.routes.push({
+
+        path: route.path.startsWith('/') ? route.path.substring(1) : route.path,
+        element
+      });
+    }
+  });
+
+
+  mainRoutesByRole.forEach(({ roles, routes }) => {
+
+    const isDefaultGroup = roles.includes('admin') && roles.includes('superadmin');
+
+    routerRoutes.push({
+      path: '/',
+      element: <PrivateRoute allowedRoles={roles} />,
+      children: [
+        ...(isDefaultGroup ? [{ path: '', element: <Navigate to="/dashboard" replace /> }] : []),
+        ...routes
+      ]
+    });
+  });
+
+
+  routerRoutes.push({
+    path: '*',
+    element: <ErrorPage status="404" />
+  });
+
+  return routerRoutes;
 };
 
-const SystemSettingsPlaceholder = () => {
-  const { t } = useTranslation();
-  return <div className="page-content">{t('systemSettings')}</div>;
-};
-
-const router = createBrowserRouter([
-  {
-    path: rc(RouteKey.Login).path,
-    element: <AuthLayout />,
-    children: [
-      { path: '', element: Loadable(Login)({}) }
-    ]
-  },
-  {
-    path: '/',
-    element: <PrivateRoute allowedRoles={['superadmin', 'admin']} />,
-    children: [
-      { path: '', element: <Navigate to={rc(RouteKey.Dashboard).path} replace /> },
-      { path: rc(RouteKey.Dashboard).path.substring(1), element: Loadable(Dashboard)({}) },
-      { path: rc(RouteKey.Products).path.substring(1), element: Loadable(ProductList)({}) },
-    ]
-  },
-  {
-    path: '/system',
-    element: <PrivateRoute allowedRoles={['superadmin']} />,
-    children: [
-      { path: 'settings', element: <SystemSettingsPlaceholder /> }
-    ]
-  },
-  {
-    path: rc(RouteKey.NotFound).path,
-    element: <NotFoundPage />
-  }
-]);
+const router = createBrowserRouter(generateRoutes());
 
 export const AppRouter = () => {
   return <RouterProvider router={router} />;

@@ -29,7 +29,8 @@ export default {
       update: "Update",
       search: "Search",
       filter: "Filter",
-      action: "Action"
+      action: "Action",
+      backHome: "Back to Home"
     },
     messages: {
       success: "Success",

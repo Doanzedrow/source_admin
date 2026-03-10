@@ -29,7 +29,8 @@ export default {
       update: "Cập nhật",
       search: "Tìm kiếm",
       filter: "Lọc",
-      action: "Thao tác"
+      action: "Thao tác",
+      backHome: "Về trang chủ"
     },
     messages: {
       success: "Thành công",
