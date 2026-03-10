@@ -58,7 +58,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 24px;
+    padding: var(--space-lg);
     
     @media (min-width: 900px) {
       flex: 0 0 500px; /* Đảm bảo form đủ to trên màn hình vừa */
@@ -76,33 +76,35 @@
       max-width: 480px; /* Nới rộng kích thước nội tại của form */
       
       .login-header {
-        margin-bottom: 40px;
+        margin-bottom: var(--space-xxl); /* Khoảng cách chuẩn Big Tech 48px */
         text-align: center;
         display: flex;
         flex-direction: column;
         align-items: center;
 
         .login-logo {
-          width: 80px;
-          height: 80px;
-          margin-bottom: 16px;
-          border-radius: var(--border-radius-base);
-          box-shadow: var(--box-shadow-base);
+          /* width/height đã được truyền qua props inline nên bỏ ở đây để không bị xung đột */
+          margin-bottom: var(--space-lg);
+          
+          /* Chỉnh lại lõi hình ảnh bên trong để nằm trọn vẹn không bị mất góc */
+          .cached-image-element {
+            object-fit: contain !important;
+          }
         }
         
         h2 {
            color: @primary-color !important;
-           margin-bottom: 12px !important;
+           margin-bottom: var(--space-sm) !important;
            font-size: 2rem !important;
         }
         p {
-           font-size: 16px;
+           font-size: var(--space-md);
            color: var(--text-secondary);
         }
       }
 
       .login-submit-wrapper {
-        margin-top: 32px;
+        margin-top: var(--space-xl);
       }
     }
   }

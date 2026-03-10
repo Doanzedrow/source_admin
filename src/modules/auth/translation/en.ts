@@ -1,5 +1,5 @@
 export default {
-  title: "System Login",
+  title: "LOGIN CRM - {{appName}}",
   welcome: "Welcome back! Please enter your details below to continue.",
   form: {
     email: "Email Address",

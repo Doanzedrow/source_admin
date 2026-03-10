@@ -19,3 +19,4 @@ export const DEFAULT_VERSION = '1.0';
 // APP CONSTANTS & THEMES
 // ==========================================
 export const APP_COLOR_PRIMARY = '#d3929a';
+export const APP_NAME = 'SPA Thanh Xuân';

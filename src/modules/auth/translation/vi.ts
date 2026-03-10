@@ -1,5 +1,5 @@
 export default {
-  title: "Đăng nhập hệ thống",
+  title: "ĐĂNG NHẬP CRM - {{appName}}",
   welcome: "Chào mừng trở lại! Vui lòng điền thông tin bên dưới để tiếp tục.",
   form: {
     email: "Địa chỉ Email",

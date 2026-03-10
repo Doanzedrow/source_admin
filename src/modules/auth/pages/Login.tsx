@@ -4,6 +4,7 @@ import { AppInput, AppPassword } from '@/components/common/AppInput';
 import CachedImage from '@/components/common/CachedImage/CachedImage';
 import { useLogin } from '../hooks/useLogin';
 import { APP_ASSETS } from '@/config/assets';
+import { APP_NAME } from '@/config/constants';
 import '../styles/login.less';
 
 const Login = () => {
@@ -30,8 +31,10 @@ const Login = () => {
               src={APP_ASSETS.LOGO_PRIMARY}
               alt={t('form.logoAlt')}
               className="login-logo"
+              width={180}
+              height="auto"
             />
-            <h2>{t('title')}</h2>
+            <h2>{t('title', { appName: APP_NAME })}</h2>
             <p>{t('welcome')}</p>
           </div>
 

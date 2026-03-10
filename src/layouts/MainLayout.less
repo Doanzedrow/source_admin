@@ -4,7 +4,7 @@
 }
 
 .logo-container {
-  height: 64px;
+  height: var(--space-xxxl);
   background: var(--body-bg);
   border-bottom: 1px solid var(--border-color);
   border-right: 1px solid var(--border-color);
@@ -23,7 +23,7 @@
 .layout-header {
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   z-index: 9;
-  padding: 0 24px !important;
+  padding: 0 var(--space-lg) !important;
   background: var(--body-bg) !important;
   display: flex;
   justify-content: space-between;
@@ -31,9 +31,9 @@
 }
 
 .header-toggle-btn {
-  font-size: 16px;
-  width: 64px;
-  height: 64px;
+  font-size: var(--space-md);
+  width: var(--space-xxxl);
+  height: var(--space-xxxl);
 }
 
 .user-avatar {
@@ -42,8 +42,8 @@
 }
 
 .layout-content {
-  margin: 24px 16px;
-  padding: 24px;
+  margin: var(--space-lg) var(--space-md);
+  padding: var(--space-lg);
   background: var(--body-bg);
   border-radius: var(--border-radius-lg, 8px);
   min-height: 280px;
