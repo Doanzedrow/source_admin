@@ -1,35 +1,34 @@
-import { Card, Col, Row, Statistic } from 'antd';
-import { ArrowUpOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { Col, Row, Spin } from 'antd';
 import { useDashboard } from '../hooks/useDashboard';
 import { SEO } from '@/components/common/SEO/SEO';
+import { TodayStatistics, RecentActivities, DashboardChart } from '../components';
 import '../styles/dashboard.less';
 
 const Dashboard = () => {
-  const { t, data } = useDashboard();
+  const { t, stats, activities, isLoading } = useDashboard();
+
+  if (isLoading) {
+    return (
+      <div className="dashboard-loading">
+        <Spin size="large" />
+      </div>
+    );
+  }
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-page">
       <SEO title={t('seoTitle')} description={t('seoDescription')} />
-      <Row gutter={[16, 16]}>
-        <Col xs={24} sm={12} lg={6}>
-          <Card bordered={false} className="stat-card">
-            <Statistic
-              title={t('revenueLabel')}
-              value={data.revenue.replace(/[^0-9]/g, '')}
-              prefix={<ArrowUpOutlined />}
-              suffix={t('currencySuffix')}
-              valueStyle={{ color: 'var(--success-color)' }}
-            />
-          </Card>
+      
+      <Row gutter={[24, 24]}>
+        {/* Cột 1: Thông tin Dashboard & Biểu đồ */}
+        <Col xs={24} lg={16}>
+          <TodayStatistics stats={stats} t={t} />
+          <DashboardChart t={t} revenue={stats.revenue} />
         </Col>
-        <Col xs={24} sm={12} lg={6}>
-          <Card bordered={false} className="stat-card">
-            <Statistic
-              title={t('newOrdersLabel')}
-              value={data.orders}
-              prefix={<ShoppingCartOutlined />}
-            />
-          </Card>
+
+        {/* Cột 2: Hoạt động gần đây */}
+        <Col xs={24} lg={8}>
+          <RecentActivities activities={activities} t={t} />
         </Col>
       </Row>
     </div>

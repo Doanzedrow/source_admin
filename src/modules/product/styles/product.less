@@ -1,20 +1,24 @@
-/* src/modules/product/styles/product.less */
 @import "../../../styles/variables.less";
 
 .product-list-wrapper {
+  padding: var(--space-lg);
+  background-color: var(--body-bg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+  margin: var(--space-md);
+
   .product-header {
     margin-bottom: var(--space-lg);
     
     h2 {
-      /* Example extending global variables styling */
       color: var(--primary-color) !important;
+      font-weight: 600;
+      margin: 0;
     }
   }
 
   .product-table {
-    background-color: var(--body-bg);
-    border-radius: @border-radius-base;
-    box-shadow: @box-shadow-base;
+    border: none;
     overflow: hidden;
   }
 }
