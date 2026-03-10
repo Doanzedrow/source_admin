@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Typography, Select, Flex, Spin } from 'antd';
+import { Select, Flex, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { AppCard } from '@/components/common/AppCard';
 import { formatCurrency } from '@/utils/format';
@@ -42,34 +42,34 @@ export const TopProductsChart: React.FC = () => {
   const maxValue = Math.max(...products.map(p => p.total || 0), 1);
 
   return (
-    <AppCard className="top-products-card">
-      <Spin spinning={isFetching}>
-        <Flex className="chart-header" justify="space-between" align="center">
-          <Typography.Title level={5} style={{ margin: 0 }}>
-            {t('topProducts.title')}
-          </Typography.Title>
-          <Flex gap={8}>
-            <Select 
-              defaultValue="revenue" 
-              size="small" 
-              style={{ width: 140 }}
-              onChange={handleTypeChange}
-            >
-              <Select.Option value="revenue">{t('topProducts.byRevenue')}</Select.Option>
-              <Select.Option value="quantity">{t('topProducts.byQuantity')}</Select.Option>
-            </Select>
-            <Select 
-              defaultValue="today" 
-              size="small" 
-              style={{ width: 120 }}
-              onChange={handleDateChange}
-            >
-              <Select.Option value="today">{t('filter.today')}</Select.Option>
-              <Select.Option value="yesterday">{t('filter.yesterday')}</Select.Option>
-              <Select.Option value="thisWeek">{t('filter.thisWeek')}</Select.Option>
-            </Select>
-          </Flex>
+    <AppCard 
+      className="top-products-card"
+      title={t('topProducts.title')}
+      extra={
+        <Flex gap={8}>
+          <Select 
+            defaultValue="revenue" 
+            size="small" 
+            style={{ width: 140 }}
+            onChange={handleTypeChange}
+          >
+            <Select.Option value="revenue">{t('topProducts.byRevenue')}</Select.Option>
+            <Select.Option value="quantity">{t('topProducts.byQuantity')}</Select.Option>
+          </Select>
+          <Select 
+            defaultValue="today" 
+            size="small" 
+            style={{ width: 120 }}
+            onChange={handleDateChange}
+          >
+            <Select.Option value="today">{t('filter.today')}</Select.Option>
+            <Select.Option value="yesterday">{t('filter.yesterday')}</Select.Option>
+            <Select.Option value="thisWeek">{t('filter.thisWeek')}</Select.Option>
+          </Select>
         </Flex>
+      }
+    >
+      <Spin spinning={isFetching}>
 
         <div className="horizontal-bar-chart">
           {isLoading ? (

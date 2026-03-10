@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Typography, Select, Flex, Spin } from 'antd';
+import { Select, Flex, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { AppCard } from '@/components/common/AppCard';
 import { formatCurrency } from '@/utils/format';
@@ -37,23 +37,23 @@ export const TopCustomersChart: React.FC = () => {
   const maxValue = Math.max(...customers.map(c => c.total || 0), 1);
 
   return (
-    <AppCard className="top-customers-card">
+    <AppCard 
+      className="top-customers-card"
+      title={t('topCustomers.title')}
+      extra={
+        <Select 
+          defaultValue="today" 
+          size="small" 
+          style={{ width: 120 }}
+          onChange={handleDateChange}
+        >
+          <Select.Option value="today">{t('filter.today')}</Select.Option>
+          <Select.Option value="yesterday">{t('filter.yesterday')}</Select.Option>
+          <Select.Option value="thisWeek">{t('filter.thisWeek')}</Select.Option>
+        </Select>
+      }
+    >
       <Spin spinning={isFetching}>
-        <Flex className="chart-header" justify="space-between" align="center">
-          <Typography.Title level={5} style={{ margin: 0 }}>
-            {t('topCustomers.title')}
-          </Typography.Title>
-          <Select 
-            defaultValue="today" 
-            size="small" 
-            style={{ width: 120 }}
-            onChange={handleDateChange}
-          >
-            <Select.Option value="today">{t('filter.today')}</Select.Option>
-            <Select.Option value="yesterday">{t('filter.yesterday')}</Select.Option>
-            <Select.Option value="thisWeek">{t('filter.thisWeek')}</Select.Option>
-          </Select>
-        </Flex>
 
         <div className="horizontal-bar-chart">
           {isLoading ? (

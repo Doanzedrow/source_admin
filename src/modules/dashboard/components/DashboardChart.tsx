@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Typography, Select, Flex, Spin } from 'antd';
+import { Select, Flex, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { AppCard } from '@/components/common/AppCard';
 import { DashboardChartSkeleton } from './skeletons';
@@ -43,29 +43,33 @@ export const DashboardChart: React.FC = () => {
   };
 
   return (
-    <AppCard className="revenue-chart-card">
+    <AppCard 
+      className="revenue-chart-card"
+      title={
+        <Flex align="center" gap={8}>
+          <span>{t('revenueLabel')}</span>
+          <span className="revenue-badge" style={{ background: '#e6f7ff', color: '#1890ff', padding: '2px 8px', borderRadius: 4, fontSize: 12 }}>
+            {formatCurrency(data.totalNetRevenue)}
+          </span>
+        </Flex>
+      }
+      extra={
+        <Select 
+          defaultValue="today" 
+          size="small" 
+          style={{ width: 120 }}
+          onChange={handleFilterChange}
+        >
+          <Select.Option value="today">{t('filter.today')}</Select.Option>
+          <Select.Option value="yesterday">{t('filter.yesterday')}</Select.Option>
+          <Select.Option value="thisWeek">{t('filter.thisWeek')}</Select.Option>
+        </Select>
+      }
+    >
       {isLoading ? (
         <DashboardChartSkeleton />
       ) : (
         <Spin spinning={isFetching}>
-          <Flex className="chart-header" justify="space-between" align="center">
-            <Flex className="title-section" align="center" gap={8}>
-              <Typography.Title level={5} style={{ margin: 0 }}>
-                {t('revenueLabel')}
-              </Typography.Title>
-              <span className="revenue-badge">{formatCurrency(data.totalNetRevenue)}</span>
-            </Flex>
-            <Select 
-              defaultValue="today" 
-              size="small" 
-              style={{ width: 120 }}
-              onChange={handleFilterChange}
-            >
-              <Select.Option value="today">{t('filter.today')}</Select.Option>
-              <Select.Option value="yesterday">{t('filter.yesterday')}</Select.Option>
-              <Select.Option value="thisWeek">{t('filter.thisWeek')}</Select.Option>
-            </Select>
-          </Flex>
 
           <Flex className="chart-tabs" gap={24}>
             <div 
