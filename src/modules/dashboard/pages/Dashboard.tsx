@@ -1,6 +1,7 @@
-import { Col, Row, Spin } from 'antd';
+import { Col, Row } from 'antd';
 import { useDashboard } from '../hooks/useDashboard';
 import { SEO } from '@/components/common/SEO/SEO';
+import { AppLoader } from '@/components/common/AppLoader/AppLoader';
 import { TodayStatistics, RecentActivities, DashboardChart } from '../components';
 import '../styles/dashboard.less';
 
@@ -8,11 +9,7 @@ const Dashboard = () => {
   const { t, stats, activities, isLoading } = useDashboard();
 
   if (isLoading) {
-    return (
-      <div className="dashboard-loading">
-        <Spin size="large" />
-      </div>
-    );
+    return <AppLoader />;
   }
 
   return (

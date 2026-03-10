@@ -2,6 +2,7 @@ import { Table, Space } from 'antd';
 import { AppButton } from '@/components/common/AppButton';
 import { useTranslation } from 'react-i18next';
 import { SEO } from '@/components/common/SEO/SEO';
+import { AppLoader } from '@/components/common/AppLoader/AppLoader';
 import { useProductList } from '@/modules/product/hooks/useProductList';
 import type { ProductMock } from '@/modules/product/data/productMockData';
 
@@ -9,7 +10,9 @@ import '../styles/product.less';
 
 const ProductList = () => {
   const { t } = useTranslation(['product', 'translation']);
-  const { data, handleDelete, handleEdit } = useProductList();
+  const { data, isLoading, handleDelete, handleEdit } = useProductList();
+
+  if (isLoading) return <AppLoader />;
 
   const columns = [
     { title: t('columns.name'), dataIndex: 'name', key: 'name' },

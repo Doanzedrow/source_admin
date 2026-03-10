@@ -5,6 +5,7 @@ import type { ProductMock } from '@/modules/product/data/productMockData';
 // Hook Contains Logic
 export const useProductList = () => {
   const [data, setData] = useState<ProductMock[]>(mockProductData);
+  const [isLoading] = useState(false); // Mock loading state
 
   const handleDelete = (key: number) => {
     const newData = data.filter((item) => item.key !== key);
@@ -17,6 +18,7 @@ export const useProductList = () => {
 
   return {
     data,
+    isLoading,
     handleDelete,
     handleEdit,
   };

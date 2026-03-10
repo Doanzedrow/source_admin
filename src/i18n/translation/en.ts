@@ -17,6 +17,8 @@ export default {
   logoFull: "Thanh Xuan SPA",
   loading: "Loading data...",
   forbidden: "403 Forbidden - You do not have permission to access this module!",
+  notFound: "404 - Page not found!",
+  systemSettings: "Professional System Settings",
   common: {
     actions: {
       edit: "Edit",

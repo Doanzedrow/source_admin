@@ -17,6 +17,8 @@ export default {
   logoFull: "SPA Thanh Xuân",
   loading: "Đang tải dữ liệu...",
   forbidden: "403 Bị chối từ - Bạn không có quyền truy cập module này!",
+  notFound: "404 - Không tìm thấy trang này!",
+  systemSettings: "Hệ thống Cài đặt chuyên môn",
   common: {
     actions: {
       edit: "Sửa",
