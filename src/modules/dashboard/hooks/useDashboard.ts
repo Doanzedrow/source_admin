@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import { 
@@ -36,7 +36,13 @@ export const useDashboard = () => {
     refetch: refetchChart
   } = useGetChartNetRevenueQuery(chartParams);
 
-  return {
+  const handleRefetch = useCallback(() => {
+    refetchStats();
+    refetchActivities();
+    refetchChart();
+  }, [refetchStats, refetchActivities, refetchChart]);
+
+  return useMemo(() => ({
     t,
     stats: stats?.result || {},
     activities: activities?.result?.data || [],
@@ -46,10 +52,16 @@ export const useDashboard = () => {
     chartData: chartData?.result || { totalNetRevenue: 0, datas: [] },
     chartParams,
     setChartParams,
-    refetch: () => {
-      refetchStats();
-      refetchActivities();
-      refetchChart();
-    }
-  };
+    refetch: handleRefetch
+  }), [
+    t, 
+    stats, 
+    activities, 
+    isStatsLoading, 
+    isActivitiesLoading, 
+    isChartLoading, 
+    chartData, 
+    chartParams, 
+    handleRefetch
+  ]);
 };

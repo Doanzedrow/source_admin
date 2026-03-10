@@ -1,20 +1,20 @@
-import type { TFunction } from 'i18next';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { AppCard } from '@/components/common/AppCard';
 import { formatRelativeTime, formatCurrency } from '@/utils/format';
 import type { RecentActivity } from '../data/dashboard.types';
 import { Typography, Flex, Avatar } from 'antd';
 import { HistoryOutlined, NotificationOutlined } from '@ant-design/icons';
 import { RecentActivitiesSkeleton } from './skeletons';
+import { useGetRecentActivitiesQuery } from '../api/dashboardApi';
 
 const { Text } = Typography;
 
-interface RecentActivitiesProps {
-  activities: RecentActivity[];
-  t: TFunction;
-  isLoading?: boolean;
-}
+export const RecentActivities: React.FC = () => {
+  const { t } = useTranslation('dashboard');
+  const { data, isLoading } = useGetRecentActivitiesQuery({ page: 1, limit: 10 });
+  const activities = data?.result?.data || [];
 
-export const RecentActivities: React.FC<RecentActivitiesProps> = ({ activities, t, isLoading = false }) => {
   return (
     <AppCard 
       title={
@@ -30,7 +30,7 @@ export const RecentActivities: React.FC<RecentActivitiesProps> = ({ activities, 
       ) : (
         <Flex vertical gap={16} className="activity-list">
           {activities.map((item: RecentActivity, index: number) => (
-            <Flex key={item.id || index} gap={12} align="flex-start" className="activity-item">
+            <Flex key={item._id || index} gap={12} align="flex-start" className="activity-item">
               <Avatar
                 size={32}
                 icon={<NotificationOutlined style={{ fontSize: 13 }} />}

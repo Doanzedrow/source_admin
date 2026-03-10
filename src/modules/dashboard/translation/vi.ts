@@ -25,5 +25,15 @@ export default {
     byDay: "Theo ngày",
     byHour: "Theo giờ",
     byWeekday: "Theo thứ"
-  }
+  },
+  topProducts: {
+    title: "Top 10 hàng bán chạy",
+    byRevenue: "Theo doanh thu",
+    byQuantity: "Theo số lượng"
+  },
+  topCustomers: {
+    title: "Top 10 khách hàng theo doanh thu"
+  },
+  loading: "Đang tải...",
+  unknownUser: "Người dùng không xác định"
 };

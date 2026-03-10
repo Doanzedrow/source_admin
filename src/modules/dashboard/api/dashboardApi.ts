@@ -5,16 +5,19 @@ import { generateEndpointVersionning } from '@/utils/api';
 import type { 
   TodayStatisticsResult, 
   RecentActivity, 
-  DashboardResponse, 
+  DashboardResponse,
   PaginatedResult,
   ChartNetRevenueResult,
-  NetRevenueParams
+  NetRevenueParams,
+  ChartLabelTotalData,
+  TopProductParams,
+  TopCustomerParams
 } from '../data/dashboard.types';
 
 const MODULE_NAME = 'dashboard';
 const ACTIVITY_MODULE = 'activity';
 
-const endpoints: Record<'todayStatistics' | 'recentActivities' | 'chartNetRevenue', Endpoint> = {
+const endpoints: Record<'todayStatistics' | 'recentActivities' | 'chartNetRevenue' | 'chartTopProduct' | 'chartTopCustomer', Endpoint> = {
   todayStatistics: {
     endpoint: `/${MODULE_NAME}/today-statistics`,
   },
@@ -23,6 +26,12 @@ const endpoints: Record<'todayStatistics' | 'recentActivities' | 'chartNetRevenu
   },
   chartNetRevenue: {
     endpoint: `/${MODULE_NAME}/chart-net-revenue`,
+  },
+  chartTopProduct: {
+    endpoint: `/${MODULE_NAME}/chart-top-product`,
+  },
+  chartTopCustomer: {
+    endpoint: `/${MODULE_NAME}/chart-top-customer`,
   },
 };
 
@@ -48,6 +57,20 @@ export const dashboardApi = baseApi.injectEndpoints({
         params,
       }),
     }),
+    getTopProducts: builder.query<DashboardResponse<ChartLabelTotalData[]>, TopProductParams>({
+      query: (params) => ({
+        url: generateEndpointVersionning(endpoints.chartTopProduct),
+        method: HTTP_METHOD.GET,
+        params,
+      }),
+    }),
+    getTopCustomers: builder.query<DashboardResponse<ChartLabelTotalData[]>, TopCustomerParams>({
+      query: (params) => ({
+        url: generateEndpointVersionning(endpoints.chartTopCustomer),
+        method: HTTP_METHOD.GET,
+        params,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -55,5 +78,7 @@ export const dashboardApi = baseApi.injectEndpoints({
 export const { 
   useGetTodayStatisticsQuery, 
   useGetRecentActivitiesQuery,
-  useGetChartNetRevenueQuery 
+  useGetChartNetRevenueQuery,
+  useGetTopProductsQuery,
+  useGetTopCustomersQuery
 } = dashboardApi;

@@ -1,27 +1,24 @@
-import React from 'react';
-import type { TFunction } from 'i18next';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Typography, Select, Flex } from 'antd';
 import dayjs from 'dayjs';
 import { AppCard } from '@/components/common/AppCard';
 import { DashboardChartSkeleton } from './skeletons';
-import type { ChartNetRevenueResult, NetRevenueParams } from '../data/dashboard.types';
+import type { NetRevenueParams } from '../data/dashboard.types';
 import { formatCurrency, formatChartLabel } from '@/utils/format';
+import { useGetChartNetRevenueQuery } from '../api/dashboardApi';
 
-interface DashboardChartProps {
-  t: TFunction;
-  data: ChartNetRevenueResult;
-  isLoading?: boolean;
-  params: NetRevenueParams;
-  onParamsChange: (params: NetRevenueParams) => void;
-}
+export const DashboardChart: React.FC = () => {
+  const { t } = useTranslation('dashboard');
+  const today = dayjs().format('YYYY-MM-DD');
+  const [params, setParams] = useState<NetRevenueParams>({
+    startDate: today,
+    endDate: today,
+    type: 'day'
+  });
 
-export const DashboardChart: React.FC<DashboardChartProps> = ({ 
-  t, 
-  data, 
-  isLoading = false,
-  params,
-  onParamsChange
-}) => {
+  const { data: response, isLoading } = useGetChartNetRevenueQuery(params);
+  const data = response?.result || { totalNetRevenue: 0, datas: [] };
   const activeTab = params.type;
 
   const handleFilterChange = (value: string) => {
@@ -36,11 +33,11 @@ export const DashboardChart: React.FC<DashboardChartProps> = ({
       endDate = dayjs().endOf('week').format('YYYY-MM-DD');
     }
 
-    onParamsChange({ ...params, startDate, endDate });
+    setParams({ ...params, startDate, endDate });
   };
 
   const handleTypeChange = (type: 'day' | 'hour' | 'weekday') => {
-    onParamsChange({ ...params, type });
+    setParams({ ...params, type });
   };
 
   return (

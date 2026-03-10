@@ -25,5 +25,15 @@ export default {
     byDay: "By Day",
     byHour: "By Hour",
     byWeekday: "By Weekday"
-  }
+  },
+  topProducts: {
+    title: "Top 10 Best Selling Products",
+    byRevenue: "By Revenue",
+    byQuantity: "By Quantity"
+  },
+  topCustomers: {
+    title: "Top 10 Customers by Revenue"
+  },
+  loading: "Loading...",
+  unknownUser: "Unknown User"
 };

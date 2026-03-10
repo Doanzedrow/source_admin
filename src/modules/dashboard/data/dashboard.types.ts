@@ -68,3 +68,19 @@ export interface NetRevenueParams {
   endDate: string;
   type: 'day' | 'hour' | 'weekday';
 }
+
+export interface ChartLabelTotalData {
+  label: string;
+  total: number;
+}
+
+export interface TopProductParams {
+  startDate: string;
+  endDate: string;
+  type: 'revenue' | 'quantity';
+}
+
+export interface TopCustomerParams {
+  startDate: string;
+  endDate: string;
+}

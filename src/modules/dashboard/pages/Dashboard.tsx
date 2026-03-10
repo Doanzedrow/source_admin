@@ -1,14 +1,17 @@
 import { Col, Row } from 'antd';
-import { useDashboard } from '../hooks/useDashboard';
+import { useTranslation } from 'react-i18next';
 import { SEO } from '@/components/common/SEO/SEO';
-import { TodayStatistics, RecentActivities, DashboardChart } from '../components';
+import { 
+  TodayStatistics, 
+  RecentActivities, 
+  DashboardChart,
+  TopProductsChart,
+  TopCustomersChart
+} from '../components';
 import '../styles/dashboard.less';
 
 const Dashboard = () => {
-  const { 
-    t, stats, activities, isStatsLoading, isActivitiesLoading,
-    chartData, isChartLoading, setChartParams, chartParams
-  } = useDashboard();
+  const { t } = useTranslation('dashboard');
 
   return (
     <div className="dashboard-page">
@@ -16,17 +19,20 @@ const Dashboard = () => {
       
       <Row gutter={[24, 24]}>
         <Col xs={24} lg={16}>
-          <TodayStatistics stats={stats} t={t} isLoading={isStatsLoading} />
-          <DashboardChart 
-            t={t} 
-            data={chartData} 
-            isLoading={isChartLoading} 
-            params={chartParams}
-            onParamsChange={setChartParams}
-          />
+          <TodayStatistics />
+          <DashboardChart />
+          
+          <Row gutter={[24, 24]}>
+            <Col xs={24} lg={12}>
+              <TopProductsChart />
+            </Col>
+            <Col xs={24} lg={12}>
+              <TopCustomersChart />
+            </Col>
+          </Row>
         </Col>
         <Col xs={24} lg={8}>
-          <RecentActivities activities={activities} t={t} isLoading={isActivitiesLoading} />
+          <RecentActivities />
         </Col>
       </Row>
     </div>

@@ -1,7 +1,7 @@
-import type { TFunction } from 'i18next';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { AppCard } from '@/components/common/AppCard';
 import { formatCurrency } from '@/utils/format';
-import type { TodayStatisticsResult } from '../data/dashboard.types';
 import { 
   DollarOutlined, 
   RollbackOutlined, 
@@ -11,14 +11,13 @@ import {
   MinusOutlined
 } from '@ant-design/icons';
 import { TodayStatisticsSkeleton } from './skeletons';
+import { useGetTodayStatisticsQuery } from '../api/dashboardApi';
 
-interface TodayStatisticsProps {
-  stats: TodayStatisticsResult;
-  t: TFunction;
-  isLoading?: boolean;
-}
+export const TodayStatistics: React.FC = () => {
+  const { t } = useTranslation('dashboard');
+  const { data, isLoading } = useGetTodayStatisticsQuery();
+  const stats = data?.result || {};
 
-export const TodayStatistics: React.FC<TodayStatisticsProps> = ({ stats, t, isLoading = false }) => {
   return (
     <AppCard className="today-sales-card" title={t('todaySalesResult')}>
       {isLoading ? (
