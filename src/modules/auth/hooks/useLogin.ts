@@ -1,28 +1,36 @@
 import { useState } from 'react';
-import { message } from 'antd';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAppNotify } from '@/hooks/useAppNotify';
+import { useAppNavigate } from '@/hooks/useAppNavigate';
+import { useStorage } from '@/hooks/useStorage';
 
 export const useLogin = () => {
   const { t } = useTranslation('auth');
-  const navigate = useNavigate();
+  const { goToDashboard } = useAppNavigate();
+  const { message: antMessage, notification } = useAppNotify();
+  const { setToken } = useStorage();
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (values: any) => {
+  const handleLogin = async (_values: any) => {
     setLoading(true);
 
 
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Login credentials:', values);
 
-      localStorage.setItem('accessToken', 'mock-token');
-      message.success(t('welcome', { defaultValue: 'Đăng nhập thành công!' }));
+      setToken('mock-token');
 
+      antMessage.success({
+        content: t('welcome'),
+        duration: 3,
+      });
 
-      navigate('/dashboard');
+      goToDashboard();
     } catch (error) {
-      message.error(t('errors.loginFailed'));
+      notification.error({
+        message: t('errors.loginFailed'),
+        description: t('errors.checkCredentials'),
+      });
     } finally {
       setLoading(false);
     }

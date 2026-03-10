@@ -3,16 +3,14 @@ import { Layout, Menu, Avatar, Dropdown, Space } from 'antd';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  DashboardOutlined,
-  ShoppingOutlined,
   UserOutlined,
-  SettingOutlined,
   ShopOutlined,
   TransactionOutlined
 } from '@ant-design/icons';
 import { useMainLayout } from './hooks/useMainLayout';
 import { AppButton } from '@/components/common/AppButton';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
+import { rc, RouteKey } from '@/routes/routeConfig';
 import './MainLayout.less';
 
 const { Header, Sider, Content } = Layout;
@@ -29,8 +27,16 @@ export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }
   } = useMainLayout();
 
   const menuItems = [
-    { key: '/dashboard', icon: <DashboardOutlined />, label: t('dashboard') },
-    { key: '/products', icon: <ShoppingOutlined />, label: t('products') },
+    { 
+      key: rc(RouteKey.Dashboard).path, 
+      icon: rc(RouteKey.Dashboard).icon, 
+      label: t('dashboard') 
+    },
+    { 
+      key: rc(RouteKey.Products).path, 
+      icon: rc(RouteKey.Products).icon, 
+      label: t('products') 
+    },
     // Group Example
     {
       key: 'user-group',
@@ -43,7 +49,11 @@ export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }
     },
     { key: '/orders', icon: <TransactionOutlined />, label: t('orders') },
     { key: '/appointments', icon: <ShopOutlined />, label: t('appointments') },
-    { key: '/system/settings', icon: <SettingOutlined />, label: t('settings') },
+    { 
+      key: rc(RouteKey.Settings).path, 
+      icon: rc(RouteKey.Settings).icon, 
+      label: t('settings') 
+    },
   ];
 
   return (

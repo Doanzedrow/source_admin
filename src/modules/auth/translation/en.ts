@@ -15,6 +15,7 @@ export default {
   errors: {
     invalidUsername: "Username cannot contain special characters",
     invalidPassword: "Password must be at least 6 characters",
-    loginFailed: "Login failed. Please check your credentials."
+    loginFailed: "Login failed. Please check your credentials.",
+    checkCredentials: "Please verify your username and password."
   }
 };

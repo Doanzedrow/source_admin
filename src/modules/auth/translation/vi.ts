@@ -14,7 +14,8 @@ export default {
   },
   errors: {
     invalidUsername: "Tên đăng nhập không được chứa ký tự đặc biệt",
-    invalidPassword: "Mật khẩu phải từ 6 kí tự trở lên",
-    loginFailed: "Đăng nhập thất bại. Kiểm tra lại thông tin."
+    invalidPassword: "Mật khẩu phải từ 6 kí tự lên",
+    loginFailed: "Đăng nhập thất bại. Kiểm tra lại thông tin.",
+    checkCredentials: "Vui lòng kiểm tra lại tài khoản và mật khẩu."
   }
 };

@@ -1,9 +1,7 @@
-import { ConfigProvider, theme } from 'antd';
+import { ConfigProvider, theme, App } from 'antd';
 import React from 'react';
 import { APP_COLOR_PRIMARY } from './constants';
 
-// Maps our native variables or Less logic directly to AntD.
-// AntD v5 allows using the Provider locally or globally seamlessly.
 export const ThemeProvider: React.FC<{ children: React.ReactNode; isDarkMode: boolean }> = ({ children, isDarkMode }) => {
   return (
     <ConfigProvider
@@ -12,7 +10,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode; isDarkMode: bo
         token: {
           colorPrimary: APP_COLOR_PRIMARY,
           borderRadius: 6,
-          // We align standard variables with the less file here
           fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
           fontSizeHeading1: 32,
           fontSizeHeading2: 24,
@@ -31,7 +28,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode; isDarkMode: bo
         },
       }}
     >
-      {children}
+      <App>
+        {children}
+      </App>
     </ConfigProvider>
   );
 };

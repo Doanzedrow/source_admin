@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { AppButton } from '../AppButton';
 import CachedImage from '../CachedImage/CachedImage';
 import { SUPPORTED_LANGUAGES } from '@/config/constants';
+import './LanguageSwitcher.less';
 
 export const LanguageSwitcher: React.FC = () => {
   const { i18n } = useTranslation();
@@ -13,33 +14,36 @@ export const LanguageSwitcher: React.FC = () => {
   };
 
   const renderFlag = (flag: string) => {
+    if (flag.startsWith('<')) {
+      return <span className="flag-html-container" dangerouslySetInnerHTML={{ __html: flag }} />;
+    }
+
     if (flag.includes('/') || flag.includes('.')) {
       return (
-        <span style={{ display: 'flex', alignItems: 'center', width: '20px', height: '14px', borderRadius: '2px', overflow: 'hidden' }}>
+        <span className="flag-image-container">
           <CachedImage src={flag} alt="flag" width={20} height={14} />
         </span>
       );
     }
-    return <span style={{ fontSize: '1.2em', lineHeight: 1 }}>{flag}</span>;
+    return <span className="flag-emoji">{flag}</span>;
   };
 
   const items = SUPPORTED_LANGUAGES.map((lang) => ({
     key: lang.code,
     label: (
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div className="language-switcher-item">
         {renderFlag(lang.flag)}
         <span>{lang.label}</span>
       </div>
     ),
   }));
 
-  // Lấy ngôn ngữ hiện tại hoặc mặc định là phần tử đầu tiên
   const currentLang = SUPPORTED_LANGUAGES.find((l) => l.code === i18n.language) || SUPPORTED_LANGUAGES[0];
 
   return (
     <Dropdown menu={{ items, onClick: handleMenuClick }} placement="bottomRight" trigger={['click']}>
       <AppButton type="text">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <div className="language-switcher-trigger">
           {renderFlag(currentLang.flag)}
           <span>{currentLang.label}</span>
         </div>

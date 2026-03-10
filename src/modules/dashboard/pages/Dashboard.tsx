@@ -15,8 +15,8 @@ const Dashboard = () => {
               title={t('revenueLabel')}
               value={data.revenue.replace(/[^0-9]/g, '')}
               prefix={<ArrowUpOutlined />}
-              suffix="VNĐ"
-              valueStyle={{ color: '#3f8600' }}
+              suffix={t('currencySuffix')}
+              valueStyle={{ color: 'var(--success-color)' }}
             />
           </Card>
         </Col>
