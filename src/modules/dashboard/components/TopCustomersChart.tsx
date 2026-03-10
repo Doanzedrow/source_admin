@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Select, Flex, Spin } from 'antd';
+import { Flex, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { AppCard } from '@/components/common/AppCard';
 import { formatCurrency } from '@/utils/format';
 import { useGetTopCustomersQuery } from '../api/dashboardApi';
 import type { TopCustomerParams } from '../data/dashboard.types';
+import { DashboardDateFilter } from './DashboardDateFilter';
 
 export const TopCustomersChart: React.FC = () => {
   const { t } = useTranslation(['dashboard', 'translation']);
@@ -18,18 +19,7 @@ export const TopCustomersChart: React.FC = () => {
   const { data: response, isLoading, isFetching } = useGetTopCustomersQuery(params);
   const customers = response?.result || [];
 
-  const handleDateChange = (value: string) => {
-    let startDate = dayjs().format('YYYY-MM-DD');
-    let endDate = dayjs().format('YYYY-MM-DD');
-
-    if (value === 'yesterday') {
-      startDate = dayjs().subtract(1, 'day').format('YYYY-MM-DD');
-      endDate = dayjs().subtract(1, 'day').format('YYYY-MM-DD');
-    } else if (value === 'thisWeek') {
-      startDate = dayjs().startOf('week').format('YYYY-MM-DD');
-      endDate = dayjs().endOf('week').format('YYYY-MM-DD');
-    }
-
+  const handleDateChange = (startDate: string, endDate: string) => {
     setParams({ startDate, endDate });
   };
 
@@ -40,20 +30,15 @@ export const TopCustomersChart: React.FC = () => {
     <AppCard 
       className="top-customers-card"
       title={t('topCustomers.title')}
-      extra={
-        <Select 
-          defaultValue="today" 
-          size="small" 
-          style={{ width: 120 }}
-          onChange={handleDateChange}
-        >
-          <Select.Option value="today">{t('filter.today')}</Select.Option>
-          <Select.Option value="yesterday">{t('filter.yesterday')}</Select.Option>
-          <Select.Option value="thisWeek">{t('filter.thisWeek')}</Select.Option>
-        </Select>
-      }
     >
       <Spin spinning={isFetching}>
+        <Flex justify="flex-end" style={{ marginBottom: 16 }}>
+          <DashboardDateFilter 
+            defaultValue="today" 
+            style={{ width: 120 }}
+            onChange={handleDateChange}
+          />
+        </Flex>
 
         <div className="horizontal-bar-chart">
           {isLoading ? (

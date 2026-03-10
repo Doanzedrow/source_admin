@@ -6,6 +6,7 @@ import { AppCard } from '@/components/common/AppCard';
 import { formatCurrency } from '@/utils/format';
 import { useGetTopProductsQuery } from '../api/dashboardApi';
 import type { TopProductParams } from '../data/dashboard.types';
+import { DashboardDateFilter } from './DashboardDateFilter';
 
 export const TopProductsChart: React.FC = () => {
   const { t } = useTranslation(['dashboard', 'translation']);
@@ -19,18 +20,7 @@ export const TopProductsChart: React.FC = () => {
   const { data: response, isLoading, isFetching } = useGetTopProductsQuery(params);
   const products = response?.result || [];
 
-  const handleDateChange = (value: string) => {
-    let startDate = dayjs().format('YYYY-MM-DD');
-    let endDate = dayjs().format('YYYY-MM-DD');
-
-    if (value === 'yesterday') {
-      startDate = dayjs().subtract(1, 'day').format('YYYY-MM-DD');
-      endDate = dayjs().subtract(1, 'day').format('YYYY-MM-DD');
-    } else if (value === 'thisWeek') {
-      startDate = dayjs().startOf('week').format('YYYY-MM-DD');
-      endDate = dayjs().endOf('week').format('YYYY-MM-DD');
-    }
-
+  const handleDateChange = (startDate: string, endDate: string) => {
     setParams({ ...params, startDate, endDate });
   };
 
@@ -45,31 +35,24 @@ export const TopProductsChart: React.FC = () => {
     <AppCard 
       className="top-products-card"
       title={t('topProducts.title')}
-      extra={
-        <Flex gap={8}>
+    >
+      <Spin spinning={isFetching}>
+        <Flex gap={12} style={{ marginBottom: 16 }}>
           <Select 
             defaultValue="revenue" 
             size="small" 
-            style={{ width: 140 }}
+            style={{ flex: 1 }}
             onChange={handleTypeChange}
           >
             <Select.Option value="revenue">{t('topProducts.byRevenue')}</Select.Option>
             <Select.Option value="quantity">{t('topProducts.byQuantity')}</Select.Option>
           </Select>
-          <Select 
+          <DashboardDateFilter 
             defaultValue="today" 
-            size="small" 
-            style={{ width: 120 }}
+            style={{ flex: 1 }}
             onChange={handleDateChange}
-          >
-            <Select.Option value="today">{t('filter.today')}</Select.Option>
-            <Select.Option value="yesterday">{t('filter.yesterday')}</Select.Option>
-            <Select.Option value="thisWeek">{t('filter.thisWeek')}</Select.Option>
-          </Select>
+          />
         </Flex>
-      }
-    >
-      <Spin spinning={isFetching}>
 
         <div className="horizontal-bar-chart">
           {isLoading ? (

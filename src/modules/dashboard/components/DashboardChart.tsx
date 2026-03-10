@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Select, Flex, Spin } from 'antd';
+import { Flex, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { AppCard } from '@/components/common/AppCard';
 import { DashboardChartSkeleton } from './skeletons';
+import { DashboardDateFilter } from './DashboardDateFilter';
 import type { NetRevenueParams } from '../data/dashboard.types';
 import { formatCurrency, formatChartLabel } from '@/utils/format';
 import { useGetChartNetRevenueQuery } from '../api/dashboardApi';
@@ -23,18 +24,7 @@ export const DashboardChart: React.FC = () => {
 
   const maxValue = Math.max(...data.datas.map(item => item.total || 0), 1);
 
-  const handleFilterChange = (value: string) => {
-    let startDate = dayjs().format('YYYY-MM-DD');
-    let endDate = dayjs().format('YYYY-MM-DD');
-
-    if (value === 'yesterday') {
-      startDate = dayjs().subtract(1, 'day').format('YYYY-MM-DD');
-      endDate = dayjs().subtract(1, 'day').format('YYYY-MM-DD');
-    } else if (value === 'thisWeek') {
-      startDate = dayjs().startOf('week').format('YYYY-MM-DD');
-      endDate = dayjs().endOf('week').format('YYYY-MM-DD');
-    }
-
+  const handleFilterChange = (startDate: string, endDate: string) => {
     setParams({ ...params, startDate, endDate });
   };
 
@@ -54,16 +44,11 @@ export const DashboardChart: React.FC = () => {
         </Flex>
       }
       extra={
-        <Select 
+        <DashboardDateFilter 
           defaultValue="today" 
-          size="small" 
           style={{ width: 120 }}
           onChange={handleFilterChange}
-        >
-          <Select.Option value="today">{t('filter.today')}</Select.Option>
-          <Select.Option value="yesterday">{t('filter.yesterday')}</Select.Option>
-          <Select.Option value="thisWeek">{t('filter.thisWeek')}</Select.Option>
-        </Select>
+        />
       }
     >
       {isLoading ? (
