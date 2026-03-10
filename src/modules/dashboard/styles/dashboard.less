@@ -11,7 +11,6 @@
     }
   }
 
-  /* Today Sales Results Card */
   .today-sales-card {
     background: var(--body-bg);
     border-radius: var(--border-radius-lg);
@@ -26,33 +25,22 @@
 
     .today-stats-grid {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
       padding: 0;
+      flex-wrap: wrap;
+      gap: 24px; /* Sử dụng gap để chia khoảng cách hoàn hảo thay vì padding */
 
       .stat-item {
-        flex: 1;
+        flex: 1 1 200px; /* Tối thiểu 200px, tự động co giãn */
         display: flex;
         align-items: center;
-        padding: 0 var(--space-lg);
+        padding: 0; /* Không dùng padding nội bộ để luôn thẳng hàng lề trái */
         position: relative;
 
-        &:first-child {
-          padding-left: 0;
-        }
-
-        &:last-child {
-          padding-right: 0;
-        }
-
-        &:not(:last-child)::after {
-          content: '';
-          position: absolute;
-          right: 0;
-          top: 10%;
-          height: 80%;
-          width: 1px;
-          background: var(--border-color);
+        /* Ẩn dải phân cách dọc. Khi dùng grid/wrap linh hoạt, khoảng cách gap và icon là đủ để tách biệt các thẻ 1 cách tinh tế */
+        &::after {
+          display: none;
         }
 
         .item-icon {
@@ -65,6 +53,7 @@
           margin-right: var(--space-md);
           font-size: 20px;
           background: var(--bg-color);
+          flex-shrink: 0;
 
           &.revenue {
             color: @primary-color;
@@ -93,30 +82,33 @@
         }
 
         .item-info {
+          flex: 1;
           .label {
             font-size: 13px;
             color: var(--text-secondary);
             margin-bottom: 4px;
             display: block;
+            white-space: nowrap;
           }
           .value {
             font-size: 18px;
             font-weight: 700;
             color: var(--text-primary);
-            line-height: 1;
+            line-height: 1.2;
+            white-space: nowrap;
           }
           .sub-value {
             font-size: 12px;
             color: var(--text-secondary);
             margin-top: 4px;
             display: block;
+            white-space: nowrap;
           }
         }
       }
     }
   }
 
-  /* Revenue Chart Card */
   .revenue-chart-card {
     background: var(--body-bg);
     border-radius: var(--border-radius-lg);
@@ -227,7 +219,11 @@
               width: 60%;
               max-width: 40px;
               min-width: 8px;
-              background: linear-gradient(180deg, @primary-color 0%, fade(@primary-color, 60%) 100%);
+              background: linear-gradient(
+                180deg,
+                @primary-color 0%,
+                fade(@primary-color, 60%) 100%
+              );
               border-radius: 4px 4px 0 0;
               transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
               cursor: pointer;
@@ -257,7 +253,6 @@
     }
   }
 
-  /* Activity Sidebar */
   .activity-sidebar {
     background: var(--body-bg);
     border-radius: var(--border-radius-lg);
@@ -330,9 +325,10 @@
     }
   }
 
-  .top-products-card, .top-customers-card {
+  .top-products-card,
+  .top-customers-card {
     margin-top: var(--space-lg);
-    
+
     .ant-card-body {
       padding: var(--space-lg);
     }

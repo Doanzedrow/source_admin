@@ -10,7 +10,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode; isDarkMode: bo
         token: {
           colorPrimary: APP_COLOR_PRIMARY,
           borderRadius: 6,
-          fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+          fontFamily: "'Montserrat', sans-serif",
           fontSizeHeading1: 32,
           fontSizeHeading2: 24,
           fontSizeHeading3: 20,
