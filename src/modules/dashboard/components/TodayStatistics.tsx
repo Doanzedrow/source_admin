@@ -1,5 +1,6 @@
-import React from 'react';
-import { Card } from 'antd';
+import type { TFunction } from 'i18next';
+import { AppCard } from '@/components/common/AppCard';
+import type { TodayStatisticsResult } from '../data/dashboard.types';
 import { 
   DollarOutlined, 
   RollbackOutlined, 
@@ -9,22 +10,14 @@ import {
 import { TodayStatisticsSkeleton } from './skeletons';
 
 interface TodayStatisticsProps {
-  stats: {
-    revenue?: number;
-    orders?: number;
-    refunds?: number;
-    refundCount?: number;
-    deposits?: number;
-    depositCount?: number;
-    netGrowth?: number;
-  };
-  t: any;
+  stats: TodayStatisticsResult;
+  t: TFunction;
   isLoading?: boolean;
 }
 
 export const TodayStatistics: React.FC<TodayStatisticsProps> = ({ stats, t, isLoading = false }) => {
   return (
-    <Card className="today-sales-card" title={t('todaySalesResult')} bordered={false}>
+    <AppCard className="today-sales-card" title={t('todaySalesResult')}>
       {isLoading ? (
         <TodayStatisticsSkeleton />
       ) : (
@@ -74,6 +67,6 @@ export const TodayStatistics: React.FC<TodayStatisticsProps> = ({ stats, t, isLo
           </div>
         </div>
       )}
-    </Card>
+    </AppCard>
   );
 };

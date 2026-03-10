@@ -35,9 +35,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode; isDarkMode: bo
             borderRadius: 6,
           },
           Card: {
-            borderRadiusLG: 8, // lg border radius defined in variables
+            borderRadiusLG: 8,
             headerHeight: 48,
             colorBorderSecondary: isDarkMode ? '#303030' : '#f0f0f0',
+            // Increase shadow and padding to look more like 'Big Tech' UI
+            paddingLG: 24,
+            headerBg: 'transparent',
+            boxShadowTertiary: '0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
           },
           Table: {
             borderRadius: 8,

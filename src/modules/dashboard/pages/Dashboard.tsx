@@ -12,13 +12,10 @@ const Dashboard = () => {
       <SEO title={t('seoTitle')} description={t('seoDescription')} />
       
       <Row gutter={[24, 24]}>
-        {/* Cột 1: Thông tin Dashboard & Biểu đồ */}
         <Col xs={24} lg={16}>
           <TodayStatistics stats={stats} t={t} isLoading={isStatsLoading} />
           <DashboardChart t={t} revenue={stats.revenue} isLoading={isStatsLoading} />
         </Col>
-
-        {/* Cột 2: Hoạt động gần đây */}
         <Col xs={24} lg={8}>
           <RecentActivities activities={activities} t={t} isLoading={isActivitiesLoading} />
         </Col>
