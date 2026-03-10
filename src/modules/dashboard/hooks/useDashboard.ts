@@ -20,7 +20,8 @@ export const useDashboard = () => {
     t,
     stats: stats?.result || {},
     activities: activities?.result?.data || [],
-    isLoading: isStatsLoading || isActivitiesLoading,
+    isStatsLoading,
+    isActivitiesLoading,
     refetch: () => {
       refetchStats();
       refetchActivities();
