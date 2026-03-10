@@ -1,14 +1,18 @@
 export default {
   title: "Product List",
+  seoTitle: "Products - Thanh Xuan SPA Admin",
+  seoDescription: "Manage list of services and products at Thanh Xuan SPA.",
   addProduct: "Add Product",
   columns: {
     name: "Product Name",
     category: "Category",
-    price: "Price",
+    price: "Selling Price",
     action: "Action"
   },
-  actions: {
-    edit: "Edit",
-    delete: "Delete"
+  form: {
+    name: "Product Name",
+    price: "Price",
+    description: "Description",
+    stock: "Stock"
   }
 };

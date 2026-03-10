@@ -1,13 +1,14 @@
 import { Table, Space } from 'antd';
 import { AppButton } from '@/components/common/AppButton';
 import { useTranslation } from 'react-i18next';
+import { SEO } from '@/components/common/SEO/SEO';
 import { useProductList } from '@/modules/product/hooks/useProductList';
 import type { ProductMock } from '@/modules/product/data/productMockData';
 
 import '../styles/product.less';
 
 const ProductList = () => {
-  const { t } = useTranslation('product');
+  const { t } = useTranslation(['product', 'translation']);
   const { data, handleDelete, handleEdit } = useProductList();
 
   const columns = [
@@ -20,10 +21,10 @@ const ProductList = () => {
       render: (_: unknown, record: ProductMock) => (
         <Space size="middle">
           <AppButton type="link" onClick={() => handleEdit(record.key)}>
-            {t('actions.edit')}
+            {t('common.actions.edit', { ns: 'translation' })}
           </AppButton>
           <AppButton danger type="link" onClick={() => handleDelete(record.key)}>
-            {t('actions.delete')}
+            {t('common.actions.delete', { ns: 'translation' })}
           </AppButton>
         </Space>
       ),
@@ -32,6 +33,7 @@ const ProductList = () => {
 
   return (
     <div className="product-list-wrapper">
+      <SEO title={t('seoTitle')} description={t('seoDescription')} />
       <div className="flex-between product-header">
         <h2>{t('title')}</h2>
         <AppButton type="primary">{t('addProduct')}</AppButton>

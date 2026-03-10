@@ -1,7 +1,5 @@
 export default {
   welcome: "Chào mừng đến với Bảng điều khiển Quản trị",
-  seoDashboardTitle: "Bảng điều khiển - Quản trị SPA Thanh Xuân",
-  seoDashboardDescription: "Quản lý doanh thu, khách hàng và lịch hẹn tại SPA Thanh Xuân.",
   dashboard: "Bảng điều khiển",
   products: "Sản phẩm",
   users: "Người dùng",
@@ -18,5 +16,23 @@ export default {
   logoMini: "A",
   logoFull: "SPA Thanh Xuân",
   loading: "Đang tải dữ liệu...",
-  forbidden: "403 Bị chối từ - Bạn không có quyền truy cập module này!"
+  forbidden: "403 Bị chối từ - Bạn không có quyền truy cập module này!",
+  common: {
+    actions: {
+      edit: "Sửa",
+      delete: "Xóa",
+      save: "Lưu",
+      cancel: "Hủy",
+      create: "Thêm mới",
+      update: "Cập nhật",
+      search: "Tìm kiếm",
+      filter: "Lọc",
+      action: "Thao tác"
+    },
+    messages: {
+      success: "Thành công",
+      error: "Lỗi",
+      confirmDelete: "Bạn có chắc chắn muốn xóa mục này không?"
+    }
+  }
 };

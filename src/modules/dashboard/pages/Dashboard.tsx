@@ -9,7 +9,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <SEO title={t('seoDashboardTitle')} description={t('seoDashboardDescription')} />
+      <SEO title={t('seoTitle')} description={t('seoDescription')} />
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>
           <Card bordered={false} className="stat-card">

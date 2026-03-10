@@ -1,7 +1,5 @@
 export default {
   welcome: "Welcome to Admin Dashboard",
-  seoDashboardTitle: "Dashboard - Thanh Xuan SPA Admin",
-  seoDashboardDescription: "Manage revenue, customers and appointments at Thanh Xuan SPA.",
   dashboard: "Dashboard",
   products: "Products",
   users: "Users",
@@ -18,5 +16,23 @@ export default {
   logoMini: "A",
   logoFull: "Thanh Xuan SPA",
   loading: "Loading data...",
-  forbidden: "403 Forbidden - You do not have permission to access this module!"
+  forbidden: "403 Forbidden - You do not have permission to access this module!",
+  common: {
+    actions: {
+      edit: "Edit",
+      delete: "Delete",
+      save: "Save",
+      cancel: "Cancel",
+      create: "Create",
+      update: "Update",
+      search: "Search",
+      filter: "Filter",
+      action: "Action"
+    },
+    messages: {
+      success: "Success",
+      error: "Error",
+      confirmDelete: "Are you sure you want to delete this item?"
+    }
+  }
 };
