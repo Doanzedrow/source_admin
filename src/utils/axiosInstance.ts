@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { API_URL } from '../config/constants';
+import { getBaseApiUrl } from '@/config/api';
 
 // Create a professional Axios Instance customized for Admin App
 const axiosInstance = axios.create({
-  baseURL: API_URL,
+  baseURL: getBaseApiUrl(), // ==> Tự động gắn thành https://api.spa.test.zinisoft.net/api/v1.0
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

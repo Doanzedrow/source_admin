@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Button, Form, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { AppInput, AppPassword } from '../../../components/common/AppInput';
-import CachedImage from '../../../components/common/CachedImage/CachedImage';
+import { AppInput, AppPassword } from '@/components/common/AppInput';
+import CachedImage from '@/components/common/CachedImage/CachedImage';
 import '../styles/login.less';
 
 const Login = () => {

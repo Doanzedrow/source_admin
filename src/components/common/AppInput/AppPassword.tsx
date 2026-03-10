@@ -10,20 +10,20 @@ interface AppPasswordProps extends PasswordProps {
   regexMessage?: string;
 }
 
-export const AppPassword: React.FC<AppPasswordProps> = ({ 
-  label, 
-  name, 
-  rules = [], 
-  regex, 
-  regexMessage, 
-  ...props 
+export const AppPassword: React.FC<AppPasswordProps> = ({
+  label,
+  name,
+  rules = [],
+  regex,
+  regexMessage,
+  ...props
 }) => {
   const combinedRules = [...rules];
-  
+
   if (regex) {
     combinedRules.push({
       pattern: regex,
-      message: regexMessage || 'Mật khẩu không đúng định dạng',
+      message: regexMessage,
     });
   }
 

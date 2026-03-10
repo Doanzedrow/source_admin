@@ -1,11 +1,11 @@
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import { PrivateRoute } from './PrivateRoute';
-import AuthLayout from '../layouts/AuthLayout';
+import AuthLayout from '@/layouts/AuthLayout';
 
-// Mock Pages for Structure
-import Dashboard from '../modules/dashboard/pages/Dashboard';
-import ProductList from '../modules/product/pages/ProductList';
-import Login from '../modules/auth/pages/Login';
+
+import Dashboard from '@/modules/dashboard/pages/Dashboard';
+import ProductList from '@/modules/product/pages/ProductList';
+import Login from '@/modules/auth/pages/Login';
 
 const router = createBrowserRouter([
   {
@@ -21,12 +21,12 @@ const router = createBrowserRouter([
     children: [
       { path: '', element: <Navigate to="/dashboard" replace /> },
       { path: 'dashboard', element: <Dashboard /> },
-      // Product Group
+
       { path: 'products', element: <ProductList /> },
-      // Users, Orders, Settings, etc... will be mapped here
+
     ]
   },
-  // Setting up specific superadmin route
+
   {
     path: '/system',
     element: <PrivateRoute allowedRoles={['superadmin']} />,

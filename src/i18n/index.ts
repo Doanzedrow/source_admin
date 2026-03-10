@@ -6,10 +6,10 @@ import translationEn from './translation/en';
 import translationVi from './translation/vi';
 
 // Modules Locales
-import productEn from '../modules/product/translation/en';
-import productVi from '../modules/product/translation/vi';
-import authEn from '../modules/auth/translation/en';
-import authVi from '../modules/auth/translation/vi';
+import productEn from '@/modules/product/translation/en';
+import productVi from '@/modules/product/translation/vi';
+import authEn from '@/modules/auth/translation/en';
+import authVi from '@/modules/auth/translation/vi';
 
 const resources = {
   en: { 

@@ -11,20 +11,20 @@ interface AppInputProps extends InputProps {
   layout?: 'horizontal' | 'vertical' | 'inline';
 }
 
-export const AppInput: React.FC<AppInputProps> = ({ 
-  label, 
-  name, 
-  rules = [], 
-  regex, 
-  regexMessage, 
-  ...props 
+export const AppInput: React.FC<AppInputProps> = ({
+  label,
+  name,
+  rules = [],
+  regex,
+  regexMessage,
+  ...props
 }) => {
   const combinedRules = [...rules];
-  
+
   if (regex) {
     combinedRules.push({
       pattern: regex,
-      message: regexMessage || 'Định dạng không hợp lệ',
+      message: regexMessage,
     });
   }
 

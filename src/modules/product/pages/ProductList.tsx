@@ -1,7 +1,7 @@
 import { Table, Button, Space } from 'antd';
 import { useTranslation } from 'react-i18next';
-import { useProductList } from '../hooks/useProductList';
-import type { ProductMock } from '../data/productMockData';
+import { useProductList } from '@/modules/product/hooks/useProductList';
+import type { ProductMock } from '@/modules/product/data/productMockData';
 
 // Import CSS less riêng của module
 import '../styles/product.less';

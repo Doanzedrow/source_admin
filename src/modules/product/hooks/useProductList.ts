@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { mockProductData } from '../data/productMockData';
-import type { ProductMock } from '../data/productMockData';
+import { mockProductData } from '@/modules/product/data/productMockData';
+import type { ProductMock } from '@/modules/product/data/productMockData';
 
 // Hook Contains Logic
 export const useProductList = () => {

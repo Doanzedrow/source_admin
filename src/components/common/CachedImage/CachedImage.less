@@ -14,8 +14,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    
-    /* Ghi đè CSS của AntD Skeleton Image để khít toàn bộ Wrapper */
+
     .ant-skeleton-image {
       width: 100% !important;
       height: 100% !important;
@@ -29,7 +28,6 @@
     transition: opacity 0.3s ease-in-out;
     opacity: 1;
 
-    /* Khi chưa load xong, thẻ img có class v-hide có thể bị mờ (nếu cần) */
     &.image-loading {
       opacity: 0;
     }
