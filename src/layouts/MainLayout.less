@@ -1,0 +1,27 @@
+/* src/layouts/MainLayout.less */
+.main-layout {
+  min-height: 100vh;
+}
+
+.logo-container {
+  height: 64px;
+  background: var(--body-bg);
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  position: relative;
+  z-index: 10;
+}
+
+.layout-header {
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  z-index: 9;
+}
+
+.layout-content {
+  margin: 24px 16px;
+  padding: 24px;
+  background: var(--body-bg);
+  border-radius: var(--border-radius-lg, 8px);
+  min-height: 280px;
+  overflow: auto;
+}

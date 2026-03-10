@@ -1,0 +1,73 @@
+/* src/styles/global.less */
+@import './variables.less';
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Typography setup mapped to AntD & global HTML tags */
+h1, .h1 {
+  font-size: var(--h1-size) !important;
+  font-weight: @h1-weight !important;
+  color: var(--text-primary) !important;
+  margin-bottom: 1rem !important;
+}
+
+h2, .h2 {
+  font-size: var(--h2-size) !important;
+  font-weight: @h2-weight !important;
+  color: var(--text-primary) !important;
+  margin-bottom: 0.75rem !important;
+}
+
+h3, .h3 {
+  font-size: var(--h3-size) !important;
+  font-weight: @h3-weight !important;
+  color: var(--text-primary) !important;
+  margin-bottom: 0.75rem !important;
+}
+
+h4, .h4 {
+  font-size: var(--h4-size) !important;
+  font-weight: @h4-weight !important;
+  color: var(--text-primary) !important;
+  margin-bottom: 0.5rem !important;
+}
+
+p {
+  color: var(--text-secondary);
+}
+
+/* Common Layout Utilities */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content {
+  padding: 24px;
+  background-color: var(--body-bg);
+  border-radius: @border-radius-lg;
+  box-shadow: @box-shadow-base;
+}
+
+/* Utilities for flex */
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
