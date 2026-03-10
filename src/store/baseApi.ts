@@ -1,10 +1,9 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import type { BaseQueryFn } from '@reduxjs/toolkit/query/react';
 import axiosInstance from '@/utils/axiosInstance';
-import type { AxiosRequestConfig, AxiosError } from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 import { TAG_TYPES } from './tags';
 
-// Tuỳ biến base query của RTK Query chạy qua Axios Client
 const axiosBaseQuery =
   (
     { baseUrl }: { baseUrl: string } = { baseUrl: '' }
@@ -28,13 +27,17 @@ const axiosBaseQuery =
           params,
           headers,
         });
-        return { data: result.data };
+
+        return { data: result };
       } catch (axiosError) {
-        const err = axiosError as AxiosError;
+        const err = axiosError as any;
+        const responseData = err.response?.data;
+
         return {
           error: {
             status: err.response?.status,
-            data: err.response?.data || err.message,
+            message: responseData?.error || responseData?.message || err.message,
+            debug: responseData?.debug,
           },
         };
       }

@@ -1,48 +1,55 @@
 import axios from 'axios';
-import { getBaseApiUrl } from '@/config/api';
+import type { InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import { API_URL } from '@/config/constants';
 import { tokenUtil } from './token';
 import { RouteKey, rc } from '@/routes/routeConfig';
 
-// Create a professional Axios Instance customized for Admin App
 const axiosInstance = axios.create({
-  baseURL: getBaseApiUrl(), 
+  baseURL: (API_URL || '').replace(/\/$/, ""),
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request Interceptor: Attach Token
 axiosInstance.interceptors.request.use(
-  (config) => {
+  (config: InternalAxiosRequestConfig) => {
     const token = tokenUtil.getToken();
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => {
+  (error: AxiosError) => {
     return Promise.reject(error);
   }
 );
 
-// Response Interceptor: Handle Global Errors
 axiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
+  (response: AxiosResponse) => {
+    return response.data;
   },
-  async (error) => {
-    const originalRequest = error.config;
-    
-    // Unauthorized access (401) - Clear token and redirect to Login
+  async (error: AxiosError) => {
+    const originalRequest = error.config as any;
+    const responseData = error.response?.data as any;
+
+    const errorMessage = responseData?.error || responseData?.message || error.message;
+
+    (error as any).processedError = errorMessage;
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      tokenUtil.removeToken();
-      tokenUtil.removeLoggedUser();
-      
-      // Navigate to login
-      window.location.href = rc(RouteKey.Login).path;
+
+      const loginPath = rc(RouteKey.Login).path;
+      const isAlreadyOnLogin = window.location.pathname === loginPath;
+
+      if (!isAlreadyOnLogin) {
+        tokenUtil.removeToken();
+        tokenUtil.removeLoggedUser();
+        window.location.href = loginPath;
+      }
     }
+
     return Promise.reject(error);
   }
 );

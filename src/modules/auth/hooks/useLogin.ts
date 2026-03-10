@@ -7,30 +7,24 @@ import { useLoginMutation } from '../api/authApi';
 export const useLogin = () => {
   const { t } = useTranslation('auth');
   const { goToDashboard } = useAppNavigate();
-  const { message: antMessage, notification } = useAppNotify();
+  const { notification } = useAppNotify();
   const { setToken } = useToken();
-  
-  // RTK Query: useLoginMutation provides the trigger function and state
+
   const [login, { isLoading: loading }] = useLoginMutation();
 
   const handleLogin = async (values: any) => {
     try {
-      // RTK Query: Call actual API login and unwrap result
-      const result = await login(values).unwrap();
-      
-      // Store token from API response
-      setToken(result?.accessToken || 'mock-token');
 
-      antMessage.success({
-        content: t('welcome'),
-        duration: 3,
-      });
+      const response = await login({ ...values, captchaToken: 'wkey' }).unwrap();
+
+      setToken(response.result.access_token);
+
 
       goToDashboard();
-    } catch (error) {
+    } catch (error: any) {
       notification.error({
         message: t('errors.loginFailed'),
-        description: t('errors.checkCredentials'),
+        description: error.message || t('errors.checkCredentials'),
       });
     }
   };
