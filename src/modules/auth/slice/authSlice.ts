@@ -12,7 +12,7 @@ import type { AppDispatch, RootState } from '@/store';
 
 const initialState = {
   data: {},
-  isLogined: !!tokenUtil.getLoggedUser(),
+  isLogined: !!tokenUtil.getToken(),
   loggedUser: (tokenUtil.getLoggedUser() as any) || null,
   permissions: [] as string[],
 };

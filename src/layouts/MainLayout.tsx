@@ -16,6 +16,7 @@ export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }
     location,
     onMenuClick,
     handleUserMenuClick,
+    loggedUser,
   } = useMainLayout();
 
   return (
@@ -35,6 +36,7 @@ export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }
           toggleTheme={toggleTheme}
           t={t}
           handleUserMenuClick={handleUserMenuClick}
+          loggedUser={loggedUser}
         />
         <LayoutContent>
           {children}

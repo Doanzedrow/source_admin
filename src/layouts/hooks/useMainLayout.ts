@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { performLogout } from '@/modules/auth/slice/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { performLogout, selectLoggedUser } from '@/modules/auth/slice/authSlice';
 import { useAppNavigate } from '@/hooks/useAppNavigate';
 import type { AppDispatch } from '@/store';
 
@@ -13,6 +13,7 @@ export const useMainLayout = () => {
   const { goToLogin, to } = useAppNavigate();
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
+  const loggedUser = useSelector(selectLoggedUser);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
@@ -43,5 +44,6 @@ export const useMainLayout = () => {
     location,
     onMenuClick,
     handleUserMenuClick,
+    loggedUser,
   };
 };

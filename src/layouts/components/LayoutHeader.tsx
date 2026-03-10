@@ -13,6 +13,7 @@ interface LayoutHeaderProps {
   toggleTheme: () => void;
   t: any;
   handleUserMenuClick: (event: { key: string }) => void;
+  loggedUser: any;
 }
 
 export const LayoutHeader: React.FC<LayoutHeaderProps> = ({
@@ -22,6 +23,7 @@ export const LayoutHeader: React.FC<LayoutHeaderProps> = ({
   toggleTheme,
   t,
   handleUserMenuClick,
+  loggedUser,
 }) => {
   return (
     <Header className="layout-header">
@@ -32,10 +34,10 @@ export const LayoutHeader: React.FC<LayoutHeaderProps> = ({
         className="header-toggle-btn"
       />
       <Space size="middle">
-        <LanguageSwitcher />
-        <AppButton onClick={toggleTheme}>
+        {/* <LanguageSwitcher /> */}
+        {/* <AppButton onClick={toggleTheme}>
           {isDarkMode ? t('lightMode') : t('darkMode')}
-        </AppButton>
+        </AppButton> */}
         <Dropdown
           menu={{
             items: [
@@ -46,7 +48,10 @@ export const LayoutHeader: React.FC<LayoutHeaderProps> = ({
           }}
           placement="bottomRight"
         >
-          <Avatar className="user-avatar" icon={<UserOutlined />} />
+          <Space style={{ cursor: 'pointer' }}>
+            <Avatar className="user-avatar" icon={<UserOutlined />} />
+            <span style={{ fontWeight: 500 }}>{loggedUser?.fullname || loggedUser?.username || ''}</span>
+          </Space>
         </Dropdown>
       </Space>
     </Header>
