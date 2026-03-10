@@ -1,10 +1,10 @@
-/* src/layouts/MainLayout.less */
 .main-layout {
   min-height: 100vh;
 }
 
 .logo-container {
   height: 64px;
+  box-sizing: border-box;
   background: var(--body-bg);
   border-bottom: 1px solid var(--border-color);
   border-right: 1px solid var(--border-color);
@@ -26,7 +26,11 @@
 }
 
 .layout-header {
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  height: 64px;
+  line-height: normal;
+  box-sizing: border-box;
+  box-shadow: none;
+  border-bottom: 1px solid var(--border-color);
   z-index: 9;
   padding: 0 var(--space-lg) !important;
   background: var(--body-bg) !important;
@@ -47,8 +51,8 @@
 }
 
 .layout-content {
-  margin: var(--space-md) var(--space-md);
-  padding: 0;
+  margin: 0;
+  padding: var(--space-lg);
   min-height: calc(100vh - 84px);
   overflow: auto;
 }
