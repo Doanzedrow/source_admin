@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Flex, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { AppCard } from '@/components/common/AppCard';
+import { DateFilter } from '@/components/common/DateFilter';
 import { DashboardChartSkeleton } from './skeletons';
-import { DashboardDateFilter } from './DashboardDateFilter';
 import type { NetRevenueParams } from '../data/dashboard.types';
 import { formatCurrency, formatChartLabel } from '@/utils/format';
 import { useGetChartNetRevenueQuery } from '../api/dashboardApi';
@@ -44,7 +44,7 @@ export const DashboardChart: React.FC = () => {
         </Flex>
       }
       extra={
-        <DashboardDateFilter 
+        <DateFilter 
           defaultValue="today" 
           style={{ width: 120 }}
           onChange={handleFilterChange}

@@ -6,7 +6,7 @@ import { AppCard } from '@/components/common/AppCard';
 import { formatCurrency } from '@/utils/format';
 import { useGetTopCustomersQuery } from '../api/dashboardApi';
 import type { TopCustomerParams } from '../data/dashboard.types';
-import { DashboardDateFilter } from './DashboardDateFilter';
+import { DateFilter } from '@/components/common/DateFilter';
 
 export const TopCustomersChart: React.FC = () => {
   const { t } = useTranslation(['dashboard', 'translation']);
@@ -33,7 +33,7 @@ export const TopCustomersChart: React.FC = () => {
     >
       <Spin spinning={isFetching}>
         <Flex justify="flex-end" style={{ marginBottom: 16 }}>
-          <DashboardDateFilter 
+          <DateFilter 
             defaultValue="today" 
             style={{ width: 120 }}
             onChange={handleDateChange}

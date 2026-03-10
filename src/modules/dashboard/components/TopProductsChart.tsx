@@ -6,7 +6,7 @@ import { AppCard } from '@/components/common/AppCard';
 import { formatCurrency } from '@/utils/format';
 import { useGetTopProductsQuery } from '../api/dashboardApi';
 import type { TopProductParams } from '../data/dashboard.types';
-import { DashboardDateFilter } from './DashboardDateFilter';
+import { DateFilter } from '@/components/common/DateFilter';
 
 export const TopProductsChart: React.FC = () => {
   const { t } = useTranslation(['dashboard', 'translation']);
@@ -47,7 +47,7 @@ export const TopProductsChart: React.FC = () => {
             <Select.Option value="revenue">{t('topProducts.byRevenue')}</Select.Option>
             <Select.Option value="quantity">{t('topProducts.byQuantity')}</Select.Option>
           </Select>
-          <DashboardDateFilter 
+          <DateFilter 
             defaultValue="today" 
             style={{ flex: 1 }}
             onChange={handleDateChange}
