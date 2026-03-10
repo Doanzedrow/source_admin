@@ -150,7 +150,11 @@ export const formatChartLabel = (label: string, type: 'day' | 'hour' | 'weekday'
     
     case 'weekday':
       const weekdays = i18n.t('common.formats.chart.weekdays', { returnObjects: true }) as string[];
-      const dayIndex = parseInt(label) - 1;
+      // API labels: 1 (Sun), 2 (Mon), ..., 7 (Sat)
+      // Our array: index 0 (Mon), ..., index 6 (Sun)
+      // Conversion: 1->6, 2->0, 3->1, 4->2, 5->3, 6->4, 7->5
+      const dayNum = parseInt(label);
+      const dayIndex = (dayNum + 5) % 7;
       return weekdays[dayIndex] || label;
 
     case 'day':

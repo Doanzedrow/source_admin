@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Typography, Select, Flex } from 'antd';
+import { Typography, Select, Flex, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { AppCard } from '@/components/common/AppCard';
 import { formatCurrency } from '@/utils/format';
@@ -15,7 +15,7 @@ export const TopCustomersChart: React.FC = () => {
     endDate: today
   });
 
-  const { data: response, isLoading } = useGetTopCustomersQuery(params);
+  const { data: response, isLoading, isFetching } = useGetTopCustomersQuery(params);
   const customers = response?.result || [];
 
   const handleDateChange = (value: string) => {
@@ -38,26 +38,27 @@ export const TopCustomersChart: React.FC = () => {
 
   return (
     <AppCard className="top-customers-card">
-      <Flex className="chart-header" justify="space-between" align="center">
-        <Typography.Title level={5} style={{ margin: 0 }}>
-          {t('topCustomers.title')}
-        </Typography.Title>
-        <Select 
-          defaultValue="today" 
-          size="small" 
-          style={{ width: 120 }}
-          onChange={handleDateChange}
-        >
-          <Select.Option value="today">{t('filter.today')}</Select.Option>
-          <Select.Option value="yesterday">{t('filter.yesterday')}</Select.Option>
-          <Select.Option value="thisWeek">{t('filter.thisWeek')}</Select.Option>
-        </Select>
-      </Flex>
+      <Spin spinning={isFetching}>
+        <Flex className="chart-header" justify="space-between" align="center">
+          <Typography.Title level={5} style={{ margin: 0 }}>
+            {t('topCustomers.title')}
+          </Typography.Title>
+          <Select 
+            defaultValue="today" 
+            size="small" 
+            style={{ width: 120 }}
+            onChange={handleDateChange}
+          >
+            <Select.Option value="today">{t('filter.today')}</Select.Option>
+            <Select.Option value="yesterday">{t('filter.yesterday')}</Select.Option>
+            <Select.Option value="thisWeek">{t('filter.thisWeek')}</Select.Option>
+          </Select>
+        </Flex>
 
-      <div className="horizontal-bar-chart">
-        {isLoading ? (
-          <div className="chart-loading-placeholder">{t('loading')}</div>
-        ) : (
+        <div className="horizontal-bar-chart">
+          {isLoading ? (
+            <div className="chart-loading-placeholder">{t('loading')}</div>
+          ) : (
           <>
             <div className="grid-lines-vertical">
               {[...Array(5)].map((_, i) => <div key={i} />)}
@@ -90,6 +91,7 @@ export const TopCustomersChart: React.FC = () => {
           </>
         )}
       </div>
-    </AppCard>
+    </Spin>
+  </AppCard>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Typography, Select, Flex } from 'antd';
+import { Typography, Select, Flex, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { AppCard } from '@/components/common/AppCard';
 import { DashboardChartSkeleton } from './skeletons';
@@ -17,9 +17,11 @@ export const DashboardChart: React.FC = () => {
     type: 'day'
   });
 
-  const { data: response, isLoading } = useGetChartNetRevenueQuery(params);
+  const { data: response, isLoading, isFetching } = useGetChartNetRevenueQuery(params);
   const data = response?.result || { totalNetRevenue: 0, datas: [] };
   const activeTab = params.type;
+
+  const maxValue = Math.max(...data.datas.map(item => item.total || 0), 1);
 
   const handleFilterChange = (value: string) => {
     let startDate = dayjs().format('YYYY-MM-DD');
@@ -45,7 +47,7 @@ export const DashboardChart: React.FC = () => {
       {isLoading ? (
         <DashboardChartSkeleton />
       ) : (
-        <>
+        <Spin spinning={isFetching}>
           <Flex className="chart-header" justify="space-between" align="center">
             <Flex className="title-section" align="center" gap={8}>
               <Typography.Title level={5} style={{ margin: 0 }}>
@@ -86,18 +88,40 @@ export const DashboardChart: React.FC = () => {
             </div>
           </Flex>
 
-          <div className="chart-placeholder">
-            <div className="grid-lines">
-              {[...Array(6)].map((_, i) => <div key={i} />)}
+          <div className="chart-container-outer">
+            <div className="chart-main-area">
+              <div className="grid-lines">
+                {[...Array(6)].map((_, i) => <div key={i} />)}
+              </div>
+              <div className="bars-wrapper">
+                {data.datas.map((item, index) => {
+                  const height = (item.total / maxValue) * 100;
+                  return (
+                    <div key={index} className="bar-column-wrapper">
+                      <div 
+                        className="bar-column" 
+                        style={{ height: `${height}%` }}
+                        title={`${formatChartLabel(item.label, params.type)}: ${formatCurrency(item.total)}`}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            <Flex className="x-axis-labels" justify="space-around" style={{ padding: '8px 0', color: 'var(--text-secondary)', fontSize: 12 }}>
+            <Flex className="x-axis-labels" justify="space-around">
               {data.datas.map((item, index) => (
-                <div key={index}>{formatChartLabel(item.label, params.type)}</div>
+                <div key={index} className="axis-label-item">
+                  {formatChartLabel(item.label, params.type)}
+                </div>
               ))}
-              {data.datas.length === 0 && <div>{formatChartLabel(params.startDate, 'day')}</div>}
+              {data.datas.length === 0 && (
+                <div className="axis-label-item">
+                  {formatChartLabel(params.startDate, 'day')}
+                </div>
+              )}
             </Flex>
           </div>
-        </>
+        </Spin>
       )}
     </AppCard>
   );
