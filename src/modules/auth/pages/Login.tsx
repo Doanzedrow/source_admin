@@ -13,7 +13,6 @@ const Login = () => {
 
   return (
     <div className="login-page-container">
-      {/* 1. SECTION BANNER (Only visible on Desktop) */}
       <div className="login-banner">
         <CachedImage
           src={APP_ASSETS.BANNER_LOGIN}
@@ -22,10 +21,8 @@ const Login = () => {
         />
       </div>
 
-      {/* 2. SECTION FORM */}
       <div className="login-form-wrapper">
         <div className="login-form-box">
-
           <div className="login-header">
             <CachedImage 
               src={APP_ASSETS.LOGO_PRIMARY}
@@ -39,7 +36,6 @@ const Login = () => {
           </div>
 
           <Form layout="vertical" onFinish={handleLogin} requiredMark={false}>
-            {/* Sử dụng Component Input Chung của toàn hệ thống */}
             <AppInput
               name="email"
               label={t('form.email')}

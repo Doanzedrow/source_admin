@@ -12,40 +12,49 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Typography setup mapped to AntD & global HTML tags */
-h1, .h1 {
-  font-size: var(--h1-size) !important;
-  font-weight: @h1-weight !important;
-  color: var(--text-primary) !important;
-  margin-bottom: 1rem !important;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-h2, .h2 {
-  font-size: var(--h2-size) !important;
-  font-weight: @h2-weight !important;
-  color: var(--text-primary) !important;
-  margin-bottom: 0.75rem !important;
+h1,
+.h1 {
+  font-size: var(--h1-size);
+  font-weight: @h1-weight;
+  color: var(--text-primary);
 }
 
-h3, .h3 {
-  font-size: var(--h3-size) !important;
-  font-weight: @h3-weight !important;
-  color: var(--text-primary) !important;
-  margin-bottom: 0.75rem !important;
+h2,
+.h2 {
+  font-size: var(--h2-size);
+  font-weight: @h2-weight;
+  color: var(--text-primary);
 }
 
-h4, .h4 {
-  font-size: var(--h4-size) !important;
-  font-weight: @h4-weight !important;
-  color: var(--text-primary) !important;
-  margin-bottom: 0.5rem !important;
+h3,
+.h3 {
+  font-size: var(--h3-size);
+  font-weight: @h3-weight;
+  color: var(--text-primary);
+}
+
+h4,
+.h4 {
+  font-size: var(--h4-size);
+  font-weight: @h4-weight;
+  color: var(--text-primary);
 }
 
 p {
   color: var(--text-secondary);
 }
 
-/* Common Layout Utilities */
 .app-container {
   min-height: 100vh;
   display: flex;
@@ -59,7 +68,6 @@ p {
   box-shadow: @box-shadow-base;
 }
 
-/* Utilities for flex */
 .flex-between {
   display: flex;
   justify-content: space-between;

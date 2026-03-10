@@ -5,14 +5,13 @@
   width: 100vw;
   height: 100vh;
   background-color: var(--bg-color);
-  
-  /* Left panel for branding or image */
+
   .login-banner {
-    flex: 1.2; // Tỉ lệ 1.2 cho banner (Khoảng ~55% màn hình)
-    display: none; // Hidden on mobile
-    background-color: @primary-color;
+    flex: 1.2;
+    display: none;
+    background-color: var(--primary-color);
     position: relative;
-    
+
     @media (min-width: 900px) {
       display: flex;
       flex-direction: column;
@@ -28,7 +27,7 @@
       height: 100%;
       object-fit: cover;
     }
-    
+
     .banner-content {
       position: absolute;
       top: 50%;
@@ -37,69 +36,62 @@
       text-align: center;
       z-index: 2;
       width: 80%;
+
       h1 {
-         color: #fff !important;
-         font-size: 3rem !important;
-         margin-bottom: 1rem;
-         font-weight: 700;
+        color: #fff;
       }
+
       p {
         color: rgba(255, 255, 255, 0.85);
-        font-size: 1.25rem;
+        font-size: var(--h3-size);
       }
     }
-    
-
   }
 
-  /* Right panel for login form */
   .login-form-wrapper {
-    flex: 1; // Form sẽ lấy nốt không gian còn lại (Tỉ lệ 1 tức ~45% màn hình)
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: var(--space-lg);
-    
+
     @media (min-width: 900px) {
-      flex: 0 0 500px; /* Đảm bảo form đủ to trên màn hình vừa */
+      flex: 0 0 500px;
       background-color: var(--body-bg);
-      box-shadow: -10px 0 30px rgba(0,0,0,0.05);
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
       z-index: 5;
     }
 
     @media (min-width: 1200px) {
-      flex: 0 0 45%; /* Trên màn hình to thì form chiếm hẳn 45% diện tích */
+      flex: 0 0 45%;
     }
 
     .login-form-box {
       width: 100%;
-      max-width: 480px; /* Nới rộng kích thước nội tại của form */
-      
+      max-width: 480px;
+
       .login-header {
-        margin-bottom: var(--space-xxl); /* Khoảng cách chuẩn Big Tech 48px */
+        margin-bottom: var(--space-xl);
         text-align: center;
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: var(--space-xs);
 
         .login-logo {
-          /* width/height đã được truyền qua props inline nên bỏ ở đây để không bị xung đột */
-          margin-bottom: var(--space-lg);
-          
-          /* Chỉnh lại lõi hình ảnh bên trong để nằm trọn vẹn không bị mất góc */
+          margin-bottom: var(--space-xs);
+
           .cached-image-element {
             object-fit: contain !important;
           }
         }
-        
+
         h2 {
-           color: @primary-color !important;
-           margin-bottom: var(--space-sm) !important;
-           font-size: 2rem !important;
+          color: var(--primary-color);
         }
+
         p {
-           font-size: var(--space-md);
-           color: var(--text-secondary);
+          font-size: var(--h4-size);
         }
       }
 
