@@ -1,68 +1,24 @@
-import React, { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { Breadcrumb, Flex, Typography, Button } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
 import { SEO } from '@/components/common/SEO/SEO';
 import { AppLoader } from '@/components/common/AppLoader/AppLoader';
-import { useAppNavigate } from '@/hooks/useAppNavigate';
-import { useAppNotify } from '@/hooks/useAppNotify';
-import { 
-  useGetProductListQuery, 
-  useCreateProductMutation, 
-  useUpdateProductMutation 
-} from '../api/productApi';
+import { AppBreadcrumb } from '@/components/common/AppBreadcrumb';
+import { AppCard } from '@/components/common/AppCard';
 import { ProductForm } from '../components/ProductForm';
+import { useProductUpsert } from '../hooks/useProductUpsert';
 
-const { Title, Text } = Typography;
+import '../styles/product-upsert.less';
 
 const ProductUpsert: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const { t } = useTranslation(['product', 'translation']);
-  const { goToProducts } = useAppNavigate();
-  const { notification } = useAppNotify();
+  const { 
+    id, 
+    t, 
+    goToProducts, 
+    currentProduct, 
+    loading, 
+    isDetailLoading, 
+    handleSave 
+  } = useProductUpsert();
 
-  
-  const [createProduct, { isLoading: isCreating }] = useCreateProductMutation();
-  const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
-
-  
-  
-  
-  const { data: listData, isLoading: isListLoading } = useGetProductListQuery({}, { skip: !id });
-
-  const currentProduct = useMemo(() => {
-    if (!id || !listData) return null;
-    return listData.result.data.find(p => p._id === id) || null;
-  }, [id, listData]);
-
-  const loading = isCreating || isUpdating;
-
-  const handleSave = async (values: any) => {
-    try {
-      if (id) {
-        await updateProduct({ id, body: values }).unwrap();
-        notification.success({
-          message: t('common.messages.success', { ns: 'translation' }),
-          description: t('messages.updateSuccess'),
-        });
-      } else {
-        await createProduct(values).unwrap();
-        notification.success({
-          message: t('common.messages.success', { ns: 'translation' }),
-          description: t('messages.createSuccess'),
-        });
-      }
-      goToProducts();
-    } catch (error: any) {
-      notification.error({
-        message: id ? t('messages.updateError') : t('messages.createError'),
-        description: error?.data?.message || error?.message,
-      });
-    }
-  };
-
-  if (id && isListLoading) return <AppLoader />;
+  if (id && isDetailLoading) return <AppLoader />;
 
   return (
     <div className="product-upsert-page">
@@ -71,39 +27,24 @@ const ProductUpsert: React.FC = () => {
         description={t('seoDescription')} 
       />
       
-      <Flex vertical gap={24}>
-        <Flex vertical gap={8}>
-          <Breadcrumb
-            items={[
-              { title: t('title'), onClick: goToProducts, className: 'cursor-pointer' },
-              { title: id ? t('titleEdit') : t('titleCreate') },
-            ]}
-          />
-          <Flex align="center" gap={16}>
-            <Button 
-              type="text" 
-              icon={<ArrowLeftOutlined />} 
-              onClick={goToProducts}
-              style={{ padding: 0 }}
-            />
-            <Title level={3} style={{ margin: 0 }}>
-              {id ? t('titleEdit') : t('titleCreate')}
-            </Title>
-          </Flex>
-          <Text type="secondary">
-            {id ? `ID: ${id}` : t('seoDescription')}
-          </Text>
-        </Flex>
+      <AppBreadcrumb
+        items={[
+          { title: t('title'), link: '/products' },
+          { title: id ? t('titleEdit') : t('titleCreate') },
+        ]}
+        title={id ? t('titleEdit') : t('titleCreate')}
+        onBack={goToProducts}
+        id={id}
+      />
 
-        <div style={{ maxWidth: 880 }}>
-          <ProductForm
-            initialValues={currentProduct}
-            loading={loading}
-            onSave={handleSave}
-            onCancel={goToProducts}
-          />
-        </div>
-      </Flex>
+      <AppCard className="form-container">
+        <ProductForm
+          initialValues={currentProduct}
+          loading={loading}
+          onSave={handleSave}
+          onCancel={goToProducts}
+        />
+      </AppCard>
     </div>
   );
 };

@@ -1,19 +1,22 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { 
   Form, 
   Input, 
   InputNumber, 
   Select, 
   Upload, 
-  Button, 
   Flex, 
   Typography,
-  Divider,
-  Card
+  Divider
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+import { AppButton } from '@/components/common/AppButton';
+import { AppInput } from '@/components/common/AppInput';
 import type { Product } from '../data/product.types';
+import { useProductForm } from '../hooks/useProductForm';
+
+import '../styles/product-form.less';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -32,30 +35,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   onCancel,
 }) => {
   const { t } = useTranslation(['product', 'translation']);
-  const [form] = Form.useForm();
-
-  useEffect(() => {
-    if (initialValues) {
-      form.setFieldsValue({
-        ...initialValues,
-        category: initialValues.category?._id,
-      });
-    } else {
-      form.resetFields();
-    }
-  }, [initialValues, form]);
-
-  const handleSubmit = async () => {
-    try {
-      const values = await form.validateFields();
-      onSave(values);
-    } catch (error) {
-      console.error('Validate failed:', error);
-    }
-  };
+  const { form, handleSubmit } = useProductForm({ initialValues, onSave });
 
   return (
-    <Card bordered={false} className="product-form-card">
+    <div className="product-form-container">
       <Form
         form={form}
         layout="vertical"
@@ -66,43 +49,41 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         }}
         scrollToFirstError
       >
-        <section>
-          <Title level={5}>{t('infoBasic')}</Title>
-          <Form.Item
+        <div className="form-section">
+          <Title level={5} className="section-title">{t('infoBasic')}</Title>
+          <AppInput
             name="name"
             label={t('form.name')}
+            placeholder={t('placeholder.name')}
             rules={[{ required: true, message: t('validation.required', { field: t('form.name') }) }]}
-          >
-            <Input placeholder={t('placeholder.name')} size="large" />
-          </Form.Item>
+          />
 
           <Flex gap={16} wrap="wrap">
-            <Form.Item
+            <AppInput
               name="code"
               label={t('form.code')}
+              placeholder={t('placeholder.code')}
               style={{ flex: '1 1 200px' }}
               rules={[{ required: true, message: t('validation.required', { field: t('form.code') }) }]}
-            >
-              <Input placeholder={t('placeholder.code')} />
-            </Form.Item>
+            />
             <Form.Item
               name="category"
               label={t('form.category')}
               style={{ flex: '1 1 200px' }}
               rules={[{ required: true, message: t('validation.required', { field: t('form.category') }) }]}
             >
-              <Select placeholder={t('placeholder.category')}>
+              <Select placeholder={t('placeholder.category')} size="large">
                 <Select.Option value="cat1">Category 1</Select.Option>
                 <Select.Option value="cat2">Category 2</Select.Option>
               </Select>
             </Form.Item>
           </Flex>
-        </section>
+        </div>
 
         <Divider />
 
-        <section>
-          <Title level={5}>{t('infoPricing')}</Title>
+        <div className="form-section">
+          <Title level={5} className="section-title">{t('infoPricing')}</Title>
           <Flex gap={16} wrap="wrap">
             <Form.Item
               name="priceSale"
@@ -112,6 +93,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             >
               <InputNumber
                 style={{ width: '100%' }}
+                size="large"
                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
                 placeholder={t('placeholder.price')}
@@ -122,7 +104,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               label={t('form.taxPercentage')}
               style={{ flex: '0.5 1 100px' }}
             >
-              <InputNumber min={0} max={100} style={{ width: '100%' }} />
+              <InputNumber min={0} max={100} size="large" style={{ width: '100%' }} />
             </Form.Item>
           </Flex>
 
@@ -131,14 +113,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             label={t('form.stock')}
             rules={[{ required: true, message: t('validation.required', { field: t('form.stock') }) }]}
           >
-            <InputNumber min={0} style={{ width: '100%' }} />
+            <InputNumber min={0} size="large" style={{ width: '100%' }} />
           </Form.Item>
-        </section>
+        </div>
 
         <Divider />
 
-        <section>
-          <Title level={5}>{t('infoMedia')}</Title>
+        <div className="form-section">
+          <Title level={5} className="section-title">{t('infoMedia')}</Title>
           <Form.Item label={t('form.image')}>
             <Upload listType="picture-card" maxCount={1} beforeUpload={() => false}>
               <div>
@@ -147,26 +129,26 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               </div>
             </Upload>
           </Form.Item>
-        </section>
+        </div>
 
         <Divider />
 
-        <section>
-          <Title level={5}>{t('infoDescription')}</Title>
+        <div className="form-section">
+          <Title level={5} className="section-title">{t('infoDescription')}</Title>
           <Form.Item name="description" label={t('form.description')}>
             <TextArea rows={6} placeholder={t('placeholder.description')} />
           </Form.Item>
-        </section>
-
-        <div style={{ marginTop: 32, display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
-          <Button size="large" onClick={onCancel}>
-            {t('common.actions.cancel', { ns: 'translation' })}
-          </Button>
-          <Button size="large" type="primary" onClick={handleSubmit} loading={loading} style={{ minWidth: 120 }}>
-            {t('common.actions.save', { ns: 'translation' })}
-          </Button>
         </div>
+
+        <Flex justify="end" gap={12} className="form-actions">
+          <AppButton size="large" onClick={onCancel}>
+            {t('common.actions.cancel', { ns: 'translation' })}
+          </AppButton>
+          <AppButton size="large" type="primary" onClick={handleSubmit} loading={loading} style={{ minWidth: 120 }}>
+            {t('common.actions.save', { ns: 'translation' })}
+          </AppButton>
+        </Flex>
       </Form>
-    </Card>
+    </div>
   );
 };

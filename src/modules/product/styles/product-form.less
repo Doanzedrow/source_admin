@@ -1,0 +1,36 @@
+@import '@/styles/variables.less';
+
+.product-form-container {
+  .form-section {
+    margin-bottom: @space-lg;
+
+    .section-title {
+      margin-bottom: @space-md;
+      color: @primary-color;
+      position: relative;
+      padding-left: @space-sm;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 16px;
+        background-color: @primary-color;
+        border-radius: @border-radius-sm;
+      }
+    }
+  }
+
+  .form-actions {
+    margin-top: @space-xl;
+    padding-top: @space-lg;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .ant-divider {
+    margin: @space-lg 0;
+  }
+}

@@ -6,7 +6,6 @@ import {
   useSwitchStatusMutation
 } from '../api/productApi';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants';
-import type { Product } from '../data/product.types';
 
 export const useProductList = () => {
   const { t } = useTranslation(['product', 'translation']);

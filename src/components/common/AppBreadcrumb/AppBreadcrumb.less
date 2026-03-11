@@ -1,0 +1,59 @@
+@import '@/styles/variables.less';
+
+.app-breadcrumb-container {
+  margin-bottom: @space-md;
+
+  .ant-breadcrumb {
+    margin-bottom: @space-xs;
+    font-size: 13px;
+    
+    .cursor-pointer {
+      cursor: pointer;
+      transition: color 0.3s;
+      
+      &:hover {
+        color: @primary-color;
+      }
+    }
+  }
+
+  .breadcrumb-title-row {
+    margin-top: @space-xs;
+
+    .back-button {
+      padding: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+      }
+    }
+
+    .main-title {
+      font-family: var(--font-family-heading) !important;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .id-text {
+      font-size: 12px;
+      margin-top: 2px;
+    }
+  }
+}
+
+[data-theme='dark'] {
+  .app-breadcrumb-container {
+    .breadcrumb-title-row {
+      .back-button:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+      }
+    }
+  }
+}

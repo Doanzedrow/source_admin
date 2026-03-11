@@ -8,7 +8,9 @@ import type { Product, PaginatedResult } from '../data/product.types';
 
 const MODULE_NAME = 'product';
 
-const endpoints: Record<'listPagination' | 'switchStatus' | 'create' | 'update', Endpoint> = {
+const PARAMS_KEY = '${PARAMS_KEY}';
+
+const endpoints: Record<'listPagination' | 'switchStatus' | 'create' | 'edit' | 'getById', Endpoint> = {
   listPagination: {
     endpoint: `/${MODULE_NAME}/list-pagination`,
   },
@@ -16,10 +18,13 @@ const endpoints: Record<'listPagination' | 'switchStatus' | 'create' | 'update',
     endpoint: `/${MODULE_NAME}/switchStatus`,
   },
   create: {
-    endpoint: `/${MODULE_NAME}`,
+    endpoint: `/${MODULE_NAME}/create`,
   },
-  update: {
-    endpoint: `/${MODULE_NAME}`,
+  edit: {
+    endpoint: `/${MODULE_NAME}/edit/${PARAMS_KEY}`,
+  },
+  getById: {
+    endpoint: `/${MODULE_NAME}/get/${PARAMS_KEY}`,
   },
 };
 
@@ -39,6 +44,13 @@ export const productApi = baseApi.injectEndpoints({
             ]
           : [{ type: TAG_TYPES.PRODUCT, id: 'LIST' }],
     }),
+    getProductById: builder.query<ApiResponse<Product>, string>({
+      query: (id) => ({
+        url: generateEndpointVersionning(endpoints.getById).replace(PARAMS_KEY, id),
+        method: HTTP_METHOD.GET,
+      }),
+      providesTags: (_result, _error, id) => [{ type: TAG_TYPES.PRODUCT, id }],
+    }),
     createProduct: builder.mutation<ApiResponse<Product>, Partial<Product>>({
       query: (body) => ({
         url: generateEndpointVersionning(endpoints.create),
@@ -49,7 +61,7 @@ export const productApi = baseApi.injectEndpoints({
     }),
     updateProduct: builder.mutation<ApiResponse<Product>, { id: string; body: Partial<Product> }>({
       query: ({ id, body }) => ({
-        url: `${generateEndpointVersionning(endpoints.update)}/${id}`,
+        url: generateEndpointVersionning(endpoints.edit).replace(PARAMS_KEY, id),
         method: HTTP_METHOD.PUT,
         body,
       }),
@@ -75,6 +87,7 @@ export const productApi = baseApi.injectEndpoints({
 
 export const { 
   useGetProductListQuery, 
+  useGetProductByIdQuery,
   useSwitchStatusMutation,
   useCreateProductMutation,
   useUpdateProductMutation,
