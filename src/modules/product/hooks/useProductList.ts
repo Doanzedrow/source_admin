@@ -122,7 +122,7 @@ export const useProductList = () => {
 
   return {
     data: data?.result?.data || [],
-    isLoading: isLoading || isFetching || isDeleting || isBatchDeleting,
+    isLoading: isLoading || isDeleting || isBatchDeleting,
     isFetching,
     switchingId,
     selectedIds,

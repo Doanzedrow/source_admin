@@ -1,6 +1,6 @@
+import React, { useMemo, useCallback } from 'react';
 import { Space, Flex, Tag, Switch, Select, Typography, Col, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
-import { useMemo } from 'react';
 import { AppButton } from '@/components/common/AppButton';
 import { AppCard } from '@/components/common/AppCard';
 import { AppTable } from '@/components/common/AppTable';
@@ -39,6 +39,31 @@ const ProductList = () => {
     handlePageChange, 
     total 
   } = useProductList();
+
+  const handleSearch = useCallback((val: string) => {
+    setFilters({ keyword: val, page: 1 });
+  }, [setFilters]);
+
+  const handleCategoryChange = useCallback((val: string) => {
+    setFilters({ category: val, page: 1 });
+  }, [setFilters]);
+
+  const handleStatusChange = useCallback((val: any) => {
+    setFilters({ status: val, page: 1 });
+  }, [setFilters]);
+
+  const categoryOptions = useMemo(
+    () => categories.map(c => ({ label: c.name, value: c.code })),
+    [categories]
+  );
+
+  const statusOptions = useMemo(
+    () => [
+      { label: t('status.active'), value: 1 },
+      { label: t('status.inactive'), value: 0 },
+    ],
+    [t]
+  );
 
   const columns = useMemo(() => [
     {
@@ -191,14 +216,14 @@ const ProductList = () => {
       
       <AppFilter 
         onReset={resetFilters} 
-        isLoading={isLoading}
+        isLoading={isFetching}
       >
         <Col xs={24} sm={12} md={10} lg={10}>
           <AppSearchInput
             placeholder={t('filter.keyword')}
             value={params.keyword}
             debounceTime={300}
-            onSearch={(val) => setFilters({ keyword: val, page: 1 })}
+            onSearch={handleSearch}
           />
         </Col>
         <Col xs={12} sm={6} md={6} lg={6}>
@@ -206,11 +231,9 @@ const ProductList = () => {
             style={{ width: '100%' }}
             placeholder={t('filter.category')}
             value={params.category}
-            onChange={(val) => setFilters({ category: val, page: 1 })}
+            onChange={handleCategoryChange}
             allowClear
-            options={[
-              ...categories.map(c => ({ label: c.name, value: c.code }))
-            ]}
+            options={categoryOptions}
           />
         </Col>
         <Col xs={12} sm={6} md={6} lg={6}>
@@ -218,12 +241,9 @@ const ProductList = () => {
             style={{ width: '100%' }}
             placeholder={t('filter.status')}
             value={params.status !== undefined ? Number(params.status) : undefined}
-            onChange={(val) => setFilters({ status: val, page: 1 })}
+            onChange={handleStatusChange}
             allowClear
-            options={[
-              { label: t('status.active'), value: 1 },
-              { label: t('status.inactive'), value: 0 },
-            ]}
+            options={statusOptions}
           />
         </Col>
       </AppFilter>

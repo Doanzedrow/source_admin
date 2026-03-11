@@ -1,62 +1,62 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+function parseSearchParams<T extends Record<string, any>>(
+  searchParams: URLSearchParams,
+  initialValues: T
+): T {
+  const params: Record<string, any> = { ...initialValues };
+  searchParams.forEach((value, key) => {
+    if (key in initialValues) {
+      if (value === '') {
+        params[key] = initialValues[key];
+      } else {
+        const initialType = typeof initialValues[key];
+        if (initialType === 'number') {
+          params[key] = Number(value);
+        } else if (initialType === 'boolean') {
+          params[key] = value === 'true';
+        } else {
+          params[key] = value;
+        }
+      }
+    }
+  });
+  return params as T;
+}
+
 export function useUrlFilters<T extends Record<string, any>>(initialValues: T) {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialValuesRef = useRef(initialValues);
 
-  const [filters, setFiltersState] = useState<T>(() => {
-    const params: Record<string, any> = { ...initialValuesRef.current };
+  const internalUpdateRef = useRef(false);
 
-    searchParams.forEach((value, key) => {
-      if (key in initialValuesRef.current) {
-        if (value === '') {
-          params[key] = initialValuesRef.current[key];
-        } else {
-          const initialType = typeof initialValuesRef.current[key];
-          if (initialType === 'number') {
-            params[key] = Number(value);
-          } else if (initialType === 'boolean') {
-            params[key] = value === 'true';
-          } else {
-            params[key] = value;
-          }
-        }
-      }
-    });
+  const [filters, setFiltersState] = useState<T>(() =>
+    parseSearchParams(searchParams, initialValuesRef.current)
+  );
 
-    return params as T;
-  });
-
-  // Sync state with URL when it changes externally
   useEffect(() => {
-    const params: Record<string, any> = { ...initialValuesRef.current };
-    
-    searchParams.forEach((value, key) => {
-      if (key in initialValuesRef.current) {
-        if (value === '') {
-          params[key] = initialValuesRef.current[key];
-        } else {
-          const initialType = typeof initialValuesRef.current[key];
-          if (initialType === 'number') {
-            params[key] = Number(value);
-          } else if (initialType === 'boolean') {
-            params[key] = value === 'true';
-          } else {
-            params[key] = value;
-          }
-        }
+    if (internalUpdateRef.current) {
+      internalUpdateRef.current = false;
+      return;
+    }
+    const parsed = parseSearchParams(searchParams, initialValuesRef.current);
+
+    // Rebuild clean URL without empty params
+    const cleanUrlParams = new URLSearchParams();
+    Object.entries(parsed).forEach(([key, val]) => {
+      if (val !== undefined && val !== null && val !== '') {
+        cleanUrlParams.set(key, String(val));
       }
     });
 
-    // Only update if actually different to prevent infinite loops
-    const currentFiltersStr = JSON.stringify(filters);
-    const newFiltersStr = JSON.stringify(params);
-
-    if (currentFiltersStr !== newFiltersStr) {
-      setFiltersState(params as T);
+    if (cleanUrlParams.toString() !== searchParams.toString()) {
+      internalUpdateRef.current = true;
+      setSearchParams(cleanUrlParams, { replace: true });
     }
-  }, [searchParams, filters]);
+
+    setFiltersState(parsed);
+  }, [searchParams, setSearchParams]);
 
   const setFilters = useCallback(
     (newFilters: Partial<T>) => {
@@ -71,6 +71,7 @@ export function useUrlFilters<T extends Record<string, any>>(initialValues: T) {
         });
 
         if (urlParams.toString() !== searchParams.toString()) {
+          internalUpdateRef.current = true;
           setSearchParams(urlParams, { replace: true });
         }
         return merged as T;
@@ -80,6 +81,7 @@ export function useUrlFilters<T extends Record<string, any>>(initialValues: T) {
   );
 
   const resetFilters = useCallback(() => {
+    internalUpdateRef.current = true;
     setFiltersState(initialValuesRef.current);
     setSearchParams(new URLSearchParams(), { replace: true });
   }, [setSearchParams]);
