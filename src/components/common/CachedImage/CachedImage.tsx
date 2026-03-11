@@ -41,7 +41,7 @@ export const CachedImage: React.FC<CachedImageProps> = ({
           src={finalSrc}
           alt={alt}
           className="cached-image-element"
-          loading="lazy" /* ĐÂY LÀ CHÌA KHÓA: Giúp không rớt hàng loạt ảnh 1 lúc làm đơ máy */
+          loading="lazy" 
           onError={() => setIsError(true)}
           {...props}
         />

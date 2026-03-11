@@ -28,64 +28,35 @@ export const DashboardOrdersTable: React.FC<DashboardOrdersTableProps> = ({
   const depositAmount = totalMetaData?.totalDeposit || 0;
   const remainingAmount = totalMetaData?.totalRemaining || 0;
 
-  const dataSource = data && data.length > 0 
-    ? [
-        { 
-          _id: 'SUMMARY_ROW', 
-          isSummary: true, 
-          totalAmount, 
-          depositAmount, 
-          remainingAmount 
-        } as unknown as DashboardOrder,
-        ...data
-      ] 
-    : [];
-
   const columns: ColumnsType<DashboardOrder> = [
     {
       title: '#',
       key: 'index',
       width: 50,
       align: 'center',
-      onCell: (record: any) => ({ colSpan: record.isSummary ? 4 : 1 }),
-      render: (_, record: any, index: number) => {
-        if (record.isSummary) {
-          return <strong style={{ color: 'var(--text-primary)', textAlign: 'left', display: 'block' }}>{t('orders.table.summaryTotal')}</strong>;
-        }
+      render: (_, __, index: number) => {
         const currentPage = (pagination && typeof pagination === 'object' && pagination.current) ? pagination.current : 1;
         const pageSize = (pagination && typeof pagination === 'object' && pagination.pageSize) ? pagination.pageSize : 20;
-        return (currentPage - 1) * pageSize + index;
+        return (currentPage - 1) * pageSize + index + 1;
       }
     },
     {
       title: t('orders.table.orderCode'),
       dataIndex: 'code',
       key: 'code',
-      onCell: (record: any) => ({ colSpan: record.isSummary ? 0 : 1 }),
-      render: (text, record: any) => {
-        if (record.isSummary) return null;
-        return <strong>{text || record.orderCode || '--'}</strong>;
-      }
+      render: (text, record: any) => <strong>{text || record.orderCode || '--'}</strong>
     },
     {
       title: t('orders.table.createdAt'),
       dataIndex: 'createdAt',
       key: 'createdAt',
-      onCell: (record: any) => ({ colSpan: record.isSummary ? 0 : 1 }),
-      render: (text, record: any) => {
-        if (record.isSummary) return null;
-        return text ? formatDateTime(text) : '--';
-      }
+      render: (text) => text ? formatDateTime(text) : '--'
     },
     {
       title: t('orders.table.customer'),
       dataIndex: 'customer',
       key: 'customer',
-      onCell: (record: any) => ({ colSpan: record.isSummary ? 0 : 1 }),
-      render: (_, record: any) => {
-        if (record.isSummary) return null;
-        return record.customer?.fullname || record.customer?.name || '--';
-      }
+      render: (_, record: any) => record.customer?.fullname || record.customer?.name || '--'
     },
     {
       title: t('orders.table.totalAmount'),
@@ -93,7 +64,7 @@ export const DashboardOrdersTable: React.FC<DashboardOrdersTableProps> = ({
       key: 'totalAmount',
       render: (val, record: any) => {
         const v = typeof val === 'number' ? val : (record.value || 0);
-        return <strong style={{ color: record.isSummary ? 'var(--primary-color)' : 'inherit' }}>{formatCurrency(v)}</strong>;
+        return <strong>{formatCurrency(v)}</strong>;
       }
     },
     ...(isDeposit ? [
@@ -101,26 +72,20 @@ export const DashboardOrdersTable: React.FC<DashboardOrdersTableProps> = ({
         title: t('orders.table.depositAmount'),
         dataIndex: 'depositAmount',
         key: 'depositAmount',
-        render: (val: number, record: any) => {
-          return <strong style={{ color: record.isSummary ? 'var(--success-color)' : 'inherit' }}>{formatCurrency(val || 0)}</strong>;
-        }
+        render: (val: number) => <strong>{formatCurrency(val || 0)}</strong>
       },
       {
         title: t('orders.table.remainingAmount'),
         dataIndex: 'remainingAmount',
         key: 'remainingAmount',
-        render: (val: number, record: any) => {
-          return <strong style={{ color: record.isSummary ? 'var(--warning-color)' : 'inherit' }}>{formatCurrency(val || 0)}</strong>;
-        }
+        render: (val: number) => <strong>{formatCurrency(val || 0)}</strong>
       }
     ] : []),
     {
       title: t('orders.table.expectedDeliveryDate'),
       dataIndex: 'deadline',
       key: 'deadline',
-      onCell: (record: any) => ({ colSpan: record.isSummary ? 3 : 1 }),
       render: (text, record: any) => {
-        if (record.isSummary) return null;
         const dateStr = text || record.deadline || record.expectedDeliveryDate || record.deliveryDate;
         return dateStr ? formatDateTime(dateStr) : '--';
       }
@@ -129,9 +94,7 @@ export const DashboardOrdersTable: React.FC<DashboardOrdersTableProps> = ({
       title: t('orders.table.orderStatus'),
       dataIndex: 'orderStatus',
       key: 'orderStatus',
-      onCell: (record: any) => ({ colSpan: record.isSummary ? 0 : 1 }),
       render: (val, record: any) => {
-        if (record.isSummary) return null;
         const status = val ?? record.status;
         if (status === undefined || status === null) return '--';
         
@@ -149,9 +112,7 @@ export const DashboardOrdersTable: React.FC<DashboardOrdersTableProps> = ({
       title: t('orders.table.paymentStatus'),
       dataIndex: 'paymentStatus',
       key: 'paymentStatus',
-      onCell: (record: any) => ({ colSpan: record.isSummary ? 0 : 1 }),
-      render: (val, record: any) => {
-        if (record.isSummary) return null;
+      render: (val) => {
         if (val === undefined || val === null) return '--';
 
         const paymentConfig = getPaymentStatus(val as number);
@@ -170,11 +131,36 @@ export const DashboardOrdersTable: React.FC<DashboardOrdersTableProps> = ({
     <div className="orders-table-wrapper">
       <AppTable<DashboardOrder>
         columns={columns} 
-        dataSource={dataSource} 
+        dataSource={data} 
         rowKey="_id"
-        pagination={pagination ? { ...pagination, pageSize: Math.max(pagination.pageSize || 0, dataSource.length) } : false}
+        pagination={pagination}
         loading={isLoading}
-        rowClassName={(record: any) => record.isSummary ? 'summary-row-highlight' : ''}
+        summary={() => {
+          if (!data || data.length === 0) return null;
+          return (
+            <AppTable.Summary fixed>
+              <AppTable.Summary.Row className="summary-row-highlight">
+                <AppTable.Summary.Cell index={0} colSpan={4}>
+                  <strong>{t('orders.table.summaryTotal')}</strong>
+                </AppTable.Summary.Cell>
+                <AppTable.Summary.Cell index={4}>
+                  <strong style={{ color: 'var(--primary-color)' }}>{formatCurrency(totalAmount)}</strong>
+                </AppTable.Summary.Cell>
+                {isDeposit && (
+                  <>
+                    <AppTable.Summary.Cell index={5}>
+                      <strong style={{ color: 'var(--success-color)' }}>{formatCurrency(depositAmount)}</strong>
+                    </AppTable.Summary.Cell>
+                    <AppTable.Summary.Cell index={6}>
+                      <strong style={{ color: 'var(--warning-color)' }}>{formatCurrency(remainingAmount)}</strong>
+                    </AppTable.Summary.Cell>
+                  </>
+                )}
+                <AppTable.Summary.Cell index={isDeposit ? 7 : 5} colSpan={3} />
+              </AppTable.Summary.Row>
+            </AppTable.Summary>
+          );
+        }}
       />
     </div>
   );

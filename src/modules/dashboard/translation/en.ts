@@ -1,6 +1,6 @@
 export default {
   title: "Dashboard Overview",
-  seoTitle: "Dashboard - Thanh Xuan SPA Admin",
+  seoTitle: "Dashboard",
   seoDescription: "Manage revenue, customers and appointments at Thanh Xuan SPA.",
   revenueLabel: "Revenue",
   newOrdersLabel: "New Orders",

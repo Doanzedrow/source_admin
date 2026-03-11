@@ -23,7 +23,7 @@ export const SEO: React.FC<SEOProps> = ({
   ogImage,
   ogType = 'website',
 }) => {
-  const pageTitle = title ? `${title} | ${APP_NAME}` : APP_NAME;
+  const pageTitle = title ? `${title} - ${APP_NAME}` : APP_NAME;
 
   return (
     <Helmet>

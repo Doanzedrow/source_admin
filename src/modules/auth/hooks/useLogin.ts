@@ -22,25 +22,22 @@ export const useLogin = () => {
 
   const [login, { isLoading: loading }] = useLoginMutation();
 
-  // Lấy tài khoản đã nhớ từ localStorage
   const [rememberedUser, setRememberedUser] = useState<RememberedUser | null>(() => {
     return storage.localStorageGet(REMEMBERED_USER_KEY);
   });
 
-  // Chế độ hiển thị: true = chỉ hiện password, false = hiện đầy đủ
   const [isRememberedMode, setIsRememberedMode] = useState<boolean>(!!rememberedUser);
   const [rememberAccount, setRememberAccount] = useState<boolean>(!!rememberedUser);
 
   const handleLogin = async (values: any) => {
     try {
-      // Nếu đang ở chế độ nhớ tài khoản, dùng username đã lưu
-      const loginData = isRememberedMode && rememberedUser
-        ? { username: rememberedUser.username, password: values.password, captchaToken: 'wkey' }
-        : { ...values, captchaToken: 'wkey' };
+      const loginData =
+        isRememberedMode && rememberedUser
+          ? { username: rememberedUser.username, password: values.password, captchaToken: 'wkey' }
+          : { ...values, captchaToken: 'wkey' };
 
       const response = await login(loginData).unwrap();
 
-      // Lưu hoặc xóa tài khoản nhớ
       if (rememberAccount) {
         const userToRemember: RememberedUser = {
           username: loginData.username,
@@ -62,13 +59,11 @@ export const useLogin = () => {
     }
   };
 
-  // Chuyển sang chế độ nhập tài khoản khác
   const switchToFullLogin = () => {
     setIsRememberedMode(false);
     setRememberAccount(false);
   };
 
-  // Quay lại chế độ nhớ tài khoản
   const switchToRememberedLogin = () => {
     if (rememberedUser) {
       setIsRememberedMode(true);
@@ -76,7 +71,6 @@ export const useLogin = () => {
     }
   };
 
-  // Xóa tài khoản đã nhớ
   const clearRememberedUser = () => {
     storage.localStorageRemove(REMEMBERED_USER_KEY);
     setRememberedUser(null);

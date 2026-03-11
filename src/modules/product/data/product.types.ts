@@ -68,5 +68,11 @@ export interface Product {
 
 export interface PaginatedResult<T> {
   data: T[];
+  pagination?: {
+    page: number;
+    page_size: number;
+    total: number;
+    total_page: number;
+  };
   total?: number;
 }

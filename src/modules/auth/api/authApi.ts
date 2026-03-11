@@ -2,6 +2,7 @@ import { baseApi } from '@/store/baseApi';
 import { HTTP_METHOD } from '@/config/constants';
 import type { Endpoint } from '@/utils/api';
 import { generateEndpointVersionning } from '@/utils/api';
+import { TAG_TYPES } from '@/store/tags';
 
 const MODULE_NAME = 'auth';
 
@@ -28,6 +29,7 @@ export const authApi = baseApi.injectEndpoints({
         url: generateEndpointVersionning(endpoints.validateToken),
         method: HTTP_METHOD.GET,
       }),
+      providesTags: [TAG_TYPES.USER],
     }),
   }),
   overrideExisting: false,

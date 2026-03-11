@@ -2,6 +2,7 @@ import { baseApi } from '@/store/baseApi';
 import { HTTP_METHOD } from '@/config/constants';
 import type { Endpoint } from '@/utils/api';
 import { generateEndpointVersionning } from '@/utils/api';
+import { TAG_TYPES } from '@/store/tags';
 import type { 
   TodayStatisticsResult, 
   RecentActivity, 
@@ -50,6 +51,7 @@ export const dashboardApi = baseApi.injectEndpoints({
         url: generateEndpointVersionning(endpoints.todayStatistics),
         method: HTTP_METHOD.GET,
       }),
+      providesTags: [{ type: TAG_TYPES.DASHBOARD, id: 'STATISTICS' }],
     }),
     getRecentActivities: builder.query<DashboardResponse<PaginatedResult<RecentActivity>>, { page?: number; limit?: number }>({
       query: (params) => ({
@@ -57,6 +59,13 @@ export const dashboardApi = baseApi.injectEndpoints({
         method: HTTP_METHOD.GET,
         params,
       }),
+      providesTags: (result) =>
+        result?.result?.data
+          ? [
+              ...result.result.data.map(({ _id }) => ({ type: TAG_TYPES.DASHBOARD, id: _id })),
+              { type: TAG_TYPES.DASHBOARD, id: 'ACTIVITY_LIST' },
+            ]
+          : [{ type: TAG_TYPES.DASHBOARD, id: 'ACTIVITY_LIST' }],
     }),
     getChartNetRevenue: builder.query<DashboardResponse<ChartNetRevenueResult>, NetRevenueParams>({
       query: (params) => ({
@@ -64,6 +73,7 @@ export const dashboardApi = baseApi.injectEndpoints({
         method: HTTP_METHOD.GET,
         params,
       }),
+      providesTags: [{ type: TAG_TYPES.DASHBOARD, id: 'CHART_REVENUE' }],
     }),
     getTopProducts: builder.query<DashboardResponse<ChartLabelTotalData[]>, TopProductParams>({
       query: (params) => ({
@@ -71,6 +81,7 @@ export const dashboardApi = baseApi.injectEndpoints({
         method: HTTP_METHOD.GET,
         params,
       }),
+      providesTags: [{ type: TAG_TYPES.DASHBOARD, id: 'TOP_PRODUCTS' }],
     }),
     getTopCustomers: builder.query<DashboardResponse<ChartLabelTotalData[]>, TopCustomerParams>({
       query: (params) => ({
@@ -78,6 +89,7 @@ export const dashboardApi = baseApi.injectEndpoints({
         method: HTTP_METHOD.GET,
         params,
       }),
+      providesTags: [{ type: TAG_TYPES.DASHBOARD, id: 'TOP_CUSTOMERS' }],
     }),
     getDashboardOrders: builder.query<DashboardResponse<PaginatedResult<DashboardOrder>>, DashboardOrderParams>({
       query: (params) => ({
@@ -85,6 +97,13 @@ export const dashboardApi = baseApi.injectEndpoints({
         method: HTTP_METHOD.GET,
         params,
       }),
+      providesTags: (result) =>
+        result?.result?.data
+          ? [
+              ...result.result.data.map(({ _id }) => ({ type: TAG_TYPES.ORDER, id: _id })),
+              { type: TAG_TYPES.ORDER, id: 'LIST' },
+            ]
+          : [{ type: TAG_TYPES.ORDER, id: 'LIST' }],
     }),
     getDashboardDraftOrders: builder.query<DashboardResponse<PaginatedResult<DashboardOrder>>, DashboardOrderParams>({
       query: (params) => ({
@@ -92,6 +111,13 @@ export const dashboardApi = baseApi.injectEndpoints({
         method: HTTP_METHOD.GET,
         params,
       }),
+      providesTags: (result) =>
+        result?.result?.data
+          ? [
+              ...result.result.data.map(({ _id }) => ({ type: TAG_TYPES.ORDER, id: _id })),
+              { type: TAG_TYPES.ORDER, id: 'DRAFT_LIST' },
+            ]
+          : [{ type: TAG_TYPES.ORDER, id: 'DRAFT_LIST' }],
     }),
   }),
   overrideExisting: false,

@@ -8,6 +8,7 @@ export const BASE_PATH = import.meta.env.BASE_URL as string;
 
 export const API_URL = import.meta.env.VITE_API_URL as string;
 export const API_URL_SOCKET = import.meta.env.VITE_API_URL_SOCKET as string;
+export const IMAGE_URL = API_URL;
 
 // ==========================================
 // API VERSIONING
@@ -19,7 +20,7 @@ export const DEFAULT_VERSION = '1.0';
 // APP CONSTANTS & THEMES
 // ==========================================
 export const APP_COLOR_PRIMARY = '#d3929a';
-export const APP_NAME = 'SPA Thanh Xuân';
+export const APP_NAME = 'CRM SPA Thanh Xuân';
 
 // ==========================================
 // PAGINATION CONFIG
