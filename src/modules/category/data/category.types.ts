@@ -9,4 +9,5 @@ export interface Category {
   totalProduct?: number;
   status: number;
   id: number;
+  type: number;
 }

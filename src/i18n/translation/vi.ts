@@ -1,7 +1,9 @@
 export default {
   welcome: "Chào mừng đến với Bảng điều khiển Quản trị",
   dashboard: "Bảng điều khiển",
+  catalog: "Thông tin sản phẩm",
   products: "Sản phẩm",
+  categories: "Loại sản phẩm",
   users: "Người dùng",
   settings: "Cài đặt",
   login: "Đăng nhập",

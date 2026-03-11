@@ -8,7 +8,7 @@ import type { Category } from '../data/category.types';
 
 const MODULE_NAME = 'category';
 
-const endpoints: Record<'listPagination' | 'switchStatus' | 'create' | 'edit' | 'getById' | 'getAll', Endpoint> = {
+const endpoints: Record<'listPagination' | 'switchStatus' | 'create' | 'edit' | 'getById' | 'getAll' | 'delete', Endpoint> = {
   listPagination: {
     endpoint: `/${MODULE_NAME}/list-pagination`,
   },
@@ -26,6 +26,9 @@ const endpoints: Record<'listPagination' | 'switchStatus' | 'create' | 'edit' | 
   },
   getAll: {
     endpoint: `/${MODULE_NAME}/getAll`,
+  },
+  delete: {
+    endpoint: `/${MODULE_NAME}/delete/${PARAMS_KEY}`,
   },
 };
 
@@ -84,6 +87,13 @@ export const categoryApi = baseApi.injectEndpoints({
         { type: TAG_TYPES.CATEGORY, id: 'LIST' },
       ],
     }),
+    deleteCategory: builder.mutation<ApiResponse<any>, string>({
+      query: (id) => ({
+        url: generateEndpointVersionning(endpoints.delete).replace(PARAMS_KEY, id),
+        method: HTTP_METHOD.DELETE,
+      }),
+      invalidatesTags: [{ type: TAG_TYPES.CATEGORY, id: 'LIST' }],
+    }),
   }),
   overrideExisting: false,
 });
@@ -95,4 +105,5 @@ export const {
   useCreateCategoryMutation,
   useUpdateCategoryMutation,
   useSwitchCategoryStatusMutation,
+  useDeleteCategoryMutation,
 } = categoryApi;

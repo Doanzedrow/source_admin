@@ -1,7 +1,9 @@
 export default {
   welcome: "Welcome to Admin Dashboard",
   dashboard: "Dashboard",
+  catalog: "Product Info",
   products: "Products",
+  categories: "Categories",
   users: "Users",
   settings: "Settings",
   login: "Login",

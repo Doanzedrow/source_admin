@@ -29,10 +29,22 @@ export const LayoutSider: React.FC<LayoutSiderProps> = ({
       icon: rc(RouteKey.Dashboard).icon, 
       label: t('dashboard') 
     },
-    { 
-      key: rc(RouteKey.Products).path, 
-      icon: rc(RouteKey.Products).icon, 
-      label: t('products') 
+    {
+      key: 'catalog-group',
+      icon: <ShopOutlined />,
+      label: t('catalog'),
+      children: [
+        { 
+          key: rc(RouteKey.Products).path, 
+          icon: rc(RouteKey.Products).icon, 
+          label: t('products') 
+        },
+        { 
+          key: rc(RouteKey.Category).path, 
+          icon: rc(RouteKey.Category).icon, 
+          label: t('categories') 
+        },
+      ],
     },
     {
       key: 'user-group',
