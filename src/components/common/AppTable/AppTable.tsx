@@ -3,7 +3,6 @@ import type { TableProps } from 'antd';
 import './AppTable.less';
 
 export interface AppTableProps<RecordType> extends TableProps<RecordType> {
-  // Bạn có thể mở rộng Props ở đây sau này nếu cần thiết
   hidePagination?: boolean;
 }
 
@@ -11,8 +10,22 @@ export const AppTable = <RecordType extends object>({
   className, 
   hidePagination,
   pagination,
+  rowClassName,
   ...props 
 }: AppTableProps<RecordType>) => {
+
+  const getRowClassName = (record: RecordType, index: number, indent: number) => {
+    const zebraClass = index % 2 === 0 ? 'table-row-light' : 'table-row-dark';
+    let customClass = '';
+    
+    if (typeof rowClassName === 'function') {
+      customClass = (rowClassName as any)(record, index, indent);
+    } else if (typeof rowClassName === 'string') {
+      customClass = rowClassName;
+    }
+    
+    return `${zebraClass} ${customClass}`.trim();
+  };
 
   return (
     <div className={`app-table-wrapper ${className || ''}`}>
@@ -23,6 +36,7 @@ export const AppTable = <RecordType extends object>({
           ...pagination,
           showSizeChanger: false
         }}
+        rowClassName={getRowClassName}
         {...props}
       />
     </div>

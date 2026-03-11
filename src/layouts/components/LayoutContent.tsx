@@ -9,8 +9,10 @@ interface LayoutContentProps {
 
 export const LayoutContent: React.FC<LayoutContentProps> = ({ children }) => {
   return (
-    <Content className="layout-content">
-      {children}
-    </Content>
+    <div className="layout-content-wrapper">
+      <Content className="layout-content">
+        {children}
+      </Content>
+    </div>
   );
 };

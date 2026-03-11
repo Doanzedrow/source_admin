@@ -7,7 +7,14 @@ export default {
     name: "Product Name",
     category: "Category",
     price: "Selling Price",
-    action: "Action"
+    action: "Action",
+    image: "Image",
+    code: "Product Code",
+    status: "Status"
+  },
+  status: {
+    active: "Active",
+    inactive: "Inactive"
   },
   form: {
     name: "Product Name",

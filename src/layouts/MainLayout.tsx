@@ -67,7 +67,12 @@ export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }
         </Drawer>
       )}
 
-      <Layout style={{ width: isSmallScreen ? '100%' : `calc(100% - ${collapsed ? 80 : 250}px)` }}>
+      <Layout style={{ 
+        width: isSmallScreen ? '100%' : `calc(100% - ${collapsed ? 80 : 250}px)`,
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
         <LayoutHeader
           collapsed={collapsed}
           setCollapsed={setCollapsed}

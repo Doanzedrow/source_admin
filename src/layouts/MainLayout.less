@@ -1,5 +1,6 @@
 .main-layout {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .logo-container {
@@ -27,6 +28,7 @@
 
 .layout-header {
   height: 64px;
+  flex-shrink: 0;
   line-height: normal;
   box-sizing: border-box;
   box-shadow: none;
@@ -50,13 +52,20 @@
   cursor: pointer;
 }
 
+.layout-content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  background-color: var(--bg-color);
+  display: flex;
+  flex-direction: column;
+}
+
 .layout-content {
   width: 100%;
   max-width: 1600px;
   margin: 0 auto;
   padding: var(--space-lg);
-  min-height: calc(100vh - 84px);
-  overflow: auto;
+  min-height: min-content;
 }
 
 .app-suspense-fallback {

@@ -1,23 +1,18 @@
-import { useState } from 'react';
-import { mockProductData } from '@/modules/product/data/productMockData';
-import type { ProductMock } from '@/modules/product/data/productMockData';
+import { useGetProductListQuery } from '../api/productApi';
 
-// Hook Contains Logic
 export const useProductList = () => {
-  const [data, setData] = useState<ProductMock[]>(mockProductData);
-  const [isLoading] = useState(false); // Mock loading state
+  const { data, isLoading } = useGetProductListQuery({ page: 1, page_size: 20 });
 
-  const handleDelete = (key: number) => {
-    const newData = data.filter((item) => item.key !== key);
-    setData(newData);
+  const handleDelete = (id: string) => {
+    console.log('Delete product Id:', id);
   };
 
-  const handleEdit = (key: number) => {
-    console.log('Edit product Id:', key);
+  const handleEdit = (id: string) => {
+    console.log('Edit product Id:', id);
   };
 
   return {
-    data,
+    data: data?.result?.data || [],
     isLoading,
     handleDelete,
     handleEdit,

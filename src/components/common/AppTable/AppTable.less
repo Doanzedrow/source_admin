@@ -15,12 +15,24 @@
       white-space: nowrap;
     }
 
-    .ant-table-tbody > tr > td {
-      border-bottom: 1px dashed var(--border-color);
-    }
+    .ant-table-tbody {
+      > tr > td {
+        border-bottom: 1px dashed var(--border-color);
+      }
 
-      .ant-table-tbody > tr.ant-table-row:hover > td {
-      background-color: fade(@primary-color, 3%) !important;
+      // Zebra striping
+      > tr.table-row-light {
+        background-color: var(--body-bg);
+      }
+
+      > tr.table-row-dark {
+        background-color: var(--bg-color); // Usually #f0f2f5 or similar
+      }
+
+      // Hover effect
+      > tr.ant-table-row:hover > td {
+        background-color: fade(@primary-color, 4%) !important;
+      }
     }
   
     .ant-table-tbody > tr.summary-row-highlight > td {

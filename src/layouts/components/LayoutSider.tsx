@@ -59,6 +59,14 @@ export const LayoutSider: React.FC<LayoutSiderProps> = ({
       collapsed={collapsed}
       theme={isDarkMode ? 'dark' : 'light'}
       width={250}
+      style={{ 
+        height: '100vh', 
+        borderRight: '1px solid var(--border-color)',
+        overflow: 'auto',
+        position: 'sticky',
+        top: 0,
+        left: 0
+      }}
     >
       <div className="logo-container">
         <CachedImage

@@ -7,7 +7,14 @@ export default {
     name: "Tên sản phẩm",
     category: "Danh mục",
     price: "Giá bán",
-    action: "Hành động"
+    action: "Hành động",
+    image: "Ảnh",
+    code: "Mã sản phẩm",
+    status: "Trạng thái"
+  },
+  status: {
+    active: "Đang bán",
+    inactive: "Ngừng bán"
   },
   form: {
     name: "Tên sản phẩm",
