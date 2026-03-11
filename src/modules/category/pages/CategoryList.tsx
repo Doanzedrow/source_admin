@@ -7,6 +7,7 @@ import { AppTable } from '@/components/common/AppTable';
 import { SEO } from '@/components/common/SEO/SEO';
 import { useCategoryList } from '../hooks/useCategoryList';
 import type { Category } from '../data/category.types';
+import { useAppNavigate } from '@/hooks/useAppNavigate';
 import { AppFilter } from '@/components/common/AppFilter/AppFilter';
 import { AppSearchInput } from '@/components/common/AppInput/AppSearchInput';
 import { AppLoader } from '@/components/common/AppLoader/AppLoader';
@@ -17,6 +18,7 @@ const { Text } = Typography;
 
 const CategoryList = () => {
   const { t } = useTranslation(['category', 'translation']);
+  const { goToCategoryCreate, goToCategoryEdit } = useAppNavigate();
   const { 
     data, 
     isLoading, 
@@ -57,7 +59,20 @@ const CategoryList = () => {
       dataIndex: 'code',
       key: 'code',
       width: 150,
-      render: (code: string) => <Text strong>{code}</Text>,
+      render: (code: string, record: Category) => (
+        <Text 
+          strong 
+          onClick={() => goToCategoryEdit(record._id)}
+          style={{ 
+            cursor: 'pointer',
+            transition: 'color 0.2s'
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--primary-color)')}
+          onMouseLeave={(e) => (e.currentTarget.style.color = 'inherit')}
+        >
+          {code}
+        </Text>
+      ),
     },
     {
       title: t('columns.name'),
@@ -110,7 +125,7 @@ const CategoryList = () => {
       width: 150,
       render: (_: unknown, record: Category) => (
         <Space size="small">
-          <AppButton type="link">
+          <AppButton type="link" onClick={() => goToCategoryEdit(record._id)}>
             {t('common.actions.edit', { ns: 'translation' })}
           </AppButton>
           <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
@@ -119,7 +134,7 @@ const CategoryList = () => {
         </Space>
       ),
     },
-  ], [t, switchingId, params.page, params.page_size, handleSwitchStatus, handleDelete]);
+  ], [t, switchingId, params.page, params.page_size, handleSwitchStatus, handleDelete, goToCategoryEdit]);
 
   const deferredData = useDeferredValue(data);
 
@@ -141,7 +156,7 @@ const CategoryList = () => {
       <AppCard
         title={t('title')}
         extra={
-          <AppButton type="primary">
+          <AppButton type="primary" onClick={goToCategoryCreate}>
             {t('addCategory')}
           </AppButton>
         }

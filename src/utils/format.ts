@@ -163,3 +163,18 @@ export const formatChartLabel = (label: string, type: 'day' | 'hour' | 'weekday'
       return dayjs(label).format(dateFormat);
   }
 };
+
+/**
+ * Convert string to slug (URL-friendly string)
+ */
+export const toSlug = (str: string): string => {
+  if (!str) return '';
+  str = str.toLowerCase();
+  str = str.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // Remove accents
+  str = str.replace(/[đĐ]/g, 'd');
+  str = str.replace(/([^0-9a-z-\s])/g, ''); // Remove special characters
+  str = str.replace(/(\s+)/g, '-'); // Replace space with -
+  str = str.replace(/-+/g, '-'); // Remove duplicate -
+  str = str.trim().replace(/^-+|-+$/g, ''); // Remove - from start and end
+  return str;
+};
