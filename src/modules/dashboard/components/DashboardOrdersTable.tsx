@@ -2,7 +2,7 @@ import React from 'react';
 import { Tag } from 'antd';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
-import { formatCurrency, formatDateTime, formatDate } from '@/utils/format';
+import { formatCurrency, formatDateTime } from '@/utils/format';
 import type { DashboardOrder } from '../data/dashboard.types';
 import { getOrderStatus, getPaymentStatus } from '../constants/order';
 import { AppTable } from '@/components/common/AppTable';
@@ -12,19 +12,21 @@ export interface DashboardOrdersTableProps {
   isLoading: boolean;
   isDeposit?: boolean;
   pagination?: TablePaginationConfig | false;
+  totalMetaData?: any;
 }
 
 export const DashboardOrdersTable: React.FC<DashboardOrdersTableProps> = ({ 
   data, 
   isLoading, 
   isDeposit = false,
-  pagination = false
+  pagination = false,
+  totalMetaData
 }) => {
   const { t } = useTranslation('dashboard');
 
-  const totalAmount = data?.reduce((sum, item) => sum + (item.totalAmount || item.value || 0), 0) || 0;
-  const depositAmount = data?.reduce((sum, item) => sum + (item.depositAmount || 0), 0) || 0;
-  const remainingAmount = data?.reduce((sum, item) => sum + (item.remainingAmount || 0), 0) || 0;
+  const totalAmount = totalMetaData?.totalAmount || 0;
+  const depositAmount = totalMetaData?.totalDeposit || 0;
+  const remainingAmount = totalMetaData?.totalRemaining || 0;
 
   const dataSource = data && data.length > 0 
     ? [
@@ -41,14 +43,27 @@ export const DashboardOrdersTable: React.FC<DashboardOrdersTableProps> = ({
 
   const columns: ColumnsType<DashboardOrder> = [
     {
+      title: '#',
+      key: 'index',
+      width: 50,
+      align: 'center',
+      onCell: (record: any) => ({ colSpan: record.isSummary ? 4 : 1 }),
+      render: (_, record: any, index: number) => {
+        if (record.isSummary) {
+          return <strong style={{ color: 'var(--text-primary)', textAlign: 'left', display: 'block' }}>{t('orders.table.summaryTotal')}</strong>;
+        }
+        const currentPage = (pagination && typeof pagination === 'object' && pagination.current) ? pagination.current : 1;
+        const pageSize = (pagination && typeof pagination === 'object' && pagination.pageSize) ? pagination.pageSize : 20;
+        return (currentPage - 1) * pageSize + index;
+      }
+    },
+    {
       title: t('orders.table.orderCode'),
       dataIndex: 'code',
       key: 'code',
-      onCell: (record: any) => ({ colSpan: record.isSummary ? 3 : 1 }),
+      onCell: (record: any) => ({ colSpan: record.isSummary ? 0 : 1 }),
       render: (text, record: any) => {
-        if (record.isSummary) {
-          return <strong style={{ color: 'var(--text-primary)' }}>{t('orders.table.summaryTotal')}</strong>;
-        }
+        if (record.isSummary) return null;
         return <strong>{text || record.orderCode || '--'}</strong>;
       }
     },
@@ -101,13 +116,13 @@ export const DashboardOrdersTable: React.FC<DashboardOrdersTableProps> = ({
     ] : []),
     {
       title: t('orders.table.expectedDeliveryDate'),
-      dataIndex: 'expectedDeliveryDate',
-      key: 'expectedDeliveryDate',
+      dataIndex: 'deadline',
+      key: 'deadline',
       onCell: (record: any) => ({ colSpan: record.isSummary ? 3 : 1 }),
       render: (text, record: any) => {
         if (record.isSummary) return null;
-        const dateStr = text || record.deliveryDate;
-        return dateStr ? formatDate(dateStr) : '--';
+        const dateStr = text || record.deadline || record.expectedDeliveryDate || record.deliveryDate;
+        return dateStr ? formatDateTime(dateStr) : '--';
       }
     },
     {

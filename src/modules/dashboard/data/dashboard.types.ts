@@ -57,6 +57,18 @@ export interface PaginatedResult<T> {
   total?: number;
   page?: number;
   limit?: number;
+  metaData?: {
+    totalPaid?: number;
+    totalDeposit?: number;
+    totalRemaining?: number;
+    totalAmount?: number;
+    totalDiscount?: number;
+    totalGivenMoney?: number;
+    totalChangeMoney?: number;
+    totalDebt?: number;
+    totalReturn?: number;
+    [key: string]: any;
+  }
 }
 
 export interface ChartNetRevenueData {

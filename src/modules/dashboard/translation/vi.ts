@@ -53,7 +53,7 @@ export default {
       expectedDeliveryDate: "Ngày giao đơn",
       orderStatus: "Trạng thái",
       paymentStatus: "Thanh toán",
-      summaryTotal: "Tổng cộng (Trang này):"
+      summaryTotal: "Tổng cộng:"
     },
     status: {
       draft: "Đang thực hiện",

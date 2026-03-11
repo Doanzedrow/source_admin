@@ -52,16 +52,19 @@ export const useDashboardOrders = () => {
       data: newData?.result?.data || [],
       loading: isFetchingNew,
       total: newData?.result?.pagination?.total || 0,
+      metaData: newData?.result?.metaData || {}
     },
     depositOrders: {
       data: depositData?.result?.data || [],
       loading: isFetchingDeposit,
       total: depositData?.result?.pagination?.total || 0,
+      metaData: depositData?.result?.metaData || {}
     },
     draftOrders: {
       data: draftData?.result?.data || [],
       loading: isFetchingDraft,
       total: draftData?.result?.pagination?.total || 0,
+      metaData: draftData?.result?.metaData || {}
     }
   };
 };

@@ -36,6 +36,7 @@ export const DashboardOrders: React.FC = () => {
           data={newOrders.data} 
           isLoading={newOrders.loading} 
           pagination={getPaginationOptions(newOrders.total)}
+          totalMetaData={newOrders.metaData}
         />
       ),
     },
@@ -48,6 +49,7 @@ export const DashboardOrders: React.FC = () => {
           isLoading={depositOrders.loading} 
           isDeposit={true}
           pagination={getPaginationOptions(depositOrders.total)}
+          totalMetaData={depositOrders.metaData}
         />
       ),
     },
@@ -59,6 +61,7 @@ export const DashboardOrders: React.FC = () => {
           data={draftOrders.data} 
           isLoading={draftOrders.loading} 
           pagination={getPaginationOptions(draftOrders.total)}
+          totalMetaData={draftOrders.metaData}
         />
       ),
     },

@@ -53,7 +53,7 @@ export default {
       expectedDeliveryDate: "Delivery Date",
       orderStatus: "Status",
       paymentStatus: "Payment",
-      summaryTotal: "Total (This page):"
+      summaryTotal: "Total:"
     },
     status: {
       draft: "In Progress",

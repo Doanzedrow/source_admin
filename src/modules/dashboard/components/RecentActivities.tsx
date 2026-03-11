@@ -25,7 +25,7 @@ export const RecentActivities: React.FC = () => {
         }
         className="activity-sidebar"
         style={{ height: '100%', display: 'flex', flexDirection: 'column', margin: 0 }}
-        bodyStyle={{ flex: 1, overflowY: 'auto' }}
+        styles={{ body: { flex: 1, overflowY: 'auto' } }}
       >
         {isLoading ? (
           <RecentActivitiesSkeleton />
