@@ -20,6 +20,24 @@
         border-radius: @border-radius-sm;
       }
     }
+
+    .full-width-upload {
+      display: block;
+      width: 100%;
+      
+      .ant-upload.ant-upload-select-picture-card {
+        width: 100%;
+        height: auto;
+        min-height: 200px;
+        background-color: transparent;
+        border: 1px dashed var(--border-color);
+        transition: border-color 0.3s;
+        
+        &:hover {
+          border-color: @primary-color;
+        }
+      }
+    }
   }
 
 

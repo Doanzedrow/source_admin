@@ -1,0 +1,51 @@
+@import '@/styles/variables.less';
+ 
+ .app-media-upload {
+   display: flex;
+   width: 100%;
+   height: auto;
+   min-height: 200px;
+   align-items: center;
+   justify-content: center;
+   border: 1px dashed var(--border-color);
+   border-radius: var(--border-radius-lg);
+   background-color: var(--body-bg);
+   transition: border-color 0.3s, background-color 0.3s;
+   padding: @space-md;
+ 
+   &:hover {
+     border-color: @primary-color;
+   }
+ 
+   .ant-upload.ant-upload-select-picture-card {
+     width: 120px;
+     height: 120px;
+     margin-right: @space-xs;
+     margin-bottom: @space-xs;
+     background-color: transparent;
+     border: 1px dashed var(--border-color);
+     
+     .upload-trigger-content {
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       justify-content: center;
+       width: 100%;
+       height: 100%;
+       color: var(--text-secondary);
+       font-size: 14px;
+     }
+   }
+ 
+   .ant-upload-list-item-container {
+     width: 120px;
+     height: 120px;
+   }
+ }
+ 
+ .media-preview-modal {
+   .ant-modal-content {
+     padding: @space-sm;
+     background-color: var(--body-bg);
+   }
+ }
