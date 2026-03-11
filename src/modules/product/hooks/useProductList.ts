@@ -7,6 +7,7 @@ import {
   useSwitchStatusMutation,
   useDeleteProductMutation,
   useBatchDeleteProductsMutation,
+  useBatchUpdateStatusMutation,
 } from '../api/productApi';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants';
 import { useUrlFilters } from '@/hooks/useUrlFilters';
@@ -62,6 +63,7 @@ export const useProductList = () => {
   const [switchStatus] = useSwitchStatusMutation();
   const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
   const [batchDeleteProducts, { isLoading: isBatchDeleting }] = useBatchDeleteProductsMutation();
+  const [batchUpdateStatus, { isLoading: isBatchUpdating }] = useBatchUpdateStatusMutation();
   const { confirmDelete, confirmBatchDelete } = useAppConfirm();
 
   const handlePageChange = useCallback(
@@ -142,13 +144,34 @@ export const useProductList = () => {
     [switchStatus, notification, t]
   );
 
+  const handleBatchUpdateStatus = useCallback(
+    async (ids: string[], status: number, onSuccess?: () => void) => {
+      if (ids.length === 0) return;
+      try {
+        await batchUpdateStatus({ productIds: ids, status }).unwrap();
+        notification.success({
+          message: t('common.messages.success', { ns: 'translation' }),
+          description: t('messages.updateStatusSuccess'),
+        });
+        onSuccess?.();
+      } catch (error: any) {
+        notification.error({
+          message: t('messages.updateStatusError'),
+          description: error?.data?.message || error?.message,
+        });
+      }
+    },
+    [batchUpdateStatus, notification, t]
+  );
+
   return {
     data: data?.result?.data || [],
-    isLoading: isLoading || isDeleting || isBatchDeleting || isCategoriesLoading,
+    isLoading: isLoading || isDeleting || isBatchDeleting || isBatchUpdating || isCategoriesLoading,
     isFetching,
     switchingId,
     handleDelete,
     handleBatchDelete,
+    handleBatchUpdateStatus,
     handleSwitchStatus,
     params: filters,
     setFilters,

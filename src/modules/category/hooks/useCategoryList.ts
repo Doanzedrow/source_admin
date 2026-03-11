@@ -5,7 +5,8 @@ import { useAppConfirm } from '@/hooks/useAppConfirm';
 import { 
   useGetCategoryListQuery, 
   useSwitchCategoryStatusMutation,
-  useDeleteCategoryMutation
+  useDeleteCategoryMutation,
+  useBatchDeleteCategoriesMutation
 } from '../api/categoryApi';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants';
 import { useUrlFilters } from '@/hooks/useUrlFilters';
@@ -13,7 +14,7 @@ import { useUrlFilters } from '@/hooks/useUrlFilters';
 export const useCategoryList = () => {
   const { t } = useTranslation(['category', 'translation']);
   const { notification } = useAppNotify();
-  const { confirmDelete } = useAppConfirm();
+  const { confirmDelete, confirmBatchDelete } = useAppConfirm();
   
   const { filters, setFilters, resetFilters } = useUrlFilters({
     page: 1,
@@ -27,6 +28,7 @@ export const useCategoryList = () => {
   const { data, isLoading, isFetching } = useGetCategoryListQuery(filters);
   const [switchStatus] = useSwitchCategoryStatusMutation();
   const [deleteCategory, { isLoading: isDeleting }] = useDeleteCategoryMutation();
+  const [batchDeleteCategories, { isLoading: isBatchDeleting }] = useBatchDeleteCategoriesMutation();
 
   const handlePageChange = useCallback((page: number, pageSize?: number) => {
     setFilters({
@@ -73,12 +75,33 @@ export const useCategoryList = () => {
     });
   }, [confirmDelete, deleteCategory, notification, t]);
 
+  const handleBatchDelete = useCallback((ids: string[], onSuccess?: () => void) => {
+    if (ids.length === 0) return;
+
+    confirmBatchDelete(ids.length, async () => {
+      try {
+        await batchDeleteCategories(ids).unwrap();
+        notification.success({
+          message: t('common.messages.success', { ns: 'translation' }),
+          description: t('messages.deleteSuccess'),
+        });
+        onSuccess?.();
+      } catch (error: any) {
+        notification.error({
+          message: t('messages.deleteError'),
+          description: error?.data?.message || error?.message,
+        });
+      }
+    });
+  }, [confirmBatchDelete, batchDeleteCategories, notification, t]);
+
   return {
     data: data?.result?.data || [],
-    isLoading: isLoading || isDeleting,
+    isLoading: isLoading || isDeleting || isBatchDeleting,
     isFetching,
     switchingId,
     handleDelete,
+    handleBatchDelete,
     handleSwitchStatus,
     params: filters,
     setFilters,

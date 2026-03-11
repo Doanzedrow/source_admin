@@ -6,8 +6,6 @@ import { rc, RouteKey } from '@/routes/routeConfig';
 import { ProductForm } from '../components/ProductForm';
 import { useProductUpsert } from '../hooks/useProductUpsert';
 
-import '../styles/product-upsert.less';
-
 const ProductUpsert: React.FC = () => {
   const { 
     id, 

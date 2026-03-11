@@ -41,20 +41,20 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
         <Row gutter={[24, 0]}>
           <Col xs={24} lg={16}>
             <Row gutter={24}>
-              <Col xs={24} md={12}>
-                <AppInput
-                  label={t('form.name')}
-                  name="name"
-                  placeholder={t('placeholder.name')}
-                  rules={[{ required: true, message: t('validation.required', { field: t('form.name') }) }]}
-                />
-              </Col>
-              <Col xs={24} md={12}>
+              <Col xs={24} md={8}>
                 <AppInput
                   label={t('form.code')}
                   name="code"
                   placeholder={t('placeholder.code')}
                   rules={[{ required: true, message: t('validation.required', { field: t('form.code') }) }]}
+                />
+              </Col>
+              <Col xs={24} md={16}>
+                <AppInput
+                  label={t('form.name')}
+                  name="name"
+                  placeholder={t('placeholder.name')}
+                  rules={[{ required: true, message: t('validation.required', { field: t('form.name') }) }]}
                 />
               </Col>
             </Row>

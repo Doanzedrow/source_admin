@@ -69,7 +69,7 @@ export const useProductForm = ({ initialValues, onSave }: UseProductFormProps) =
     const taxPercentage = safeParseNumber(trimmed.taxPercentage);
     const priceSaleWithTax = safeParseNumber(trimmed.priceSaleWithTax);
 
-    onSave({
+    const payload: any = {
       ...trimmed,
       type: PRODUCT_TYPE.REGULAR,
       status: trimmed.status ? 1 : 0,
@@ -77,7 +77,13 @@ export const useProductForm = ({ initialValues, onSave }: UseProductFormProps) =
       taxPercentage,
       priceSaleWithTax,
       taxAmount: priceSaleWithTax - priceSale,
-    });
+    };
+
+    if (!payload.thumbnail) {
+      payload.thumbnail = null;
+    }
+
+    onSave(payload);
   };
 
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery({ type: 1 });

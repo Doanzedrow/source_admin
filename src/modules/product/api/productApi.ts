@@ -9,7 +9,14 @@ import type { Product } from '../data/product.types';
 const MODULE_NAME = 'product';
 
 const endpoints: Record<
-  'listPagination' | 'switchStatus' | 'create' | 'edit' | 'getById' | 'delete' | 'batchDelete', 
+  | 'listPagination'
+  | 'switchStatus'
+  | 'create'
+  | 'edit'
+  | 'getById'
+  | 'delete'
+  | 'batchDelete'
+  | 'editMultiple',
   Endpoint
 > = {
   listPagination: {
@@ -32,6 +39,9 @@ const endpoints: Record<
   },
   batchDelete: {
     endpoint: `/${MODULE_NAME}/batchDelete`,
+  },
+  editMultiple: {
+    endpoint: `/${MODULE_NAME}/multiple`,
   },
 };
 
@@ -100,6 +110,14 @@ export const productApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: TAG_TYPES.PRODUCT, id: 'LIST' }],
     }),
+    batchUpdateStatus: builder.mutation<ApiResponse<any>, { productIds: string[]; status: number }>({
+      query: (body) => ({
+        url: generateEndpointVersionning(endpoints.editMultiple),
+        method: HTTP_METHOD.PUT,
+        data: body,
+      }),
+      invalidatesTags: [{ type: TAG_TYPES.PRODUCT, id: 'LIST' }],
+    }),
   }),
   overrideExisting: false,
 });
@@ -112,4 +130,5 @@ export const {
   useUpdateProductMutation,
   useDeleteProductMutation,
   useBatchDeleteProductsMutation,
+  useBatchUpdateStatusMutation,
 } = productApi;

@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useState, memo, useEffect, useDeferredValue } from 'react';
+import React, { useMemo, useCallback, useState, memo, useEffect, useDeferredValue, useTransition } from 'react';
 import { Space, Flex, Tag, Switch, Select, Typography, Col } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/components/common/AppButton';
@@ -29,6 +29,7 @@ const ProductList = () => {
     isFetching,
     handleDelete,
     handleBatchDelete,
+    handleBatchUpdateStatus,
     handleSwitchStatus,
     switchingId,
     params,
@@ -40,12 +41,21 @@ const ProductList = () => {
   } = useProductList();
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [localCategory, setLocalCategory] = useState<string | undefined>(params.category);
+  const [localStatus, setLocalStatus] = useState<number | undefined>(params.status !== undefined ? Number(params.status) : undefined);
+  const [isPending, startTransition] = useTransition();
 
   const [isReady, setIsReady] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => setIsReady(true), 10);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (params.category !== localCategory) setLocalCategory(params.category);
+    const apiStatus = params.status !== undefined ? Number(params.status) : undefined;
+    if (apiStatus !== localStatus) setLocalStatus(apiStatus);
+  }, [params.category, params.status]);
 
   const handleSearch = useCallback(
     (val: string) => {
@@ -56,14 +66,26 @@ const ProductList = () => {
 
   const handleCategoryChange = useCallback(
     (val: string) => {
-      setFilters({ category: val, page: 1 });
+      setLocalCategory(val);
+      // Use setTimeout to allow the UI to paint the select value update first
+      setTimeout(() => {
+        startTransition(() => {
+          setFilters({ category: val, page: 1 });
+        });
+      }, 0);
     },
     [setFilters]
   );
 
   const handleStatusChange = useCallback(
     (val: any) => {
-      setFilters({ status: val, page: 1 });
+      setLocalStatus(val);
+      // Use setTimeout to allow the UI to paint the select value update first
+      setTimeout(() => {
+        startTransition(() => {
+          setFilters({ status: val, page: 1 });
+        });
+      }, 0);
     },
     [setFilters]
   );
@@ -280,20 +302,22 @@ const ProductList = () => {
             <Select
               style={{ width: '100%' }}
               placeholder={t('filter.category')}
-              value={params.category}
+              value={localCategory}
               onChange={handleCategoryChange}
               allowClear
               options={categoryOptions}
+              loading={isPending}
             />
           </Col>
           <Col xs={12} sm={6} md={6} lg={6}>
             <Select
               style={{ width: '100%' }}
               placeholder={t('filter.status')}
-              value={params.status !== undefined ? Number(params.status) : undefined}
+              value={localStatus}
               onChange={handleStatusChange}
               allowClear
               options={statusOptions}
+              loading={isPending}
             />
           </Col>
         </AppFilter>
@@ -304,16 +328,30 @@ const ProductList = () => {
         extra={
           <Space>
             {selectedIds.length > 0 && (
-              <AppButton
-                danger
-                onClick={() => handleBatchDelete(selectedIds, () => setSelectedIds([]))}
-                loading={isLoading}
-              >
-                {t('common.actions.deleteSelected', {
-                  ns: 'translation',
-                  count: selectedIds.length,
-                })}
-              </AppButton>
+              <>
+                <AppButton
+                  onClick={() => handleBatchUpdateStatus(selectedIds, 1, () => setSelectedIds([]))}
+                  loading={isLoading}
+                >
+                  {t('status.active')}
+                </AppButton>
+                <AppButton
+                  onClick={() => handleBatchUpdateStatus(selectedIds, 0, () => setSelectedIds([]))}
+                  loading={isLoading}
+                >
+                  {t('status.inactive')}
+                </AppButton>
+                <AppButton
+                  danger
+                  onClick={() => handleBatchDelete(selectedIds, () => setSelectedIds([]))}
+                  loading={isLoading}
+                >
+                  {t('common.actions.deleteSelected', {
+                    ns: 'translation',
+                    count: selectedIds.length,
+                  })}
+                </AppButton>
+              </>
             )}
             <AppButton type="primary" onClick={goToProductCreate}>
               {t('addProduct')}
@@ -329,6 +367,7 @@ const ProductList = () => {
               columns={columns}
               dataSource={deferredData}
               rowKey="_id"
+              loading={isFetching}
               pagination={{
                 total,
                 current: params.page,
@@ -342,7 +381,7 @@ const ProductList = () => {
           <AppLoader 
             isLoading={!isReady || (isLoading && data.length === 0)} 
             overlay 
-            tip={!isReady || (isLoading && data.length === 0) ? t('loading', { ns: 'translation' }) : undefined}
+            description={t('loading', { ns: 'translation' })}
           />
         </div>
       </AppCard>

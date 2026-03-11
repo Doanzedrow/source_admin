@@ -24,6 +24,7 @@ const CategoryList = () => {
     isLoading, 
     isFetching,
     handleDelete, 
+    handleBatchDelete,
     handleSwitchStatus, 
     switchingId,
     params, 
@@ -33,6 +34,7 @@ const CategoryList = () => {
     total 
   } = useCategoryList();
 
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isReady, setIsReady] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => setIsReady(true), 10);
@@ -136,6 +138,13 @@ const CategoryList = () => {
     },
   ], [t, switchingId, params.page, params.page_size, handleSwitchStatus, handleDelete, goToCategoryEdit]);
 
+  const rowSelection = useMemo(() => ({
+    type: 'checkbox' as const,
+    selectedRowKeys: selectedIds,
+    onChange: (keys: React.Key[]) => setSelectedIds(keys as string[]),
+    preserveSelectedRowKeys: true,
+  }), [selectedIds]);
+
   const deferredData = useDeferredValue(data);
 
   return (
@@ -158,9 +167,20 @@ const CategoryList = () => {
       <AppCard
         title={t('title')}
         extra={
-          <AppButton type="primary" onClick={goToCategoryCreate}>
-            {t('addCategory')}
-          </AppButton>
+          <Space>
+            {selectedIds.length > 0 && (
+              <AppButton
+                danger
+                onClick={() => handleBatchDelete(selectedIds, () => setSelectedIds([]))}
+                loading={isLoading}
+              >
+                {t('common.actions.deleteSelected', { ns: 'translation', count: selectedIds.length })}
+              </AppButton>
+            )}
+            <AppButton type="primary" onClick={goToCategoryCreate}>
+              {t('addCategory')}
+            </AppButton>
+          </Space>
         }
       >
         <div style={{ position: 'relative', minHeight: '400px' }}>
@@ -170,19 +190,21 @@ const CategoryList = () => {
               columns={columns}
               dataSource={deferredData}
               rowKey="_id"
+              loading={isFetching}
               pagination={{
                 total,
                 current: params.page,
                 pageSize: params.page_size,
                 onChange: handlePageChange,
               }}
+              rowSelection={rowSelection}
             />
           )}
           
           <AppLoader 
             isLoading={!isReady || (isLoading && data.length === 0)} 
             overlay 
-            tip={!isReady || (isLoading && data.length === 0) ? t('loading', { ns: 'translation' }) : undefined}
+            description={t('loading', { ns: 'translation' })}
           />
         </div>
       </AppCard>
