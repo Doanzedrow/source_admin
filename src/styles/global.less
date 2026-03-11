@@ -1,4 +1,3 @@
-/* src/styles/global.less */
 @import './variables.less';
 
 body {
@@ -137,7 +136,6 @@ p {
   align-items: center;
 }
 
-/* Reset Browser Autofill Background (Big Tech standard) */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -161,4 +159,31 @@ input:-webkit-autofill:active {
   flex-shrink: 0;
   min-width: 36px;
   justify-content: center;
+}
+
+.app-input-right {
+  input {
+    text-align: right !important;
+  }
+}
+
+.ant-form-item-control-input-content {
+  .ant-input-number-group-wrapper,
+  .ant-input-group-wrapper,
+  .ant-select,
+  .ant-input,
+  .ant-input-number {
+    width: 100% !important;
+  }
+
+  .ant-input-number-group-addon {
+    background-color: #fafafa;
+    border-color: #d9d9d9;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    font-weight: 500;
+  }
 }

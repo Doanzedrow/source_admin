@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { InputNumber, Form, Space } from 'antd';
+import { InputNumber, Form } from 'antd';
 import type { InputNumberProps } from 'antd';
 
 interface AppInputPriceProps extends Omit<InputNumberProps, 'name' | 'formatter' | 'parser'> {
@@ -11,21 +11,33 @@ interface AppInputPriceProps extends Omit<InputNumberProps, 'name' | 'formatter'
 }
 
 const ALLOWED_KEYS = new Set([
-  'Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
-  'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
-  'Home', 'End',
+  'Backspace',
+  'Delete',
+  'Tab',
+  'Escape',
+  'Enter',
+  'ArrowLeft',
+  'ArrowRight',
+  'ArrowUp',
+  'ArrowDown',
+  'Home',
+  'End',
 ]);
+
+const numberFormatter = new Intl.NumberFormat('vi-VN');
 
 const formatter = (value: number | string | undefined): string => {
   if (value === undefined || value === null || value === '') return '';
-  const num = Number(`${value}`.replace(/,/g, ''));
+  const strValue = `${value}`.replace(/\D/g, '');
+  const num = Number(strValue);
   if (isNaN(num)) return '';
-  return num.toLocaleString('vi-VN');
+  return numberFormatter.format(num);
 };
 
-const parser = (value: string | undefined): string => {
-  if (!value) return '';
-  return value.replace(/\./g, '').replace(/,/g, '');
+const parser = (value: string | undefined): number => {
+  if (!value) return 0;
+  const cleanValue = value.replace(/\D/g, '');
+  return cleanValue ? parseInt(cleanValue, 10) : 0;
 };
 
 export const AppInputPrice: React.FC<AppInputPriceProps> = ({
@@ -43,23 +55,25 @@ export const AppInputPrice: React.FC<AppInputPriceProps> = ({
   }, []);
 
   const inputId = id || (typeof name === 'string' ? name : undefined);
+  
   return (
     <Form.Item label={label} name={name} rules={rules} htmlFor={inputId}>
-      <Space.Compact style={{ width: '100%', ...style }}>
-        <InputNumber
-          id={inputId}
-          size="large"
-          style={{ width: '100%' }}
-          formatter={formatter}
-          parser={parser}
-          min={0}
-          step={1000}
-          precision={0}
-          onKeyDown={handleKeyDown}
-          {...props}
-        />
-        <span className="app-input-price-suffix">{currency}</span>
-      </Space.Compact>
+      <InputNumber
+        id={inputId}
+        size="large"
+        style={{ width: '100%', ...style }}
+        formatter={formatter}
+        parser={parser as any}
+        min={0}
+        step={1000}
+        precision={0}
+        onKeyDown={handleKeyDown}
+        controls={false}
+        className="app-input-right"
+        // Ant Design v5 suffix for InputNumber:
+        suffix={currency} 
+        {...props}
+      />
     </Form.Item>
   );
 };

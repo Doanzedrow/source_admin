@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Form } from 'antd';
 import type { Product } from '../data/product.types';
 
@@ -7,39 +7,55 @@ interface UseProductFormProps {
   onSave: (values: any) => void;
 }
 
+/**
+ * Safely parses numbers, stripping potential thousand separators.
+ */
+const safeParseNumber = (val: any): number => {
+  if (val === undefined || val === null || val === '') return 0;
+  if (typeof val === 'number') return val;
+  const cleaned = String(val).replace(/\D/g, '');
+  return cleaned ? parseInt(cleaned, 10) : 0;
+};
+
 export const useProductForm = ({ initialValues, onSave }: UseProductFormProps) => {
   const [form] = Form.useForm();
-  const [priceSaleWithTax, setPriceSaleWithTax] = useState<number>(0);
 
   useEffect(() => {
     if (initialValues) {
+      const priceSale = initialValues.priceSale ?? 0;
+      const taxPercentage = initialValues.taxPercentage ?? 0;
+      const priceSaleWithTax = Math.round(priceSale * (1 + taxPercentage / 100));
+
       form.setFieldsValue({
         ...initialValues,
         category: initialValues.category?._id,
-        thumbnail: initialValues.thumbnail?.thumbnail?.path || initialValues.thumbnail?.thumbnail?.sizes?.product_square?.path || '',
+        thumbnail:
+          initialValues.thumbnail?.thumbnail?.path ||
+          initialValues.thumbnail?.thumbnail?.sizes?.product_square?.path ||
+          '',
         status: initialValues.status === 1,
+        priceSaleWithTax: priceSaleWithTax,
       });
-      recalculatePrice(
-        initialValues.priceSale ?? 0,
-        initialValues.taxPercentage ?? 0,
-      );
     } else {
       form.resetFields();
-      form.setFieldsValue({ status: true });
-      setPriceSaleWithTax(0);
+      form.setFieldsValue({ status: true, taxPercentage: 0, priceSale: 0, priceSaleWithTax: 0 });
     }
   }, [initialValues, form]);
 
-  const recalculatePrice = (price: number, vat: number) => {
-    const calculated = Math.round(price * (1 + vat / 100));
-    setPriceSaleWithTax(calculated);
-  };
-
+  /**
+   * Universal onValuesChange for bidirectional price calculation.
+   */
   const onValuesChange = (changed: any, all: any) => {
+    const taxPercentage = safeParseNumber(all.taxPercentage);
+
     if ('priceSale' in changed || 'taxPercentage' in changed) {
-      const price = Number(all.priceSale) || 0;
-      const vat = Number(all.taxPercentage) || 0;
-      recalculatePrice(price, vat);
+      const priceSale = safeParseNumber(all.priceSale);
+      const priceSaleWithTax = Math.round(priceSale * (1 + taxPercentage / 100));
+      form.setFieldsValue({ priceSaleWithTax });
+    } else if ('priceSaleWithTax' in changed) {
+      const priceSaleWithTax = safeParseNumber(all.priceSaleWithTax);
+      const priceSale = Math.round(priceSaleWithTax / (1 + taxPercentage / 100));
+      form.setFieldsValue({ priceSale });
     }
   };
 
@@ -49,21 +65,25 @@ export const useProductForm = ({ initialValues, onSave }: UseProductFormProps) =
       const trimmed = Object.fromEntries(
         Object.entries(values).map(([k, v]) => [k, typeof v === 'string' ? v.trim() : v])
       );
-      
-      onSave({ 
-        ...trimmed, 
+
+      const priceSale = safeParseNumber(trimmed.priceSale);
+      const taxPercentage = safeParseNumber(trimmed.taxPercentage);
+      const priceSaleWithTax = safeParseNumber(trimmed.priceSaleWithTax);
+
+      onSave({
+        ...trimmed,
         status: trimmed.status ? 1 : 0,
+        priceSale,
+        taxPercentage,
         priceSaleWithTax,
-        taxAmount: priceSaleWithTax - (Number(trimmed.priceSale) || 0)
+        taxAmount: priceSaleWithTax - priceSale,
       });
-    } catch {
-    }
+    } catch {}
   };
 
   return {
     form,
-    handleSubmit,
     onValuesChange,
-    priceSaleWithTax,
+    handleSubmit,
   };
 };

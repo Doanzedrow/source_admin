@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { InputNumber, Form } from 'antd';
 import type { InputNumberProps } from 'antd';
 
-interface AppInputNumberProps extends Omit<InputNumberProps, 'name'> {
+interface AppInputNumberProps extends Omit<InputNumberProps, 'name' | 'formatter' | 'parser'> {
   label?: string;
   name?: string | (string | number)[];
   rules?: any[];
@@ -15,6 +15,20 @@ const ALLOWED_KEYS = new Set([
   'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
   'Home', 'End',
 ]);
+
+const numberFormatter = new Intl.NumberFormat('vi-VN');
+
+const formatter = (value: number | string | undefined): string => {
+  if (value === undefined || value === null || value === '') return '';
+  const num = typeof value === 'number' ? value : Number(`${value}`.replace(/\./g, ''));
+  if (isNaN(num)) return '';
+  return numberFormatter.format(num);
+};
+
+const parser = (value: string | undefined): string => {
+  if (!value) return '';
+  return value.replace(/\./g, '');
+};
 
 export const AppInputNumber: React.FC<AppInputNumberProps> = ({
   label,
@@ -37,6 +51,10 @@ export const AppInputNumber: React.FC<AppInputNumberProps> = ({
         style={{ width: '100%' }}
         precision={0}
         onKeyDown={handleKeyDown}
+        formatter={formatter}
+        parser={parser}
+        controls={false}
+        className="app-input-right"
         {...props}
       />
     </Form.Item>
