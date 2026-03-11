@@ -2,20 +2,17 @@
 
 .product-upsert-page {
   .upsert-header {
-    margin-bottom: @space-xl;
-    
-    .ant-breadcrumb {
-      margin-bottom: @space-xs;
-    }
-    
-    .header-title-row {
-      margin-top: @space-sm;
-    }
-  }
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: var(--bg-color);
+    padding: @space-sm var(--space-lg);
+    margin: calc(@space-lg * -1) calc(@space-lg * -1) @space-lg;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 
-  .form-container {
-    max-width: 1000px;
-    margin: 0 auto;
+    .ant-breadcrumb {
+      margin-bottom: @space-xxs;
+    }
   }
 }
-

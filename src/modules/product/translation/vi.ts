@@ -45,7 +45,9 @@ export default {
     code: "Nhập mã sản phẩm",
     price: "Nhập giá bán",
     description: "Nhập mô tả sản phẩm...",
-    category: "Chọn danh mục"
+    category: "Chọn danh mục",
+    categoryMock1: "Danh mục 1",
+    categoryMock2: "Danh mục 2"
   },
   validation: {
     required: "{{field}} là bắt buộc",

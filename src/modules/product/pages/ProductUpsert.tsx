@@ -2,6 +2,7 @@ import { SEO } from '@/components/common/SEO/SEO';
 import { AppLoader } from '@/components/common/AppLoader/AppLoader';
 import { AppBreadcrumb } from '@/components/common/AppBreadcrumb';
 import { AppCard } from '@/components/common/AppCard';
+import { rc, RouteKey } from '@/routes/routeConfig';
 import { ProductForm } from '../components/ProductForm';
 import { useProductUpsert } from '../hooks/useProductUpsert';
 
@@ -27,22 +28,23 @@ const ProductUpsert: React.FC = () => {
         description={t('seoDescription')} 
       />
       
-      <AppBreadcrumb
-        items={[
-          { title: t('title'), link: '/products' },
-          { title: id ? t('titleEdit') : t('titleCreate') },
-        ]}
-        title={id ? t('titleEdit') : t('titleCreate')}
-        onBack={goToProducts}
-        id={id}
-      />
+      <div className="upsert-header">
+        <AppBreadcrumb
+          items={[
+            { title: t('title'), link: rc(RouteKey.Products).path },
+            { title: id ? t('titleEdit') : t('titleCreate') },
+          ]}
+          title={id ? t('titleEdit') : t('titleCreate')}
+          onBack={goToProducts}
+          id={id}
+        />
+      </div>
 
       <AppCard className="form-container">
         <ProductForm
           initialValues={currentProduct}
           loading={loading}
           onSave={handleSave}
-          onCancel={goToProducts}
         />
       </AppCard>
     </div>

@@ -13,6 +13,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/components/common/AppButton';
 import { AppInput } from '@/components/common/AppInput';
+import { FormActions } from '@/components/common/FormActions';
 import type { Product } from '../data/product.types';
 import { useProductForm } from '../hooks/useProductForm';
 
@@ -25,14 +26,12 @@ interface ProductFormProps {
   onSave: (values: any) => void;
   loading: boolean;
   initialValues: Product | null;
-  onCancel: () => void;
 }
 
 export const ProductForm: React.FC<ProductFormProps> = ({
   onSave,
   loading,
   initialValues,
-  onCancel,
 }) => {
   const { t } = useTranslation(['product', 'translation']);
   const { form, handleSubmit } = useProductForm({ initialValues, onSave });
@@ -73,8 +72,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               rules={[{ required: true, message: t('validation.required', { field: t('form.category') }) }]}
             >
               <Select placeholder={t('placeholder.category')} size="large">
-                <Select.Option value="cat1">Category 1</Select.Option>
-                <Select.Option value="cat2">Category 2</Select.Option>
+                <Select.Option value="cat1">{t('placeholder.categoryMock1')}</Select.Option>
+                <Select.Option value="cat2">{t('placeholder.categoryMock2')}</Select.Option>
               </Select>
             </Form.Item>
           </Flex>
@@ -140,14 +139,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           </Form.Item>
         </div>
 
-        <Flex justify="end" gap={12} className="form-actions">
-          <AppButton size="large" onClick={onCancel}>
-            {t('common.actions.cancel', { ns: 'translation' })}
+        <FormActions>
+          <AppButton size="large" onClick={() => form.resetFields()}>
+            {t('common.actions.reset', { ns: 'translation' })}
           </AppButton>
           <AppButton size="large" type="primary" onClick={handleSubmit} loading={loading} style={{ minWidth: 120 }}>
-            {t('common.actions.save', { ns: 'translation' })}
+            {t('common.actions.confirm', { ns: 'translation' })}
           </AppButton>
-        </Flex>
+        </FormActions>
       </Form>
     </div>
   );

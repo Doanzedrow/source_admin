@@ -43,7 +43,9 @@ export default {
     code: "Enter product code",
     price: "Enter selling price",
     description: "Enter product description...",
-    category: "Select category"
+    category: "Select category",
+    categoryMock1: "Category 1",
+    categoryMock2: "Category 2"
   },
   validation: {
     required: "{{field}} is required",

@@ -30,7 +30,10 @@ export default {
       search: "Search",
       filter: "Filter",
       action: "Action",
-      backHome: "Back to Home"
+      backHome: "Back to Home",
+      confirm: "Confirm",
+      reset: "Reset",
+      upload: "Upload"
     },
     messages: {
       success: "Success",

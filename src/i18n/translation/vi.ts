@@ -30,7 +30,10 @@ export default {
       search: "Tìm kiếm",
       filter: "Lọc",
       action: "Thao tác",
-      backHome: "Về trang chủ"
+      backHome: "Về trang chủ",
+      confirm: "Xác nhận",
+      reset: "Thiết lập lại",
+      upload: "Tải ảnh lên"
     },
     messages: {
       success: "Thành công",

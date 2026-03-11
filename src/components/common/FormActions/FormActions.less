@@ -1,0 +1,30 @@
+@import '@/styles/variables.less';
+
+.form-actions-wrapper {
+  margin-top: @space-xl;
+  padding-top: @space-lg;
+  border-top: 1px solid var(--border-color);
+  
+  &.is-sticky {
+    position: sticky;
+    bottom: 0;
+    z-index: 1000;
+    margin: @space-lg calc(@space-lg * -1) calc(@space-lg * -1);
+    padding: @space-md var(--space-lg);
+    background-color: var(--body-bg);
+    border-top: 1px solid var(--border-color);
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+    border-bottom-left-radius: var(--border-radius-lg);
+    border-bottom-right-radius: var(--border-radius-lg);
+  }
+
+  .form-actions-content {
+    max-width: 100%;
+  }
+}
+
+[data-theme='dark'] {
+  .form-actions-wrapper.is-sticky {
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.3);
+  }
+}
