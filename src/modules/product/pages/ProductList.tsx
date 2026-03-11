@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useState } from 'react';
 import { Space, Flex, Tag, Switch, Select, Typography, Col, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/components/common/AppButton';
@@ -30,8 +30,6 @@ const ProductList = () => {
     handleBatchDelete,
     handleSwitchStatus, 
     switchingId,
-    selectedIds,
-    setSelectedIds,
     params, 
     setFilters,
     resetFilters,
@@ -39,6 +37,8 @@ const ProductList = () => {
     handlePageChange, 
     total 
   } = useProductList();
+
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const handleSearch = useCallback((val: string) => {
     setFilters({ keyword: val, page: 1 });
@@ -80,8 +80,22 @@ const ProductList = () => {
       title: t('columns.code'),
       dataIndex: 'code',
       key: 'code',
-      width: 120,
-      render: (code: string) => <Text strong>{code}</Text>,
+      width: 160,
+      render: (code: string, record: Product) => (
+        <Text 
+          strong 
+          onClick={() => goToProductEdit(record._id)}
+          style={{ 
+            cursor: 'pointer',
+            color: 'inherit',
+            transition: 'color 0.2s',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.color = 'var(--primary-color)')}
+          onMouseLeave={e => (e.currentTarget.style.color = 'inherit')}
+        >
+          {code}
+        </Text>
+      ),
     },
     {
       title: t('columns.name'),
@@ -204,11 +218,11 @@ const ProductList = () => {
     },
   ], [t, params.page, params.page_size, switchingId, goToProductEdit, handleDelete, handleSwitchStatus]);
 
-  const rowSelection = useMemo(() => ({
+  const rowSelection = {
     type: 'checkbox' as const,
     selectedRowKeys: selectedIds,
     onChange: (keys: React.Key[]) => setSelectedIds(keys as string[]),
-  }), [selectedIds, setSelectedIds]);
+  };
 
   return (
     <div className="product-list-wrapper">
@@ -255,7 +269,7 @@ const ProductList = () => {
             {selectedIds.length > 0 && (
               <AppButton 
                 danger 
-                onClick={handleBatchDelete}
+                onClick={() => handleBatchDelete(selectedIds, () => setSelectedIds([]))}
                 loading={isLoading}
               >
                 {t('common.actions.deleteSelected', { ns: 'translation', count: selectedIds.length })}

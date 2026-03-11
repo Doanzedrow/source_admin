@@ -25,7 +25,6 @@ export const useProductList = () => {
   });
 
   const [switchingId, setSwitchingId] = useState<string | null>(null);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const { data: categoriesData } = useGetAllCategoriesQuery({ type: 1 });
   const categories = useMemo(() => categoriesData?.result || [], [categoriesData]);
 
@@ -80,17 +79,17 @@ export const useProductList = () => {
     });
   };
 
-  const handleBatchDelete = () => {
-    if (selectedIds.length === 0) return;
+  const handleBatchDelete = (ids: string[], onSuccess?: () => void) => {
+    if (ids.length === 0) return;
 
-    confirmBatchDelete(selectedIds.length, async () => {
+    confirmBatchDelete(ids.length, async () => {
       try {
-        await batchDeleteProducts(selectedIds).unwrap();
+        await batchDeleteProducts(ids).unwrap();
         notification.success({
           message: t('common.messages.success', { ns: 'translation' }),
           description: t('messages.deleteSuccess'),
         });
-        setSelectedIds([]);
+        onSuccess?.();
       } catch (error: any) {
         notification.error({
           message: t('messages.deleteError'),
@@ -125,8 +124,6 @@ export const useProductList = () => {
     isLoading: isLoading || isDeleting || isBatchDeleting,
     isFetching,
     switchingId,
-    selectedIds,
-    setSelectedIds,
     handleDelete,
     handleBatchDelete,
     handleSwitchStatus,

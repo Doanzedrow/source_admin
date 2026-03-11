@@ -33,7 +33,8 @@ export default {
       backHome: "Về trang chủ",
       confirm: "Xác nhận",
       reset: "Thiết lập lại",
-      upload: "Tải ảnh lên"
+      upload: "Tải ảnh lên",
+      deleteSelected: "Xóa {{count}} mục đã chọn"
     },
     messages: {
       success: "Thành công",

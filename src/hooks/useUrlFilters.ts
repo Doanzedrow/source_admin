@@ -42,10 +42,10 @@ export function useUrlFilters<T extends Record<string, any>>(initialValues: T) {
     }
     const parsed = parseSearchParams(searchParams, initialValuesRef.current);
 
-    // Rebuild clean URL without empty params
     const cleanUrlParams = new URLSearchParams();
     Object.entries(parsed).forEach(([key, val]) => {
-      if (val !== undefined && val !== null && val !== '') {
+      const defaultVal = initialValuesRef.current[key];
+      if (val !== undefined && val !== null && val !== '' && String(val) !== String(defaultVal)) {
         cleanUrlParams.set(key, String(val));
       }
     });
@@ -65,7 +65,9 @@ export function useUrlFilters<T extends Record<string, any>>(initialValues: T) {
         const urlParams = new URLSearchParams();
 
         Object.entries(merged).forEach(([key, val]) => {
-          if (val !== undefined && val !== null && val !== '') {
+          const defaultVal = initialValuesRef.current[key];
+          // Skip empty values AND values that equal the default (no need to show in URL)
+          if (val !== undefined && val !== null && val !== '' && String(val) !== String(defaultVal)) {
             urlParams.set(key, String(val));
           }
         });

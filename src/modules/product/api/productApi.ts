@@ -93,10 +93,10 @@ export const productApi = baseApi.injectEndpoints({
       invalidatesTags: [{ type: TAG_TYPES.PRODUCT, id: 'LIST' }],
     }),
     batchDeleteProducts: builder.mutation<ApiResponse<any>, string[]>({
-      query: (ids) => ({
+      query: (productIds) => ({
         url: generateEndpointVersionning(endpoints.batchDelete),
         method: HTTP_METHOD.DELETE,
-        data: { ids },
+        data: { productIds },
       }),
       invalidatesTags: [{ type: TAG_TYPES.PRODUCT, id: 'LIST' }],
     }),

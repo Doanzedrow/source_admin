@@ -33,7 +33,8 @@ export default {
       backHome: "Back to Home",
       confirm: "Confirm",
       reset: "Reset",
-      upload: "Upload"
+      upload: "Upload",
+      deleteSelected: "Delete {{count}} selected"
     },
     messages: {
       success: "Success",
