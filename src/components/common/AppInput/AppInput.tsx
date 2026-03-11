@@ -19,7 +19,7 @@ export const AppInput: React.FC<AppInputProps> = ({
   regexMessage,
   ...props
 }) => {
-  const combinedRules = [...rules];
+  const combinedRules = [{ whitespace: true }, ...rules];
 
   if (regex) {
     combinedRules.push({
@@ -28,9 +28,17 @@ export const AppInput: React.FC<AppInputProps> = ({
     });
   }
 
+  const inputId = props.id || name;
+
   return (
-    <Form.Item label={label} name={name} rules={combinedRules}>
-      <Input size="large" {...props} />
+    <Form.Item
+      label={label}
+      name={name}
+      rules={combinedRules}
+      htmlFor={inputId}
+      normalize={(value: string) => value?.trimStart().replace(/\s{2,}/g, ' ')}
+    >
+      <Input id={inputId} size="large" {...props} />
     </Form.Item>
   );
 };

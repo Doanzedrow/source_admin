@@ -32,26 +32,32 @@ export default {
     description: "Mô tả",
     stock: "Số lượng",
     code: "Mã sản phẩm",
-    category: "Danh mục",
-    priceSale: "Giá bán",
-    taxPercentage: "Thuế (%)",
+    category: "Loại sản phẩm",
+    priceSale: "Giá gốc",
+    priceAfterTax: "Giá sau thuế",
+    taxPercentage: "Thuế VAT",
     status: "Trạng thái",
+    note: "Chú thích",
     image: "Ảnh sản phẩm",
     tax: "Thuế (%)",
-    totalPrice: "Giá tổng (gồm thuế)"
+    totalPrice: "Giá tổng (gồm thuế)",
+    uploadHint: "JPG, PNG. Kích thước chuẩn 1280x1280 px, tỉ lệ 1:1"
   },
   placeholder: {
     name: "Nhập tên sản phẩm",
     code: "Nhập mã sản phẩm",
-    price: "Nhập giá bán",
+    price: "Nhập giá gốc",
     description: "Nhập mô tả sản phẩm...",
-    category: "Chọn danh mục",
+    category: "Chọn loại sản phẩm",
+    note: "Nhập chú thích...",
     categoryMock1: "Danh mục 1",
     categoryMock2: "Danh mục 2"
   },
   validation: {
     required: "{{field}} là bắt buộc",
-    number: "{{field}} phải là số"
+    number: "{{field}} phải là số",
+    invalidCode: "Mã sản phẩm chỉ cho phép chữ, số và các ký tự _ - ( ) , . (2–30 ký tự)",
+    invalidName: "Tên sản phẩm 2–200 ký tự, không chứa ký tự đặc biệt"
   },
   messages: {
     updateStatusSuccess: "Cập nhật trạng thái thành công",

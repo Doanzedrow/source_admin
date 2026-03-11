@@ -6,6 +6,7 @@ import CachedImage from '@/components/common/CachedImage/CachedImage';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import { SEO } from '@/components/common/SEO/SEO';
 import { useLogin } from '../hooks/useLogin';
+import { REGEX } from '@/utils/regex';
 import { APP_ASSETS } from '@/config/assets';
 import { APP_NAME } from '@/config/constants';
 import '../styles/login.less';
@@ -51,7 +52,6 @@ const Login = () => {
             <p>{isRememberedMode ? t('welcomeBack') : t('welcome')}</p>
           </div>
 
-          {/* Chế độ nhớ tài khoản: hiện thông tin user + chỉ nhập password */}
           {isRememberedMode && rememberedUser ? (
             <Form layout="vertical" onFinish={handleLogin} requiredMark={false}>
               <div className="remembered-user-section">
@@ -74,7 +74,7 @@ const Login = () => {
                 label={t('form.password')}
                 placeholder={t('form.passwordPlaceholder')}
                 rules={[{ required: true, message: t('form.passwordFeedback') }]}
-                regex={/.{6,}/}
+                regex={REGEX.PASSWORD}
                 regexMessage={t('errors.invalidPassword')}
               />
 
@@ -98,7 +98,6 @@ const Login = () => {
               </div>
             </Form>
           ) : (
-            /* Chế độ đầy đủ: nhập username + password */
             <Form layout="vertical" onFinish={handleLogin} requiredMark={false}>
               <AppInput
                 id="username"
@@ -106,7 +105,7 @@ const Login = () => {
                 label={t('form.username')}
                 placeholder={t('form.usernamePlaceholder')}
                 rules={[{ required: true, message: t('form.usernameFeedback') }]}
-                regex={/^[a-zA-Z0-9_]+$/i}
+                regex={REGEX.USERNAME}
                 regexMessage={t('errors.invalidUsername')}
               />
 
@@ -116,7 +115,7 @@ const Login = () => {
                 label={t('form.password')}
                 placeholder={t('form.passwordPlaceholder')}
                 rules={[{ required: true, message: t('form.passwordFeedback') }]}
-                regex={/.{6,}/}
+                regex={REGEX.PASSWORD}
                 regexMessage={t('errors.invalidPassword')}
               />
 

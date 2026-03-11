@@ -19,7 +19,7 @@ export default {
     logoAlt: "Application Logo",
   },
   errors: {
-    invalidUsername: "Username cannot contain special characters",
+    invalidUsername: "Username must be 3–50 characters: letters, digits, dots, or underscores only",
     invalidPassword: "Password must be at least 6 characters",
     loginFailed: "Login failed. Please check your credentials.",
     checkCredentials: "Please verify your username and password."

@@ -1,51 +1,67 @@
 @import '@/styles/variables.less';
- 
- .app-media-upload {
-   display: flex;
-   width: 100%;
-   height: auto;
-   min-height: 200px;
-   align-items: center;
-   justify-content: center;
-   border: 1px dashed var(--border-color);
-   border-radius: var(--border-radius-lg);
-   background-color: var(--body-bg);
-   transition: border-color 0.3s, background-color 0.3s;
-   padding: @space-md;
- 
-   &:hover {
-     border-color: @primary-color;
-   }
- 
-   .ant-upload.ant-upload-select-picture-card {
-     width: 120px;
-     height: 120px;
-     margin-right: @space-xs;
-     margin-bottom: @space-xs;
-     background-color: transparent;
-     border: 1px dashed var(--border-color);
-     
-     .upload-trigger-content {
-       display: flex;
-       flex-direction: column;
-       align-items: center;
-       justify-content: center;
-       width: 100%;
-       height: 100%;
-       color: var(--text-secondary);
-       font-size: 14px;
-     }
-   }
- 
-   .ant-upload-list-item-container {
-     width: 120px;
-     height: 120px;
-   }
- }
- 
- .media-preview-modal {
-   .ant-modal-content {
-     padding: @space-sm;
-     background-color: var(--body-bg);
-   }
- }
+
+.app-media-upload {
+  display: block;
+  width: 100%;
+
+  .ant-upload.ant-upload-select-picture-card,
+  .ant-upload-select {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1;
+    background-color: transparent;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--border-radius-lg);
+    transition: border-color 0.3s, background-color 0.3s;
+    margin: 0;
+
+    &:hover {
+      border-color: @primary-color;
+      background-color: rgba(var(--primary-color-rgb, 0, 0, 0), 0.02);
+    }
+
+    .upload-trigger-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      padding: @space-xl;
+      color: var(--text-secondary);
+      font-size: 14px;
+      gap: @space-xs;
+    }
+  }
+
+  .ant-upload-list {
+
+    .ant-upload-list-item-container {
+      width: 100% !important;
+      height: auto !important;
+      aspect-ratio: 1 / 1;
+      border-radius: var(--border-radius-lg);
+      overflow: hidden;
+
+      .ant-upload-list-item {
+        border-radius: var(--border-radius-lg);
+        padding: 0;
+        height: 100%;
+        border: 1px solid var(--border-color);
+
+        img {
+          object-fit: cover;
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+}
+
+.media-preview-modal {
+  .ant-modal-content {
+    padding: @space-sm;
+    background-color: var(--body-bg);
+  }
+}

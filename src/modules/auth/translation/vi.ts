@@ -19,8 +19,8 @@ export default {
     logoAlt: "Logo ứng dụng",
   },
   errors: {
-    invalidUsername: "Tên đăng nhập không được chứa ký tự đặc biệt",
-    invalidPassword: "Mật khẩu phải từ 6 kí tự lên",
+    invalidUsername: "Tên đăng nhập 3–50 ký tự, chỉ có chữ, số, dấu chấm và gạch dưới",
+    invalidPassword: "Mật khẩu phải từ 6 ký tự trở lên",
     loginFailed: "Đăng nhập thất bại. Kiểm tra lại thông tin.",
     checkCredentials: "Vui lòng kiểm tra lại tài khoản và mật khẩu."
   }

@@ -1,27 +1,31 @@
 import React from 'react';
-import { 
-  Form, 
-  Input, 
-  InputNumber, 
-  Select, 
-  Flex, 
-  Typography,
-  Divider,
+import {
+  Form,
+  Input,
+  Select,
   Row,
-  Col
+  Col,
+  Typography,
+  Switch,
+  InputNumber,
+  Space,
 } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/components/common/AppButton';
 import { AppInput } from '@/components/common/AppInput';
+import { AppInputNumber } from '@/components/common/AppInputNumber';
+import { AppInputPrice } from '@/components/common/AppInputPrice';
 import { FormActions } from '@/components/common/FormActions';
 import { AppMediaUpload } from '@/components/common/AppMediaUpload';
 import type { Product } from '../data/product.types';
 import { useProductForm } from '../hooks/useProductForm';
+import { REGEX } from '@/utils/regex';
 
 import '../styles/product-form.less';
 
-const { Title } = Typography;
 const { TextArea } = Input;
+
+const VAT_OPTIONS = [0, 5, 8, 10];
 
 interface ProductFormProps {
   onSave: (values: any) => void;
@@ -35,108 +39,124 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   initialValues,
 }) => {
   const { t } = useTranslation(['product', 'translation']);
-  const { form, handleSubmit } = useProductForm({ initialValues, onSave });
+  const { form, handleSubmit, onValuesChange, priceSaleWithTax } = useProductForm({ initialValues, onSave });
 
   return (
     <div className="product-form-container">
       <Form
         form={form}
-        layout="vertical"
+        layout="vertical" 
         disabled={loading}
-        initialValues={{
-          taxPercentage: 0,
-          status: 1,
-        }}
+        initialValues={{ taxPercentage: 0, status: true }}
+        onValuesChange={onValuesChange}
         scrollToFirstError
       >
-        <Row gutter={24}>
-          {/* Left Column: Product Information */}
+        <Row gutter={[24, 0]}>
           <Col xs={24} lg={16}>
-            <div className="form-section">
-              <Title level={5} className="section-title">{t('infoBasic')}</Title>
-              <AppInput
-                name="name"
-                label={t('form.name')}
-                placeholder={t('placeholder.name')}
-                rules={[{ required: true, message: t('validation.required', { field: t('form.name') }) }]}
-              />
-
-              <Flex gap={16} wrap="wrap">
+            <Row gutter={16}>
+              <Col xs={24} sm={12}>
                 <AppInput
                   name="code"
                   label={t('form.code')}
                   placeholder={t('placeholder.code')}
-                  style={{ flex: '1 1 200px' }}
                   rules={[{ required: true, message: t('validation.required', { field: t('form.code') }) }]}
+                  regex={REGEX.PRODUCT_CODE}
+                  regexMessage={t('validation.invalidCode')}
                 />
+              </Col>
+              <Col xs={24} sm={12}>
                 <Form.Item
                   name="category"
                   label={t('form.category')}
-                  style={{ flex: '1 1 200px' }}
                   rules={[{ required: true, message: t('validation.required', { field: t('form.category') }) }]}
+                  htmlFor="category"
                 >
-                  <Select placeholder={t('placeholder.category')} size="large">
+                  <Select id="category" placeholder={t('placeholder.category')} size="large">
                     <Select.Option value="cat1">{t('placeholder.categoryMock1')}</Select.Option>
                     <Select.Option value="cat2">{t('placeholder.categoryMock2')}</Select.Option>
                   </Select>
                 </Form.Item>
-              </Flex>
-            </div>
+              </Col>
+            </Row>
 
-            <Divider />
+            <AppInput
+              name="name"
+              label={t('form.name')}
+              placeholder={t('placeholder.name')}
+              rules={[{ required: true, message: t('validation.required', { field: t('form.name') }) }]}
+              regex={REGEX.PRODUCT_NAME}
+              regexMessage={t('validation.invalidName')}
+            />
 
-            <div className="form-section">
-              <Title level={5} className="section-title">{t('infoPricing')}</Title>
-              <Flex gap={16} wrap="wrap">
-                <Form.Item
+            <Row gutter={16}>
+              <Col xs={24} sm={12}>
+                <AppInputPrice
                   name="priceSale"
                   label={t('form.priceSale')}
-                  style={{ flex: '1 1 200px' }}
+                  placeholder={t('placeholder.price')}
                   rules={[{ required: true, message: t('validation.required', { field: t('form.priceSale') }) }]}
-                >
-                  <InputNumber
-                    style={{ width: '100%' }}
-                    size="large"
-                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                    parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
-                    placeholder={t('placeholder.price')}
-                  />
+                />
+              </Col>
+              <Col xs={12} sm={6}>
+                <Form.Item name="taxPercentage" label={t('form.taxPercentage')} htmlFor="taxPercentage">
+                  <Select id="taxPercentage" size="large">
+                    {VAT_OPTIONS.map((v) => (
+                      <Select.Option key={v} value={v}>{v}%</Select.Option>
+                    ))}
+                  </Select>
                 </Form.Item>
-                <Form.Item
-                  name="taxPercentage"
-                  label={t('form.taxPercentage')}
-                  style={{ flex: '0.5 1 100px' }}
-                >
-                  <InputNumber min={0} max={100} size="large" style={{ width: '100%' }} />
+              </Col>
+              <Col xs={12} sm={6}>
+                <Form.Item label={t('form.priceAfterTax')} htmlFor="priceSaleWithTax">
+                  <Space.Compact style={{ width: '100%' }}>
+                    <InputNumber
+                      id="priceSaleWithTax"
+                      size="large"
+                      style={{ width: '100%' }}
+                      value={priceSaleWithTax}
+                      formatter={(v) => v ? Number(v).toLocaleString('vi-VN') : ''}
+                      parser={(v) => Number(v?.replace(/\./g, '').replace(/,/g, '') ?? 0)}
+                      disabled
+                    />
+                    <span className="app-input-price-suffix">₫</span>
+                  </Space.Compact>
                 </Form.Item>
-              </Flex>
+              </Col>
+            </Row>
 
-              <Form.Item
-                name="stockCount"
-                label={t('form.stock')}
-                rules={[{ required: true, message: t('validation.required', { field: t('form.stock') }) }]}
-              >
-                <InputNumber min={0} size="large" style={{ width: '100%' }} />
-              </Form.Item>
-            </div>
+            <Row gutter={16}>
+              <Col xs={24} sm={12}>
+                <AppInputNumber
+                  name="stockCount"
+                  label={t('form.stock')}
+                  rules={[{ required: true, message: t('validation.required', { field: t('form.stock') }) }]}
+                  min={0}
+                  placeholder="0"
+                />
+              </Col>
+              <Col xs={24} sm={12}>
+                <Form.Item name="status" label={t('form.status')} htmlFor="status">
+                  <Select id="status" size="large">
+                    <Select.Option value={true}>{t('status.active')}</Select.Option>
+                    <Select.Option value={false}>{t('status.inactive')}</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
 
-            <Divider />
-
-            <div className="form-section">
-              <Title level={5} className="section-title">{t('infoDescription')}</Title>
-              <Form.Item name="description" label={t('form.description')}>
-                <TextArea rows={9} placeholder={t('placeholder.description')} />
-              </Form.Item>
-            </div>
+            <Form.Item name="description" label={t('form.description')} htmlFor="description">
+              <TextArea id="description" rows={4} placeholder={t('placeholder.description')} />
+            </Form.Item>
           </Col>
 
-          {/* Right Column: Media & Extras */}
           <Col xs={24} lg={8}>
-            <div className="form-section" style={{ background: 'var(--light-bg)', padding: 'var(--space-md)', borderRadius: 'var(--border-radius-lg)', border: '1px solid var(--border-color)' }}>
-              <Title level={5} className="section-title" style={{ marginBottom: 'var(--space-lg)' }}>{t('infoMedia')}</Title>
-              <Form.Item name="imagePath" label={t('form.image')} style={{ marginBottom: 0 }}>
+            <div className="media-panel">
+              <Form.Item name="thumbnail" label={t('form.image')} style={{ marginBottom: 8 }}>
                 <AppMediaUpload type="product" maxCount={1} />
               </Form.Item>
+              <Typography.Text type="secondary" className="upload-hint">
+                {t('form.uploadHint')}
+              </Typography.Text>
             </div>
           </Col>
         </Row>

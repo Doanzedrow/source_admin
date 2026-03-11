@@ -32,11 +32,14 @@ export default {
     description: "Description",
     stock: "Stock",
     code: "Product Code",
-    category: "Category",
-    priceSale: "Selling Price",
-    taxPercentage: "Tax (%)",
+    category: "Product Type",
+    priceSale: "Original Price",
+    priceAfterTax: "Price After Tax",
+    taxPercentage: "VAT",
     status: "Status",
-    image: "Product Image"
+    note: "Notes",
+    image: "Product Image",
+    uploadHint: "JPG, PNG. Standard size is 1280x1280 px, for the 1:1 aspect ratio."
   },
   placeholder: {
     name: "Enter product name",
@@ -49,7 +52,9 @@ export default {
   },
   validation: {
     required: "{{field}} is required",
-    number: "{{field}} must be a number"
+    number: "{{field}} must be a number",
+    invalidCode: "Product code allows letters, digits and _ - ( ) , . (2–30 chars)",
+    invalidName: "Product name must be 2–200 characters with no special symbols"
   },
   messages: {
     updateStatusSuccess: "Status updated successfully",

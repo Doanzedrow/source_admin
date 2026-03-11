@@ -18,7 +18,7 @@ export const AppPassword: React.FC<AppPasswordProps> = ({
   regexMessage,
   ...props
 }) => {
-  const combinedRules = [...rules];
+  const combinedRules = [{ whitespace: true }, ...rules];
 
   if (regex) {
     combinedRules.push({
@@ -27,9 +27,17 @@ export const AppPassword: React.FC<AppPasswordProps> = ({
     });
   }
 
+  const inputId = props.id || name;
+
   return (
-    <Form.Item label={label} name={name} rules={combinedRules}>
-      <Input.Password size="large" {...props} />
+    <Form.Item
+      label={label}
+      name={name}
+      rules={combinedRules}
+      htmlFor={inputId}
+      normalize={(value: string) => value?.trimStart().replace(/\s{2,}/g, ' ')}
+    >
+      <Input.Password id={inputId} size="large" {...props} />
     </Form.Item>
   );
 };
