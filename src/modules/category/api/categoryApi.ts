@@ -4,11 +4,11 @@ import type { ApiResponse, PaginatedResult } from '@/types/api';
 import type { Endpoint } from '@/utils/api';
 import { generateEndpointVersionning, PARAMS_KEY, providesList } from '@/utils/api';
 import { TAG_TYPES } from '@/store/tags';
-import type { Product } from '../data/product.types';
+import type { Category } from '../data/category.types';
 
-const MODULE_NAME = 'product';
+const MODULE_NAME = 'category';
 
-const endpoints: Record<'listPagination' | 'switchStatus' | 'create' | 'edit' | 'getById', Endpoint> = {
+const endpoints: Record<'listPagination' | 'switchStatus' | 'create' | 'edit' | 'getById' | 'getAll', Endpoint> = {
   listPagination: {
     endpoint: `/${MODULE_NAME}/list-pagination`,
   },
@@ -24,63 +24,74 @@ const endpoints: Record<'listPagination' | 'switchStatus' | 'create' | 'edit' | 
   getById: {
     endpoint: `/${MODULE_NAME}/get/${PARAMS_KEY}`,
   },
+  getAll: {
+    endpoint: `/${MODULE_NAME}/getAll`,
+  },
 };
 
-export const productApi = baseApi.injectEndpoints({
+export const categoryApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getProductList: builder.query<ApiResponse<PaginatedResult<Product>>, { page?: number; page_size?: number }>({
+    getCategoryList: builder.query<ApiResponse<PaginatedResult<Category>>, { page?: number; page_size?: number }>({
       query: (params) => ({
         url: generateEndpointVersionning(endpoints.listPagination),
         method: HTTP_METHOD.GET,
         params,
       }),
-      providesTags: (result) => providesList(result, TAG_TYPES.PRODUCT),
+      providesTags: (result) => providesList(result, TAG_TYPES.CATEGORY),
     }),
-    getProductById: builder.query<ApiResponse<Product>, string>({
+    getAllCategories: builder.query<ApiResponse<Category[]>, void>({
+      query: () => ({
+        url: generateEndpointVersionning(endpoints.getAll),
+        method: HTTP_METHOD.GET,
+      }),
+      providesTags: (result) => providesList(result, TAG_TYPES.CATEGORY),
+    }),
+    getCategoryById: builder.query<ApiResponse<Category>, string>({
       query: (id) => ({
         url: generateEndpointVersionning(endpoints.getById).replace(PARAMS_KEY, id),
         method: HTTP_METHOD.GET,
       }),
-      providesTags: (_result, _error, id) => [{ type: TAG_TYPES.PRODUCT, id }],
+      providesTags: (_result, _error, id) => [{ type: TAG_TYPES.CATEGORY, id }],
     }),
-    createProduct: builder.mutation<ApiResponse<Product>, Partial<Product>>({
+    createCategory: builder.mutation<ApiResponse<Category>, Partial<Category>>({
       query: (body) => ({
         url: generateEndpointVersionning(endpoints.create),
         method: HTTP_METHOD.POST,
         body,
       }),
-      invalidatesTags: [{ type: TAG_TYPES.PRODUCT, id: 'LIST' }],
+      invalidatesTags: [{ type: TAG_TYPES.CATEGORY, id: 'LIST' }],
     }),
-    updateProduct: builder.mutation<ApiResponse<Product>, { id: string; body: Partial<Product> }>({
+    updateCategory: builder.mutation<ApiResponse<Category>, { id: string; body: Partial<Category> }>({
       query: ({ id, body }) => ({
         url: generateEndpointVersionning(endpoints.edit).replace(PARAMS_KEY, id),
         method: HTTP_METHOD.PUT,
         body,
       }),
       invalidatesTags: (_result, _error, { id }) => [
-        { type: TAG_TYPES.PRODUCT, id },
-        { type: TAG_TYPES.PRODUCT, id: 'LIST' },
+        { type: TAG_TYPES.CATEGORY, id },
+        { type: TAG_TYPES.CATEGORY, id: 'LIST' },
       ],
     }),
-    switchStatus: builder.mutation<ApiResponse<any>, { id: string; status: number }>({
+    switchCategoryStatus: builder.mutation<ApiResponse<any>, { id: string; status: number }>({
       query: ({ id, status }) => ({
         url: `${generateEndpointVersionning(endpoints.switchStatus)}/${id}`,
         method: HTTP_METHOD.PATCH,
         body: { status },
       }),
       invalidatesTags: (_result, _error, { id }) => [
-        { type: TAG_TYPES.PRODUCT, id },
-        { type: TAG_TYPES.PRODUCT, id: 'LIST' },
+        { type: TAG_TYPES.CATEGORY, id },
+        { type: TAG_TYPES.CATEGORY, id: 'LIST' },
       ],
     }),
   }),
   overrideExisting: false,
 });
 
-export const { 
-  useGetProductListQuery, 
-  useGetProductByIdQuery,
-  useSwitchStatusMutation,
-  useCreateProductMutation,
-  useUpdateProductMutation,
-} = productApi;
+export const {
+  useGetCategoryListQuery,
+  useGetAllCategoriesQuery,
+  useGetCategoryByIdQuery,
+  useCreateCategoryMutation,
+  useUpdateCategoryMutation,
+  useSwitchCategoryStatusMutation,
+} = categoryApi;

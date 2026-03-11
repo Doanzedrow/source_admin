@@ -8,7 +8,7 @@ import { FormActions } from '@/components/common/FormActions';
 import { AppMediaUpload } from '@/components/common/AppMediaUpload';
 import type { Product } from '../data/product.types';
 import { useProductForm } from '../hooks/useProductForm';
-import { useGetAllCategoriesQuery } from '../api/categoryApi';
+import { useGetAllCategoriesQuery } from '@/modules/category/api/categoryApi';
 import { REGEX } from '@/utils/regex';
 
 import '../styles/product-form.less';
@@ -27,7 +27,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onSave, loading, initi
   const { t } = useTranslation(['product', 'translation']);
   const { form, handleSubmit, onValuesChange } = useProductForm({ initialValues, onSave });
   
-  // Real API call for categories
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery();
   
   const categories = useMemo(() => {

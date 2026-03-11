@@ -1,3 +1,4 @@
+
 export interface Product {
   _id: string;
   code: string;
@@ -64,15 +65,4 @@ export interface Product {
   __v: number;
   variants: any[];
   inventoryDetails: any[];
-}
-
-export interface PaginatedResult<T> {
-  data: T[];
-  pagination?: {
-    page: number;
-    page_size: number;
-    total: number;
-    total_page: number;
-  };
-  total?: number;
 }
