@@ -1,10 +1,21 @@
 import { ConfigProvider, theme, App } from 'antd';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import viVN from 'antd/locale/vi_VN';
+import enUS from 'antd/locale/en_US';
 import { APP_COLOR_PRIMARY } from './constants';
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode; isDarkMode: boolean }> = ({ children, isDarkMode }) => {
+export const ThemeProvider: React.FC<{ children: React.ReactNode; isDarkMode: boolean }> = ({
+  children,
+  isDarkMode,
+}) => {
+  const { i18n } = useTranslation();
+
+  const antdLocale = i18n.language.startsWith('vi') ? viVN : enUS;
+
   return (
     <ConfigProvider
+      locale={antdLocale}
       theme={{
         algorithm: isDarkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
         token: {
@@ -41,7 +52,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode; isDarkMode: bo
             // Increase shadow and padding to look more like 'Big Tech' UI
             paddingLG: 24,
             headerBg: 'transparent',
-            boxShadowTertiary: '0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+            boxShadowTertiary:
+              '0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
           },
           Table: {
             borderRadius: 8,
@@ -60,9 +72,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode; isDarkMode: bo
         },
       }}
     >
-      <App>
-        {children}
-      </App>
+      <App>{children}</App>
     </ConfigProvider>
   );
 };
