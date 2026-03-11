@@ -75,7 +75,7 @@ export const routesArray: RouteConfig[] = [
     path: '/categories/create',
     layout: 'main',
     allowedRoles: ['superadmin', 'admin'],
-    component: lazy(() => import('@/modules/category/pages/CategoryCreate')),
+    component: lazy(() => import('@/modules/category/pages/CategoryUpsert')),
   },
   {
     id: RouteKey.CategoryEdit,
@@ -83,7 +83,7 @@ export const routesArray: RouteConfig[] = [
     path: '/categories/edit/:id',
     layout: 'main',
     allowedRoles: ['superadmin', 'admin'],
-    component: lazy(() => import('@/modules/category/pages/CategoryEdit')),
+    component: lazy(() => import('@/modules/category/pages/CategoryUpsert')),
   },
   {
     id: RouteKey.ProductCreate,

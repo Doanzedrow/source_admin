@@ -46,7 +46,7 @@ axiosInstance.interceptors.response.use(
       if (!isAlreadyOnLogin) {
         tokenUtil.removeToken();
         tokenUtil.removeLoggedUser();
-        window.location.href = loginPath;
+        window.location.replace(loginPath);
       }
     }
 

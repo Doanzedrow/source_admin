@@ -10,6 +10,8 @@ import type { Product } from '../data/product.types';
 import { useProductForm } from '../hooks/useProductForm';
 import { REGEX } from '@/utils/regex';
 
+import { useNavigate } from 'react-router-dom';
+import { useAppNavigate } from '@/hooks/useAppNavigate';
 import '../styles/product-form.less';
 
 const { TextArea } = Input;
@@ -35,6 +37,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onSave, loading, initi
     initialValues, 
     onSave 
   });
+
+  const navigate = useNavigate();
+  const { goToProducts } = useAppNavigate();
+
+  const isEdit = !!initialValues;
 
   return (
     <div className="product-form-container">
@@ -189,17 +196,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onSave, loading, initi
         </Row>
 
         <FormActions>
-          <AppButton size="large" onClick={() => form.resetFields()}>
-            {t('common.actions.reset', { ns: 'translation' })}
+          <AppButton onClick={goToProducts}>
+            {t('common.actions.cancel', { ns: 'translation' })}
           </AppButton>
-          <AppButton
-            size="large"
-            type="primary"
-            htmlType="submit"
-            loading={loading}
-            style={{ minWidth: 120 }}
-          >
-            {t('common.actions.confirm', { ns: 'translation' })}
+          <AppButton type="primary" htmlType="submit" loading={loading}>
+            {isEdit
+              ? t('common.actions.update', { ns: 'translation' })
+              : t('common.actions.create', { ns: 'translation' })}
           </AppButton>
         </FormActions>
       </Form>

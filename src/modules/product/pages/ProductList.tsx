@@ -266,36 +266,38 @@ const ProductList = () => {
     <div className="product-list-wrapper">
       <SEO title={t('seoTitle')} description={t('seoDescription')} />
 
-      <AppFilter onReset={resetFilters} isLoading={isFetching}>
-        <Col xs={24} sm={12} md={10} lg={10}>
-          <AppSearchInput
-            placeholder={t('filter.keyword')}
-            value={params.keyword}
-            debounceTime={300}
-            onSearch={handleSearch}
-          />
-        </Col>
-        <Col xs={12} sm={6} md={6} lg={6}>
-          <Select
-            style={{ width: '100%' }}
-            placeholder={t('filter.category')}
-            value={params.category}
-            onChange={handleCategoryChange}
-            allowClear
-            options={categoryOptions}
-          />
-        </Col>
-        <Col xs={12} sm={6} md={6} lg={6}>
-          <Select
-            style={{ width: '100%' }}
-            placeholder={t('filter.status')}
-            value={params.status !== undefined ? Number(params.status) : undefined}
-            onChange={handleStatusChange}
-            allowClear
-            options={statusOptions}
-          />
-        </Col>
-      </AppFilter>
+      <div className="sticky-filter">
+        <AppFilter onReset={resetFilters} isLoading={isFetching}>
+          <Col xs={24} sm={12} md={10} lg={10}>
+            <AppSearchInput
+              placeholder={t('filter.keyword')}
+              value={params.keyword}
+              debounceTime={300}
+              onSearch={handleSearch}
+            />
+          </Col>
+          <Col xs={12} sm={6} md={6} lg={6}>
+            <Select
+              style={{ width: '100%' }}
+              placeholder={t('filter.category')}
+              value={params.category}
+              onChange={handleCategoryChange}
+              allowClear
+              options={categoryOptions}
+            />
+          </Col>
+          <Col xs={12} sm={6} md={6} lg={6}>
+            <Select
+              style={{ width: '100%' }}
+              placeholder={t('filter.status')}
+              value={params.status !== undefined ? Number(params.status) : undefined}
+              onChange={handleStatusChange}
+              allowClear
+              options={statusOptions}
+            />
+          </Col>
+        </AppFilter>
+      </div>
 
       <AppCard
         title={t('title')}
@@ -338,9 +340,9 @@ const ProductList = () => {
           )}
 
           <AppLoader 
-            isLoading={!isReady || (isLoading && data.length === 0) || (isFetching && data.length > 0)} 
+            isLoading={!isReady || (isLoading && data.length === 0)} 
             overlay 
-            tip={!isReady || isLoading ? t('loading', { ns: 'translation' }) : undefined}
+            tip={!isReady || (isLoading && data.length === 0) ? t('loading', { ns: 'translation' }) : undefined}
           />
         </div>
       </AppCard>

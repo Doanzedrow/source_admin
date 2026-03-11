@@ -40,6 +40,7 @@ export const AppTable: AppTableComponent = Object.assign(
         <Table<RecordType>
           size="middle"
           scroll={{ x: 'max-content' }}
+          sticky={{ offsetHeader: 0 }}
           pagination={
             hidePagination
               ? false

@@ -1,38 +1,46 @@
-import React from 'react';
-import { Form, Select, Row, Col, Switch, Input } from 'antd';
-import { AppCard } from '@/components/common/AppCard';
+import { Form, Select, Row, Col, Input } from 'antd';
 import { AppInput } from '@/components/common/AppInput/AppInput';
 import { AppButton } from '@/components/common/AppButton';
 import { FormActions } from '@/components/common/FormActions/FormActions';
-import { PageHeader } from '@/components/common/PageHeader/PageHeader';
 import { useCategoryForm } from '../hooks/useCategoryForm';
-import { useNavigate } from 'react-router-dom';
-import { rc, RouteKey } from '@/routes/routeConfig';
+import { useAppNavigate } from '@/hooks/useAppNavigate';
+import type { Category } from '../data/category.types';
 
 interface CategoryFormProps {
+  onSave: (values: any) => void;
+  loading: boolean;
+  initialValues: Category | null;
   isEdit?: boolean;
 }
 
-export const CategoryForm: React.FC<CategoryFormProps> = ({ isEdit = false }) => {
-  const { form, onFinish, handleValuesChange, isLoading, t } = useCategoryForm(isEdit);
-  const navigate = useNavigate();
+export const CategoryForm: React.FC<CategoryFormProps> = ({ 
+  onSave, 
+  loading, 
+  initialValues, 
+  isEdit = false 
+}) => {
+  const { form, onFinish, handleValuesChange, t } = useCategoryForm({
+    initialValues,
+    onSave,
+    isEdit
+  });
+  
+  const { goToCategories } = useAppNavigate();
 
   return (
-    <Form
-      form={form}
-      layout="vertical"
-      onFinish={onFinish}
-      onValuesChange={handleValuesChange}
-      initialValues={{ status: 1, type: 1 }}
-    >
-      <PageHeader 
-        title={isEdit ? t('titleEdit') : t('titleCreate')} 
-      />
-
-      <Row gutter={24}>
-        <Col xs={24} lg={16}>
-          <AppCard>
-            <Row gutter={16}>
+    <div className="category-form-container">
+      <Form
+        form={form}
+        layout="vertical"
+        disabled={loading}
+        onFinish={onFinish}
+        initialValues={{ status: 1, type: 1 }}
+        onValuesChange={handleValuesChange}
+        scrollToFirstError
+      >
+        <Row gutter={[24, 0]}>
+          <Col xs={24} lg={16}>
+            <Row gutter={24}>
               <Col xs={24} md={12}>
                 <AppInput
                   label={t('form.name')}
@@ -67,11 +75,9 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({ isEdit = false }) =>
                 placeholder={t('placeholder.description')} 
               />
             </Form.Item>
-          </AppCard>
-        </Col>
+          </Col>
 
-        <Col xs={24} lg={8}>
-          <AppCard>
+          <Col xs={24} lg={8}>
             <Form.Item
               label={t('form.type')}
               name="type"
@@ -83,30 +89,31 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({ isEdit = false }) =>
                   { label: t('type.service'), value: 2 },
                 ]}
                 placeholder={t('placeholder.type')}
+                size="large"
               />
             </Form.Item>
 
             <Form.Item
               label={t('form.status')}
               name="status"
-              valuePropName="checked"
-              getValueProps={(value) => ({ checked: value === 1 })}
-              getValueFromEvent={(checked) => (checked ? 1 : 0)}
             >
-              <Switch checkedChildren={t('status.active')} unCheckedChildren={t('status.inactive')} />
+              <Select size="large">
+                <Select.Option value={1}>{t('status.active')}</Select.Option>
+                <Select.Option value={0}>{t('status.inactive')}</Select.Option>
+              </Select>
             </Form.Item>
-          </AppCard>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
 
-      <FormActions>
-        <AppButton onClick={() => navigate(rc(RouteKey.Category).path)}>
-          {t('common.actions.cancel', { ns: 'translation' })}
-        </AppButton>
-        <AppButton type="primary" htmlType="submit" loading={isLoading}>
-          {isEdit ? t('common.actions.update', { ns: 'translation' }) : t('common.actions.create', { ns: 'translation' })}
-        </AppButton>
-      </FormActions>
-    </Form>
+        <FormActions>
+          <AppButton onClick={goToCategories}>
+            {t('common.actions.cancel', { ns: 'translation' })}
+          </AppButton>
+          <AppButton type="primary" htmlType="submit" loading={loading}>
+            {isEdit ? t('common.actions.update', { ns: 'translation' }) : t('common.actions.create', { ns: 'translation' })}
+          </AppButton>
+        </FormActions>
+      </Form>
+    </div>
   );
 };

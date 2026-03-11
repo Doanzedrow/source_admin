@@ -187,3 +187,32 @@ input:-webkit-autofill:active {
     font-weight: 500;
   }
 }
+
+
+.upsert-header {
+  background-color: var(--body-bg);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-md) !important; 
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+  border: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  
+  .ant-breadcrumb {
+    margin-bottom: 0;
+  }
+}
+
+.sticky-filter {
+  position: sticky;
+  top: 0;
+  z-index: 101;
+  background-color: var(--bg-color); 
+  margin-top: -var(--space-md); 
+  
+  & > div {
+    margin-bottom: 0 !important;
+  }
+}

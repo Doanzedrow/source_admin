@@ -17,46 +17,36 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({ allowedRoles }) => {
   const token = tokenUtil.getToken();
   const user = useAppSelector(selectLoggedUser);
 
-  // Gọi validateToken khi có token nhưng chưa có user info
   const { isLoading, isError } = useValidateTokenQuery(undefined, {
     skip: !token || !!user,
+    refetchOnMountOrArgChange: 30,
   });
 
-  // 1. Không có token → về login
   if (!token) {
     return <Navigate to="/login" replace />;
   }
 
-  // 2. Đang validate token → hiển thị loading
   if (!user && isLoading) {
     return <AppLoader />;
   }
 
-  // 3. Validate thất bại (token hết hạn/không hợp lệ) → về login
-  if (!user && isError) {
+  if (!user && (isError || !isLoading)) {
     tokenUtil.removeToken();
     tokenUtil.removeLoggedUser();
     return <Navigate to="/login" replace />;
   }
 
-  // 4. Không có user sau khi validate xong → về login
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  // 5. Kiểm tra quyền truy cập
   const userRoles: Role[] = [];
   if (user.isSuperAdmin) userRoles.push('superadmin');
   if (user.isAdmin || user.role?.name?.toLowerCase() === 'admin') userRoles.push('admin');
   if (typeof user.role === 'string') userRoles.push(user.role as Role);
 
-  const hasAccess = allowedRoles.some(role => userRoles.includes(role));
+  const hasAccess = allowedRoles.some((role) => userRoles.includes(role));
 
   if (!hasAccess) {
     return <ErrorPage status="403" />;
   }
 
-  // 6. Mọi thứ OK → render page
   return (
     <MainLayout>
       <Outlet />

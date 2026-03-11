@@ -142,16 +142,18 @@ const CategoryList = () => {
     <div className="category-list-wrapper">
       <SEO title={t('seoTitle')} description={t('seoDescription')} />
       
-      <AppFilter onReset={resetFilters} isLoading={isFetching}>
-        <Col xs={24} sm={16} md={12} lg={12}>
-          <AppSearchInput
-            placeholder={t('filter.keyword')}
-            value={params.keyword}
-            debounceTime={300}
-            onSearch={handleSearch}
-          />
-        </Col>
-      </AppFilter>
+      <div className="sticky-filter">
+        <AppFilter onReset={resetFilters} isLoading={isFetching}>
+          <Col xs={24} sm={16} md={12} lg={12}>
+            <AppSearchInput
+              placeholder={t('filter.keyword')}
+              value={params.keyword}
+              debounceTime={300}
+              onSearch={handleSearch}
+            />
+          </Col>
+        </AppFilter>
+      </div>
 
       <AppCard
         title={t('title')}
@@ -178,9 +180,9 @@ const CategoryList = () => {
           )}
           
           <AppLoader 
-            isLoading={!isReady || (isLoading && data.length === 0) || (isFetching && data.length > 0)} 
+            isLoading={!isReady || (isLoading && data.length === 0)} 
             overlay 
-            tip={!isReady || isLoading ? t('loading', { ns: 'translation' }) : undefined}
+            tip={!isReady || (isLoading && data.length === 0) ? t('loading', { ns: 'translation' }) : undefined}
           />
         </div>
       </AppCard>
