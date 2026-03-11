@@ -38,7 +38,9 @@ export default {
     messages: {
       success: "Thành công",
       error: "Lỗi",
-      confirmDelete: "Bạn có chắc chắn muốn xóa mục này không?"
+      confirmDelete: "Bạn có chắc chắn muốn xóa không?",
+      deleteWarning: "Hành động này không thể hoàn tác. Dữ liệu sẽ bị xóa vĩnh viễn khỏi hệ thống.",
+      batchDeleteWarning: "Bạn đang chọn xóa {{count}} mục. Hành động này không thể hoàn tác.",
     },
     formats: {
       relativeTime: {

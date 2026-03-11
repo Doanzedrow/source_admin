@@ -65,6 +65,10 @@ export default {
     createSuccess: "Thêm sản phẩm thành công",
     createError: "Thêm sản phẩm thất bại",
     updateSuccess: "Cập nhật sản phẩm thành công",
-    updateError: "Cập nhật sản phẩm thất bại"
+    updateError: "Cập nhật sản phẩm thất bại",
+    deleteSuccess: "Xóa sản phẩm thành công",
+    deleteError: "Xóa sản phẩm thất bại",
+    deleteConfirm: "Bạn có chắc chắn muốn xóa sản phẩm này?",
+    batchDeleteConfirm: "Bạn có chắc chắn muốn xóa {{count}} sản phẩm đã chọn?"
   }
 };

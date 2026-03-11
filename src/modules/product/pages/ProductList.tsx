@@ -23,8 +23,11 @@ const ProductList = () => {
     data, 
     isLoading, 
     handleDelete, 
+    handleBatchDelete,
     handleSwitchStatus, 
     switchingId,
+    selectedIds,
+    setSelectedIds,
     params, 
     handlePageChange, 
     total 
@@ -174,7 +177,22 @@ const ProductList = () => {
       <SEO title={t('seoTitle')} description={t('seoDescription')} />
       <AppCard
         title={t('title')}
-        extra={<AppButton type="primary" onClick={goToProductCreate}>{t('addProduct')}</AppButton>}
+        extra={
+          <Space>
+            {selectedIds.length > 0 && (
+              <AppButton 
+                danger 
+                onClick={handleBatchDelete}
+                loading={isLoading}
+              >
+                {t('common.actions.deleteSelected', { ns: 'translation', count: selectedIds.length })}
+              </AppButton>
+            )}
+            <AppButton type="primary" onClick={goToProductCreate}>
+              {t('addProduct')}
+            </AppButton>
+          </Space>
+        }
         className="product-card"
       >
         <AppTable
@@ -191,9 +209,8 @@ const ProductList = () => {
           }}
           rowSelection={{
             type: 'checkbox',
-            onChange: (selectedRowKeys, selectedRows) => {
-              console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            },
+            selectedRowKeys: selectedIds,
+            onChange: (keys) => setSelectedIds(keys as string[]),
           }}
         />
       </AppCard>

@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppNotify } from '@/hooks/useAppNotify';
+import { useAppConfirm } from '@/hooks/useAppConfirm';
 import { 
   useGetProductListQuery, 
-  useSwitchStatusMutation
+  useSwitchStatusMutation,
+  useDeleteProductMutation,
+  useBatchDeleteProductsMutation
 } from '../api/productApi';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants';
 
@@ -15,9 +18,13 @@ export const useProductList = () => {
     page_size: DEFAULT_PAGE_SIZE,
   });
   const [switchingId, setSwitchingId] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const { data, isLoading } = useGetProductListQuery(params);
   const [switchStatus] = useSwitchStatusMutation();
+  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
+  const [batchDeleteProducts, { isLoading: isBatchDeleting }] = useBatchDeleteProductsMutation();
+  const { confirmDelete, confirmBatchDelete } = useAppConfirm();
 
   const handlePageChange = (page: number, pageSize?: number) => {
     setParams((prev) => ({
@@ -28,7 +35,42 @@ export const useProductList = () => {
   };
 
   const handleDelete = (id: string) => {
-    console.log('Delete product Id:', id);
+    confirmDelete({
+      onOk: async () => {
+        try {
+          await deleteProduct(id).unwrap();
+          notification.success({
+            message: t('common.messages.success', { ns: 'translation' }),
+            description: t('messages.deleteSuccess'),
+          });
+        } catch (error: any) {
+          notification.error({
+            message: t('messages.deleteError'),
+            description: error?.data?.message || error?.message,
+          });
+        }
+      },
+    });
+  };
+
+  const handleBatchDelete = () => {
+    if (selectedIds.length === 0) return;
+
+    confirmBatchDelete(selectedIds.length, async () => {
+      try {
+        await batchDeleteProducts(selectedIds).unwrap();
+        notification.success({
+          message: t('common.messages.success', { ns: 'translation' }),
+          description: t('messages.deleteSuccess'),
+        });
+        setSelectedIds([]);
+      } catch (error: any) {
+        notification.error({
+          message: t('messages.deleteError'),
+          description: error?.data?.message || error?.message,
+        });
+      }
+    });
   };
 
   const handleSwitchStatus = async (id: string, currentStatus: number) => {
@@ -53,9 +95,12 @@ export const useProductList = () => {
 
   return {
     data: data?.result?.data || [],
-    isLoading,
+    isLoading: isLoading || isDeleting || isBatchDeleting,
     switchingId,
+    selectedIds,
+    setSelectedIds,
     handleDelete,
+    handleBatchDelete,
     handleSwitchStatus,
     params,
     handlePageChange,

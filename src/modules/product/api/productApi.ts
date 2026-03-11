@@ -8,7 +8,10 @@ import type { Product } from '../data/product.types';
 
 const MODULE_NAME = 'product';
 
-const endpoints: Record<'listPagination' | 'switchStatus' | 'create' | 'edit' | 'getById', Endpoint> = {
+const endpoints: Record<
+  'listPagination' | 'switchStatus' | 'create' | 'edit' | 'getById' | 'delete' | 'batchDelete', 
+  Endpoint
+> = {
   listPagination: {
     endpoint: `/${MODULE_NAME}/list-pagination`,
   },
@@ -23,6 +26,12 @@ const endpoints: Record<'listPagination' | 'switchStatus' | 'create' | 'edit' | 
   },
   getById: {
     endpoint: `/${MODULE_NAME}/get/${PARAMS_KEY}`,
+  },
+  delete: {
+    endpoint: `/${MODULE_NAME}/delete/${PARAMS_KEY}`,
+  },
+  batchDelete: {
+    endpoint: `/${MODULE_NAME}/batchDelete`,
   },
 };
 
@@ -73,6 +82,21 @@ export const productApi = baseApi.injectEndpoints({
         { type: TAG_TYPES.PRODUCT, id: 'LIST' },
       ],
     }),
+    deleteProduct: builder.mutation<ApiResponse<any>, string>({
+      query: (id) => ({
+        url: generateEndpointVersionning(endpoints.delete).replace(PARAMS_KEY, id),
+        method: HTTP_METHOD.DELETE,
+      }),
+      invalidatesTags: [{ type: TAG_TYPES.PRODUCT, id: 'LIST' }],
+    }),
+    batchDeleteProducts: builder.mutation<ApiResponse<any>, string[]>({
+      query: (ids) => ({
+        url: generateEndpointVersionning(endpoints.batchDelete),
+        method: HTTP_METHOD.DELETE,
+        data: { ids },
+      }),
+      invalidatesTags: [{ type: TAG_TYPES.PRODUCT, id: 'LIST' }],
+    }),
   }),
   overrideExisting: false,
 });
@@ -83,4 +107,6 @@ export const {
   useSwitchStatusMutation,
   useCreateProductMutation,
   useUpdateProductMutation,
+  useDeleteProductMutation,
+  useBatchDeleteProductsMutation,
 } = productApi;

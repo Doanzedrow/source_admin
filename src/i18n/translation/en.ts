@@ -38,7 +38,9 @@ export default {
     messages: {
       success: "Success",
       error: "Error",
-      confirmDelete: "Are you sure you want to delete this item?"
+      confirmDelete: "Are you sure you want to delete?",
+      deleteWarning: "This action cannot be undone. Data will be permanently removed from the system.",
+      batchDeleteWarning: "You are about to delete {{count}} items. This action cannot be undone.",
     },
     formats: {
       relativeTime: {

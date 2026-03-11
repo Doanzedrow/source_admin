@@ -31,22 +31,29 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
   const [uploadMedia, { isLoading }] = useUploadMediaMutation();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
+  const [uploadedMap, setUploadedMap] = useState<Record<string, string>>({});
 
   const getFileList = (): UploadFile[] => {
     const displayValues = (val: string | string[], paths?: string | string[]) => {
       const items = Array.isArray(val) ? val : [val];
       const initialPaths = Array.isArray(paths) ? paths : [paths];
-      
-      return items.map((item, index) => {
-        const path = (item && (item as string).includes('/')) ? (item as string) : (initialPaths[index] || '');
-        return {
-          uid: `-${index}`,
-          name: `image-${index}.png`,
-          status: 'done' as const,
-          url: path ? getFullImageUrl(path) : '',
-          response: { path, id: item },
-        } as UploadFile;
-      }).filter(f => f.url);
+
+      return items
+        .map((item, index) => {
+          const path =
+            item && (item as string).includes('/') 
+              ? (item as string) 
+              : (uploadedMap[item as string] || initialPaths[index] || '');
+              
+          return {
+            uid: (item && !(item as string).includes('/')) ? (item as string) : `-${index}`,
+            name: `image-${index}.png`,
+            status: 'done' as const,
+            url: path ? getFullImageUrl(path) : '',
+            response: { path, id: item },
+          } as UploadFile;
+        })
+        .filter((f) => f.url);
     };
 
     if (!value) return [];
@@ -62,7 +69,7 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
   const customRequest: UploadProps['customRequest'] = async ({ file, onSuccess, onError }) => {
     try {
       const formData = new FormData();
-      formData.append('file', file as File);
+      formData.append('thumbnail', file as File);
 
       let responsePath = '';
       let responseId = '';
@@ -73,9 +80,10 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
         responseId = res.id || responsePath;
       } else {
         const res = await uploadMedia(formData).unwrap();
-        responseId = res.result.thumbnail.id;
+        responseId = (res.result as any)._id;
         if (type === 'product') {
-          responsePath = res.result.thumbnail.sizes.product_square?.path || res.result.thumbnail.path;
+          responsePath =
+            res.result.thumbnail.sizes.product_square?.path || res.result.thumbnail.path;
         } else {
           responsePath = res.result.thumbnail.path;
         }
@@ -94,10 +102,13 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
       const newFileList = maxCount === 1 ? [newFile] : [...fileList, newFile];
       setFileList(newFileList);
 
+      // Lưu lại bản đồ ID -> Path để hiển thị ngay lập tức
+      setUploadedMap(prev => ({ ...prev, [responseId]: responsePath }));
+
       if (maxCount === 1) {
         onChange?.(responseId);
       } else {
-        onChange?.(newFileList.map(f => f.response.id).filter(Boolean));
+        onChange?.(newFileList.map((f) => f.response.id).filter(Boolean));
       }
 
       onSuccess?.(newFile);
@@ -113,7 +124,7 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
     if (maxCount === 1) {
       onChange?.('');
     } else {
-      onChange?.(newFileList.map(f => f.response?.id).filter(Boolean));
+      onChange?.(newFileList.map((f) => f.response?.id).filter(Boolean));
     }
     return true;
   };

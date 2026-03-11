@@ -7,6 +7,7 @@ export interface MediaSize {
 
 export interface MediaThumbnail {
   id: string;
+  _id: string;
   path: string;
   sizes: {
     news_large: MediaSize;
@@ -15,6 +16,11 @@ export interface MediaThumbnail {
   };
 }
 
-export interface ThumbnailResponse {
+export interface MediaResult {
+  _id: string;
+  id: number;
   thumbnail: MediaThumbnail;
+  [key: string]: any;
 }
+
+export interface ThumbnailResponse extends MediaResult {}

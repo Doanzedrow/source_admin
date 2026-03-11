@@ -62,6 +62,10 @@ export default {
     createSuccess: "Product created successfully",
     createError: "Failed to create product",
     updateSuccess: "Product updated successfully",
-    updateError: "Failed to update product"
+    updateError: "Failed to update product",
+    deleteSuccess: "Product deleted successfully",
+    deleteError: "Failed to delete product",
+    deleteConfirm: "Are you sure you want to delete this product?",
+    batchDeleteConfirm: "Are you sure you want to delete {{count}} selected products?"
   }
 };
