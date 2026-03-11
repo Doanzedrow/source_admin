@@ -1,4 +1,3 @@
-import { APP_COLOR_PRIMARY } from '@/config/constants';
 
 export enum OrderStatus {
   Draft = 0,
@@ -15,29 +14,29 @@ const orderStatusMap = new Map(
       id: OrderStatus.Draft,
       name: 'draft',
       label: 'Đang thực hiện',
-      backgroundColor: '#f1f1f1',
-      textColor: '#777777',
+      backgroundColor: '#f5f5f5',
+      textColor: '#595959',
     },
     {
       id: OrderStatus.InProduction,
       name: 'inProduction',
       label: 'Đang sản xuất',
-      backgroundColor: APP_COLOR_PRIMARY,
-      textColor: 'white',
+      backgroundColor: '#e6f7ff',
+      textColor: '#1890ff',
     },
     {
       id: OrderStatus.Produced,
       name: 'produced',
       label: 'Đã sản xuất',
-      backgroundColor: '#53A451',
-      textColor: 'white',
+      backgroundColor: '#f6ffed',
+      textColor: '#52c41a',
     },
     {
       id: OrderStatus.Delivered,
       name: 'delivered',
       label: 'Đã giao hàng',
-      backgroundColor: APP_COLOR_PRIMARY,
-      textColor: 'white',
+      backgroundColor: '#f6ffed',
+      textColor: '#52c41a',
     },
     {
       id: OrderStatus.Refunded,
@@ -50,8 +49,8 @@ const orderStatusMap = new Map(
       id: OrderStatus.Canceled,
       name: 'canceled',
       label: 'Đã hủy',
-      backgroundColor: '#ffff0078',
-      textColor: '#ff0000',
+      backgroundColor: '#fff1f0',
+      textColor: '#cf1322',
     },
   ].map((item) => [item.id, item])
 );
@@ -72,23 +71,23 @@ const paymentStatusMap = new Map(
     {
       id: PaymentStatus.Error,
       name: 'error',
-      backgroundColor: '#ffff0078',
-      textColor: '#ff0000',
       label: 'Lỗi',
+      backgroundColor: '#fff1f0',
+      textColor: '#cf1322',
     },
     {
       id: PaymentStatus.Unpaid,
       name: 'unpaid',
-      backgroundColor: '#ff00002b',
-      textColor: '#FF0000',
       label: 'Chưa thanh toán',
+      backgroundColor: '#fff1f0',
+      textColor: '#cf1322',
     },
     {
       id: PaymentStatus.Paid,
       name: 'paid',
-      backgroundColor: '#dff0e6',
-      textColor: '#27ae61',
       label: 'Đã thanh toán',
+      backgroundColor: '#f6ffed',
+      textColor: '#52c41a',
     },
     {
       id: PaymentStatus.Deposit,

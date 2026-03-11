@@ -1,0 +1,29 @@
+@import '../../../styles/variables.less';
+
+.orders-table-wrapper {
+  .summary-row-highlight {
+    background-color: fade(@primary-color, 2%) !important;
+    
+    td {
+      font-weight: 600;
+      border-bottom: 2px solid var(--border-color) !important;
+    }
+  }
+
+  .summary-label {
+    color: var(--text-primary);
+    text-align: left;
+    display: block;
+  }
+
+  .summary-value {
+    &.primary { color: var(--primary-color); }
+    &.success { color: var(--success-color); }
+    &.warning { color: var(--warning-color); }
+  }
+
+  /* Chống vỡ Layout trên Mobile cho bảng Order */
+  .ant-table-tbody > tr > td {
+    padding: 12px 8px;
+  }
+}

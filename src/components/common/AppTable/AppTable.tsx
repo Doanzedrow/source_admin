@@ -20,7 +20,8 @@ export const AppTable = <RecordType extends object>({
         size="middle"
         scroll={{ x: 'max-content' }} 
         pagination={hidePagination ? false : {
-          ...pagination
+          ...pagination,
+          showSizeChanger: false
         }}
         {...props}
       />

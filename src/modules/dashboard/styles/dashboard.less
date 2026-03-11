@@ -1,7 +1,6 @@
 @import '../../../styles/variables.less';
 
 .dashboard-page {
-  /* Fix chống vỡ Layout do DatePicker Picker siêu dài trên Mobile đè bẹp Card Header */
   .ant-card-head-wrapper {
     @media (max-width: 575px) {
       flex-wrap: wrap;
@@ -16,7 +15,7 @@
         padding: 8px 0;
 
         .ant-picker {
-          width: 100% !important; /* Dãn toàn màn hình, không trồi ra ngang */
+          width: 100% !important; 
         }
       }
     }
