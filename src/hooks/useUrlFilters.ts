@@ -42,6 +42,7 @@ export function useUrlFilters<T extends Record<string, any>>(initialValues: T) {
     }
     const parsed = parseSearchParams(searchParams, initialValuesRef.current);
 
+    // Dọn dẹp URL nếu cần (giữ logic cũ của bạn)
     const cleanUrlParams = new URLSearchParams();
     Object.entries(parsed).forEach(([key, val]) => {
       const defaultVal = initialValuesRef.current[key];
@@ -55,8 +56,13 @@ export function useUrlFilters<T extends Record<string, any>>(initialValues: T) {
       setSearchParams(cleanUrlParams, { replace: true });
     }
 
-    setFiltersState(parsed);
-  }, [searchParams, setSearchParams]);
+    // CHỈ CẬP NHẬT nếu thực sự có thay đổi từ URL bên ngoài 
+    // (Tránh re-render khi vừa mount vì state đã được init chính xác ở useState)
+    const isSame = Object.keys(parsed).every(key => String(parsed[key]) === String(filters[key]));
+    if (!isSame) {
+      setFiltersState(parsed);
+    }
+  }, [searchParams, setSearchParams, filters]);
 
   const setFilters = useCallback(
     (newFilters: Partial<T>) => {
