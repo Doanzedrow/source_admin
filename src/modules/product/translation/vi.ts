@@ -22,6 +22,12 @@ export default {
     tax: "Thuế (%)",
     totalPrice: "Tổng tiền (sau thuế)"
   },
+  filter: {
+    keyword: "Tìm theo tên, mã sản phẩm",
+    category: "Tất cả danh mục",
+    status: "Tất cả trạng thái",
+    reset: "Đặt lại"
+  },
   status: {
     active: "Đang bán",
     inactive: "Ngừng bán"

@@ -2,7 +2,7 @@ import { baseApi } from '@/store/baseApi';
 import { HTTP_METHOD } from '@/config/constants';
 import type { ApiResponse, PaginatedResult } from '@/types/api';
 import type { Endpoint } from '@/utils/api';
-import { generateEndpointVersionning, PARAMS_KEY, providesList } from '@/utils/api';
+import { generateEndpointVersionning, PARAMS_KEY, providesList, cleanParams } from '@/utils/api';
 import { TAG_TYPES } from '@/store/tags';
 import type { Category } from '../data/category.types';
 
@@ -35,7 +35,7 @@ export const categoryApi = baseApi.injectEndpoints({
       query: (params) => ({
         url: generateEndpointVersionning(endpoints.listPagination),
         method: HTTP_METHOD.GET,
-        params,
+        params: cleanParams(params),
       }),
       providesTags: (result) => providesList(result, TAG_TYPES.CATEGORY),
     }),
@@ -43,7 +43,7 @@ export const categoryApi = baseApi.injectEndpoints({
       query: (params) => ({
         url: generateEndpointVersionning(endpoints.getAll),
         method: HTTP_METHOD.GET,
-        params,
+        params: params ? cleanParams(params) : undefined,
       }),
       providesTags: (result) => providesList(result, TAG_TYPES.CATEGORY),
     }),

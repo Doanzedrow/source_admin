@@ -9,29 +9,36 @@ import {
   useBatchDeleteProductsMutation
 } from '../api/productApi';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants';
+import { useUrlFilters } from '@/hooks/useUrlFilters';
+import { useGetAllCategoriesQuery } from '@/modules/category/api/categoryApi';
 
 export const useProductList = () => {
   const { t } = useTranslation(['product', 'translation']);
   const { notification } = useAppNotify();
-  const [params, setParams] = useState({
+  
+  const { filters, setFilters, resetFilters } = useUrlFilters({
     page: 1,
     page_size: DEFAULT_PAGE_SIZE,
+    keyword: '',
+    category: undefined as string | undefined,
+    status: undefined as number | undefined,
   });
+
   const [switchingId, setSwitchingId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const { data: categoriesData } = useGetAllCategoriesQuery({ type: 1 });
 
-  const { data, isLoading } = useGetProductListQuery(params);
+  const { data, isLoading, isFetching } = useGetProductListQuery(filters);
   const [switchStatus] = useSwitchStatusMutation();
   const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
   const [batchDeleteProducts, { isLoading: isBatchDeleting }] = useBatchDeleteProductsMutation();
   const { confirmDelete, confirmBatchDelete } = useAppConfirm();
 
   const handlePageChange = (page: number, pageSize?: number) => {
-    setParams((prev) => ({
-      ...prev,
+    setFilters({
       page,
-      page_size: pageSize || prev.page_size,
-    }));
+      page_size: pageSize || filters.page_size,
+    });
   };
 
   const handleDelete = (id: string) => {
@@ -95,14 +102,18 @@ export const useProductList = () => {
 
   return {
     data: data?.result?.data || [],
-    isLoading: isLoading || isDeleting || isBatchDeleting,
+    isLoading: isLoading || isFetching || isDeleting || isBatchDeleting,
+    isFetching,
     switchingId,
     selectedIds,
     setSelectedIds,
     handleDelete,
     handleBatchDelete,
     handleSwitchStatus,
-    params,
+    params: filters,
+    setFilters,
+    resetFilters,
+    categories: categoriesData?.result || [],
     handlePageChange,
     total: data?.result?.pagination?.total || 0,
   };

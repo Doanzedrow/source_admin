@@ -36,3 +36,17 @@ export function providesList<T extends { _id: string | number }, TagType extends
   }
   return [{ type: tagType, id: 'LIST' }];
 }
+
+/**
+ * Filter params to remove null, undefined, and empty strings
+ * zero and false are allowed
+ */
+export const cleanParams = <T extends Record<string, any>>(params: T): Partial<T> => {
+  if (!params) return {};
+  return Object.entries(params).reduce((acc, [key, value]) => {
+    if (value !== null && value !== undefined && value !== '') {
+      acc[key as keyof T] = value;
+    }
+    return acc;
+  }, {} as Partial<T>);
+};

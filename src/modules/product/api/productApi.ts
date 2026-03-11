@@ -2,7 +2,7 @@ import { baseApi } from '@/store/baseApi';
 import { HTTP_METHOD } from '@/config/constants';
 import type { ApiResponse, PaginatedResult } from '@/types/api';
 import type { Endpoint } from '@/utils/api';
-import { generateEndpointVersionning, PARAMS_KEY, providesList } from '@/utils/api';
+import { generateEndpointVersionning, PARAMS_KEY, providesList, cleanParams } from '@/utils/api';
 import { TAG_TYPES } from '@/store/tags';
 import type { Product } from '../data/product.types';
 
@@ -37,11 +37,14 @@ const endpoints: Record<
 
 export const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getProductList: builder.query<ApiResponse<PaginatedResult<Product>>, { page?: number; page_size?: number }>({
+    getProductList: builder.query<
+      ApiResponse<PaginatedResult<Product>>, 
+      { page?: number; page_size?: number; keyword?: string; category?: string; status?: number }
+    >({
       query: (params) => ({
         url: generateEndpointVersionning(endpoints.listPagination),
         method: HTTP_METHOD.GET,
-        params,
+        params: cleanParams(params),
       }),
       providesTags: (result) => providesList(result, TAG_TYPES.PRODUCT),
     }),

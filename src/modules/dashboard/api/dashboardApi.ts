@@ -1,7 +1,7 @@
 import { baseApi } from '@/store/baseApi';
 import { HTTP_METHOD } from '@/config/constants';
 import type { Endpoint } from '@/utils/api';
-import { generateEndpointVersionning } from '@/utils/api';
+import { generateEndpointVersionning, cleanParams } from '@/utils/api';
 import { TAG_TYPES } from '@/store/tags';
 import type { 
   TodayStatisticsResult, 
@@ -57,7 +57,7 @@ export const dashboardApi = baseApi.injectEndpoints({
       query: (params) => ({
         url: generateEndpointVersionning(endpoints.recentActivities),
         method: HTTP_METHOD.GET,
-        params,
+        params: cleanParams(params),
       }),
       providesTags: (result) =>
         result?.result?.data
@@ -71,7 +71,7 @@ export const dashboardApi = baseApi.injectEndpoints({
       query: (params) => ({
         url: generateEndpointVersionning(endpoints.chartNetRevenue),
         method: HTTP_METHOD.GET,
-        params,
+        params: cleanParams(params),
       }),
       providesTags: [{ type: TAG_TYPES.DASHBOARD, id: 'CHART_REVENUE' }],
     }),
@@ -79,7 +79,7 @@ export const dashboardApi = baseApi.injectEndpoints({
       query: (params) => ({
         url: generateEndpointVersionning(endpoints.chartTopProduct),
         method: HTTP_METHOD.GET,
-        params,
+        params: cleanParams(params),
       }),
       providesTags: [{ type: TAG_TYPES.DASHBOARD, id: 'TOP_PRODUCTS' }],
     }),
@@ -87,7 +87,7 @@ export const dashboardApi = baseApi.injectEndpoints({
       query: (params) => ({
         url: generateEndpointVersionning(endpoints.chartTopCustomer),
         method: HTTP_METHOD.GET,
-        params,
+        params: cleanParams(params),
       }),
       providesTags: [{ type: TAG_TYPES.DASHBOARD, id: 'TOP_CUSTOMERS' }],
     }),
@@ -95,7 +95,7 @@ export const dashboardApi = baseApi.injectEndpoints({
       query: (params) => ({
         url: generateEndpointVersionning(endpoints.orders),
         method: HTTP_METHOD.GET,
-        params,
+        params: cleanParams(params),
       }),
       providesTags: (result) =>
         result?.result?.data
@@ -109,7 +109,7 @@ export const dashboardApi = baseApi.injectEndpoints({
       query: (params) => ({
         url: generateEndpointVersionning(endpoints.draftOrders),
         method: HTTP_METHOD.GET,
-        params,
+        params: cleanParams(params),
       }),
       providesTags: (result) =>
         result?.result?.data

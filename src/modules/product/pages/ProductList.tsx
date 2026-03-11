@@ -1,4 +1,4 @@
-import { Space, Flex, Typography, Tag, Switch } from 'antd';
+import { Space, Flex, Tag, Switch, Select, Typography, Col } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/components/common/AppButton';
 import { AppCard } from '@/components/common/AppCard';
@@ -11,6 +11,8 @@ import { formatCurrency } from '@/utils/format';
 import { getFullImageUrl } from '@/store/api/uploadApi';
 import { useAppNavigate } from '@/hooks/useAppNavigate';
 import { APP_ASSETS } from '@/config/assets';
+import { AppFilter } from '@/components/common/AppFilter/AppFilter';
+import { AppSearchInput } from '@/components/common/AppInput/AppSearchInput';
 
 import '../styles/product.less';
 
@@ -29,6 +31,9 @@ const ProductList = () => {
     selectedIds,
     setSelectedIds,
     params, 
+    setFilters,
+    resetFilters,
+    categories,
     handlePageChange, 
     total 
   } = useProductList();
@@ -175,6 +180,45 @@ const ProductList = () => {
   return (
     <div className="product-list-wrapper">
       <SEO title={t('seoTitle')} description={t('seoDescription')} />
+      
+      <AppFilter 
+        onReset={resetFilters} 
+        isLoading={isLoading}
+      >
+        <Col xs={24} sm={12} md={10} lg={10}>
+          <AppSearchInput
+            placeholder={t('filter.keyword')}
+            value={params.keyword}
+            onSearch={(val) => setFilters({ keyword: val, page: 1 })}
+          />
+        </Col>
+        <Col xs={12} sm={6} md={6} lg={6}>
+          <Select
+            style={{ width: '100%' }}
+            placeholder={t('filter.category')}
+            value={params.category}
+            onChange={(val) => setFilters({ category: val, page: 1 })}
+            allowClear
+            options={[
+              ...categories.map(c => ({ label: c.name, value: c._id }))
+            ]}
+          />
+        </Col>
+        <Col xs={12} sm={6} md={6} lg={6}>
+          <Select
+            style={{ width: '100%' }}
+            placeholder={t('filter.status')}
+            value={params.status}
+            onChange={(val) => setFilters({ status: val, page: 1 })}
+            allowClear
+            options={[
+              { label: t('status.active'), value: 1 },
+              { label: t('status.inactive'), value: 0 },
+            ]}
+          />
+        </Col>
+      </AppFilter>
+
       <AppCard
         title={t('title')}
         extra={

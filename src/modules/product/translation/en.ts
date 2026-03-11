@@ -22,6 +22,12 @@ export default {
     tax: "Tax (%)",
     totalPrice: "Total Price (incl. tax)"
   },
+  filter: {
+    keyword: "Search by name, code",
+    category: "All Categories",
+    status: "All Status",
+    reset: "Reset"
+  },
   status: {
     active: "Active",
     inactive: "Inactive"
