@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Form, Input, Select, Row, Col, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/components/common/AppButton';
@@ -8,6 +8,7 @@ import { FormActions } from '@/components/common/FormActions';
 import { AppMediaUpload } from '@/components/common/AppMediaUpload';
 import type { Product } from '../data/product.types';
 import { useProductForm } from '../hooks/useProductForm';
+import { useGetAllCategoriesQuery } from '../api/categoryApi';
 import { REGEX } from '@/utils/regex';
 
 import '../styles/product-form.less';
@@ -25,6 +26,13 @@ interface ProductFormProps {
 export const ProductForm: React.FC<ProductFormProps> = ({ onSave, loading, initialValues }) => {
   const { t } = useTranslation(['product', 'translation']);
   const { form, handleSubmit, onValuesChange } = useProductForm({ initialValues, onSave });
+  
+  // Real API call for categories
+  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery();
+  
+  const categories = useMemo(() => {
+    return categoriesData?.result || [];
+  }, [categoriesData]);
 
   return (
     <div className="product-form-container">
@@ -35,7 +43,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onSave, loading, initi
         initialValues={{ priceSale: 0, taxPercentage: 0, status: true, priceSaleWithTax: 0 }}
         onValuesChange={onValuesChange}
         scrollToFirstError
-        style={{ padding: '0 4px' }} // Tiny padding to fix edge cutoff
+        style={{ padding: '0 4px' }}
       >
         <Row gutter={[24, 0]}>
           <Col xs={24} lg={16}>
@@ -44,7 +52,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onSave, loading, initi
                 <AppInput
                   name="code"
                   label={t('form.code')}
-                  style={{ width: '100%' }}
                   placeholder={t('placeholder.code')}
                   rules={[
                     {
@@ -86,9 +93,19 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onSave, loading, initi
                   ]}
                   htmlFor="category"
                 >
-                  <Select id="category" placeholder={t('placeholder.category')} size="large">
-                    <Select.Option value="cat1">{t('placeholder.categoryMock1')}</Select.Option>
-                    <Select.Option value="cat2">{t('placeholder.categoryMock2')}</Select.Option>
+                  <Select
+                    id="category"
+                    placeholder={t('placeholder.category')}
+                    size="large"
+                    showSearch
+                    optionFilterProp="children"
+                    loading={isCategoriesLoading}
+                  >
+                    {categories.map((cat) => (
+                      <Select.Option key={cat._id} value={cat._id}>
+                        {cat.name}
+                      </Select.Option>
+                    ))}
                   </Select>
                 </Form.Item>
               </Col>

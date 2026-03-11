@@ -4,4 +4,5 @@ export const TAG_TYPES = {
   ORDER: 'Order',
   APPOINTMENT: 'Appointment',
   DASHBOARD: 'Dashboard',
+  CATEGORY: 'Category',
 } as const;
