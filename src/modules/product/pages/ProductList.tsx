@@ -1,5 +1,6 @@
-import { Space, Flex, Tag, Switch, Select, Typography, Col } from 'antd';
+import { Space, Flex, Tag, Switch, Select, Typography, Col, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
+import { useMemo } from 'react';
 import { AppButton } from '@/components/common/AppButton';
 import { AppCard } from '@/components/common/AppCard';
 import { AppTable } from '@/components/common/AppTable';
@@ -24,6 +25,7 @@ const ProductList = () => {
   const { 
     data, 
     isLoading, 
+    isFetching,
     handleDelete, 
     handleBatchDelete,
     handleSwitchStatus, 
@@ -38,7 +40,7 @@ const ProductList = () => {
     total 
   } = useProductList();
 
-  const columns = [
+  const columns = useMemo(() => [
     {
       title: t('columns.index'),
       key: 'index',
@@ -175,7 +177,13 @@ const ProductList = () => {
         </Space>
       ),
     },
-  ];
+  ], [t, params.page, params.page_size, switchingId, goToProductEdit, handleDelete, handleSwitchStatus]);
+
+  const rowSelection = useMemo(() => ({
+    type: 'checkbox' as const,
+    selectedRowKeys: selectedIds,
+    onChange: (keys: React.Key[]) => setSelectedIds(keys as string[]),
+  }), [selectedIds, setSelectedIds]);
 
   return (
     <div className="product-list-wrapper">
@@ -189,6 +197,7 @@ const ProductList = () => {
           <AppSearchInput
             placeholder={t('filter.keyword')}
             value={params.keyword}
+            debounceTime={300}
             onSearch={(val) => setFilters({ keyword: val, page: 1 })}
           />
         </Col>
@@ -200,7 +209,7 @@ const ProductList = () => {
             onChange={(val) => setFilters({ category: val, page: 1 })}
             allowClear
             options={[
-              ...categories.map(c => ({ label: c.name, value: c._id }))
+              ...categories.map(c => ({ label: c.name, value: c.code }))
             ]}
           />
         </Col>
@@ -208,7 +217,7 @@ const ProductList = () => {
           <Select
             style={{ width: '100%' }}
             placeholder={t('filter.status')}
-            value={params.status}
+            value={params.status !== undefined ? Number(params.status) : undefined}
             onChange={(val) => setFilters({ status: val, page: 1 })}
             allowClear
             options={[
@@ -239,24 +248,42 @@ const ProductList = () => {
         }
         className="product-card"
       >
-        <AppTable
-          className="product-table"
-          columns={columns}
-          dataSource={data}
-          rowKey="_id"
-          loading={isLoading}
-          pagination={{
-            total,
-            current: params.page,
-            pageSize: params.page_size,
-            onChange: handlePageChange,
-          }}
-          rowSelection={{
-            type: 'checkbox',
-            selectedRowKeys: selectedIds,
-            onChange: (keys) => setSelectedIds(keys as string[]),
-          }}
-        />
+        <div style={{ position: 'relative' }}>
+          <AppTable
+            className="product-table"
+            columns={columns}
+            dataSource={data}
+            rowKey="_id"
+            loading={isLoading && data.length === 0}
+            pagination={{
+              total,
+              current: params.page,
+              pageSize: params.page_size,
+              onChange: handlePageChange,
+            }}
+            rowSelection={rowSelection}
+          />
+          {isFetching && data.length > 0 && (
+            <div 
+              style={{ 
+                position: 'absolute', 
+                top: 0, 
+                left: 0, 
+                right: 0, 
+                bottom: 0, 
+                backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                zIndex: 10,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                pointerEvents: 'none',
+                transition: 'opacity 0.2s'
+              }}
+            >
+              <Spin size="large" />
+            </div>
+          )}
+        </div>
       </AppCard>
     </div>
   );

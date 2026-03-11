@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppNotify } from '@/hooks/useAppNotify';
 import { useAppConfirm } from '@/hooks/useAppConfirm';
@@ -27,8 +27,28 @@ export const useProductList = () => {
   const [switchingId, setSwitchingId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const { data: categoriesData } = useGetAllCategoriesQuery({ type: 1 });
+  const categories = useMemo(() => categoriesData?.result || [], [categoriesData]);
 
-  const { data, isLoading, isFetching } = useGetProductListQuery(filters);
+  const apiParams = useMemo(() => {
+    const params = { ...filters };
+    if (params.category && categories.length > 0) {
+      const category = categories.find(c => c.code === params.category);
+      if (category) {
+        params.category = category._id;
+      }
+    }
+    if (params.status !== undefined && params.status !== null) {
+      params.status = Number(params.status);
+    }
+    
+    return params;
+  }, [filters, categories]);
+
+  const isCategoryReady = !filters.category || (filters.category && categories.some(c => c.code === filters.category));
+
+  const { data, isLoading, isFetching } = useGetProductListQuery(apiParams, {
+    skip: !isCategoryReady && categories.length === 0,
+  });
   const [switchStatus] = useSwitchStatusMutation();
   const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
   const [batchDeleteProducts, { isLoading: isBatchDeleting }] = useBatchDeleteProductsMutation();
@@ -113,7 +133,7 @@ export const useProductList = () => {
     params: filters,
     setFilters,
     resetFilters,
-    categories: categoriesData?.result || [],
+    categories,
     handlePageChange,
     total: data?.result?.pagination?.total || 0,
   };
