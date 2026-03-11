@@ -1,6 +1,7 @@
 import React from 'react';
 import { Skeleton } from 'antd';
 import { useCachedImage } from './useCachedImage';
+import { APP_ASSETS } from '@/config/assets';
 import './CachedImage.less';
 
 interface CachedImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
@@ -17,7 +18,7 @@ export const CachedImage: React.FC<CachedImageProps> = ({
   src,
   alt,
   isApiImage = false,
-  fallbackSrc = '/favicon.ico',
+  fallbackSrc = APP_ASSETS.IMAGE_FALLBACK_DEFAULT,
   className = '',
   width = '100%',
   height = '100%',

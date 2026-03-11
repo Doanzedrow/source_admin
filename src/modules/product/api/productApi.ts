@@ -47,7 +47,7 @@ export const productApi = baseApi.injectEndpoints({
       query: (body) => ({
         url: generateEndpointVersionning(endpoints.create),
         method: HTTP_METHOD.POST,
-        body,
+        data: body,
       }),
       invalidatesTags: [{ type: TAG_TYPES.PRODUCT, id: 'LIST' }],
     }),
@@ -55,7 +55,7 @@ export const productApi = baseApi.injectEndpoints({
       query: ({ id, body }) => ({
         url: generateEndpointVersionning(endpoints.edit).replace(PARAMS_KEY, id),
         method: HTTP_METHOD.PUT,
-        body,
+        data: body,
       }),
       invalidatesTags: (_result, _error, { id }) => [
         { type: TAG_TYPES.PRODUCT, id },
@@ -66,7 +66,7 @@ export const productApi = baseApi.injectEndpoints({
       query: ({ id, status }) => ({
         url: `${generateEndpointVersionning(endpoints.switchStatus)}/${id}`,
         method: HTTP_METHOD.PATCH,
-        body: { status },
+        data: { status },
       }),
       invalidatesTags: (_result, _error, { id }) => [
         { type: TAG_TYPES.PRODUCT, id },

@@ -7,6 +7,7 @@ import {
   useCreateProductMutation, 
   useUpdateProductMutation 
 } from '../api/productApi';
+import { PRODUCT_TYPE } from '../data/product.constants';
 
 export const useProductUpsert = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,13 +25,13 @@ export const useProductUpsert = () => {
   const handleSave = async (values: any) => {
     try {
       if (id) {
-        await updateProduct({ id, body: values }).unwrap();
+        await updateProduct({ id, body: { ...values, type: PRODUCT_TYPE.REGULAR } }).unwrap();
         notification.success({
           message: t('common.messages.success', { ns: 'translation' }),
           description: t('messages.updateSuccess'),
         });
       } else {
-        await createProduct(values).unwrap();
+        await createProduct({ ...values, type: PRODUCT_TYPE.REGULAR }).unwrap();
         notification.success({
           message: t('common.messages.success', { ns: 'translation' }),
           description: t('messages.createSuccess'),

@@ -15,6 +15,7 @@ interface AppMediaUploadProps {
   type?: 'product' | 'general';
   uploadAction?: (file: File) => Promise<any>;
   disabled?: boolean;
+  initialValuePath?: string | string[];
 }
 
 export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
@@ -24,6 +25,7 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
   type = 'product',
   uploadAction,
   disabled = false,
+  initialValuePath,
 }) => {
   const { t } = useTranslation('translation');
   const [uploadMedia, { isLoading }] = useUploadMediaMutation();
@@ -31,18 +33,31 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
   const [previewImage, setPreviewImage] = useState('');
 
   const getFileList = (): UploadFile[] => {
+    const displayValues = (val: string | string[], paths?: string | string[]) => {
+      const items = Array.isArray(val) ? val : [val];
+      const initialPaths = Array.isArray(paths) ? paths : [paths];
+      
+      return items.map((item, index) => {
+        const path = (item && (item as string).includes('/')) ? (item as string) : (initialPaths[index] || '');
+        return {
+          uid: `-${index}`,
+          name: `image-${index}.png`,
+          status: 'done' as const,
+          url: path ? getFullImageUrl(path) : '',
+          response: { path, id: item },
+        } as UploadFile;
+      }).filter(f => f.url);
+    };
+
     if (!value) return [];
-    const paths = Array.isArray(value) ? value : [value];
-    return paths.map((path, index) => ({
-      uid: `-${index}`,
-      name: `image-${index}.png`,
-      status: 'done',
-      url: getFullImageUrl(path),
-      response: { path },
-    }));
+    return displayValues(value, initialValuePath);
   };
 
   const [fileList, setFileList] = useState<UploadFile[]>(getFileList());
+
+  React.useEffect(() => {
+    setFileList(getFileList());
+  }, [value, initialValuePath]);
 
   const customRequest: UploadProps['customRequest'] = async ({ file, onSuccess, onError }) => {
     try {
@@ -50,12 +65,15 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
       formData.append('file', file as File);
 
       let responsePath = '';
+      let responseId = '';
 
       if (uploadAction) {
         const res = await uploadAction(file as File);
         responsePath = res.path || res.url;
+        responseId = res.id || responsePath;
       } else {
         const res = await uploadMedia(formData).unwrap();
+        responseId = res.result.thumbnail.id;
         if (type === 'product') {
           responsePath = res.result.thumbnail.sizes.product_square?.path || res.result.thumbnail.path;
         } else {
@@ -70,16 +88,16 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
         name: (file as File).name,
         status: 'done',
         url: getFullImageUrl(responsePath),
-        response: { path: responsePath },
+        response: { path: responsePath, id: responseId },
       };
 
-      const newFileList = [...fileList, newFile];
+      const newFileList = maxCount === 1 ? [newFile] : [...fileList, newFile];
       setFileList(newFileList);
 
       if (maxCount === 1) {
-        onChange?.(responsePath);
+        onChange?.(responseId);
       } else {
-        onChange?.(newFileList.map(f => f.response.path).filter(Boolean));
+        onChange?.(newFileList.map(f => f.response.id).filter(Boolean));
       }
 
       onSuccess?.(newFile);
@@ -95,7 +113,7 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
     if (maxCount === 1) {
       onChange?.('');
     } else {
-      onChange?.(newFileList.map(f => f.response?.path).filter(Boolean));
+      onChange?.(newFileList.map(f => f.response?.id).filter(Boolean));
     }
     return true;
   };

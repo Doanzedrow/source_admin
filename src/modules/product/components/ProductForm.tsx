@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Form, Input, Select, Row, Col, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/components/common/AppButton';
@@ -8,7 +8,6 @@ import { FormActions } from '@/components/common/FormActions';
 import { AppMediaUpload } from '@/components/common/AppMediaUpload';
 import type { Product } from '../data/product.types';
 import { useProductForm } from '../hooks/useProductForm';
-import { useGetAllCategoriesQuery } from '@/modules/category/api/categoryApi';
 import { REGEX } from '@/utils/regex';
 
 import '../styles/product-form.less';
@@ -25,13 +24,17 @@ interface ProductFormProps {
 
 export const ProductForm: React.FC<ProductFormProps> = ({ onSave, loading, initialValues }) => {
   const { t } = useTranslation(['product', 'translation']);
-  const { form, handleSubmit, onValuesChange } = useProductForm({ initialValues, onSave });
-  
-  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery();
-  
-  const categories = useMemo(() => {
-    return categoriesData?.result || [];
-  }, [categoriesData]);
+  const { 
+    form, 
+    handleSubmit, 
+    onValuesChange, 
+    categories, 
+    isCategoriesLoading,
+    initialThumbnailPath
+  } = useProductForm({ 
+    initialValues, 
+    onSave 
+  });
 
   return (
     <div className="product-form-container">
@@ -41,6 +44,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onSave, loading, initi
         disabled={loading}
         initialValues={{ priceSale: 0, taxPercentage: 0, status: true, priceSaleWithTax: 0 }}
         onValuesChange={onValuesChange}
+        onFinish={handleSubmit}
         scrollToFirstError
         style={{ padding: '0 4px' }}
       >
@@ -175,7 +179,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onSave, loading, initi
           <Col xs={24} lg={8}>
             <div className="media-panel">
               <Form.Item name="thumbnail" label={t('form.image')} style={{ marginBottom: 12 }}>
-                <AppMediaUpload type="product" maxCount={1} />
+                <AppMediaUpload type="product" maxCount={1} initialValuePath={initialThumbnailPath} />
               </Form.Item>
               <Typography.Text type="secondary" className="upload-hint">
                 {t('form.uploadHint')}
@@ -191,7 +195,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ onSave, loading, initi
           <AppButton
             size="large"
             type="primary"
-            onClick={handleSubmit}
+            htmlType="submit"
             loading={loading}
             style={{ minWidth: 120 }}
           >

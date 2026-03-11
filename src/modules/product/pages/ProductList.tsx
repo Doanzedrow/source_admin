@@ -8,8 +8,9 @@ import { SEO } from '@/components/common/SEO/SEO';
 import { useProductList } from '@/modules/product/hooks/useProductList';
 import type { Product } from '@/modules/product/data/product.types';
 import { formatCurrency } from '@/utils/format';
-import { IMAGE_URL } from '@/config/constants';
+import { getFullImageUrl } from '@/store/api/uploadApi';
 import { useAppNavigate } from '@/hooks/useAppNavigate';
+import { APP_ASSETS } from '@/config/assets';
 
 import '../styles/product.less';
 
@@ -53,28 +54,33 @@ const ProductList = () => {
       width: 300,
       render: (_: any, record: Product) => {
         const imagePath = record.thumbnail?.thumbnail?.path;
-        let imageUrl = '/placeholder-product.png';
-
-        if (imagePath) {
-          if (imagePath.startsWith('http')) {
-            imageUrl = imagePath;
-          } else {
-            const baseUrl = IMAGE_URL.replace(/\/$/, '');
-            const cleanPath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
-            imageUrl = `${baseUrl}${cleanPath}`;
-          }
-        }
+        const imageUrl = getFullImageUrl(imagePath) || APP_ASSETS.PRODUCT_PLACEHOLDER;
 
         return (
           <Flex gap={12} align="center">
-            <CachedImage
-              src={imageUrl}
-              alt={record.name}
-              width={48}
-              height={48}
-              style={{ objectFit: 'cover', borderRadius: '4px' }}
-              isApiImage={false}
-            />
+            <div 
+              style={{ 
+                width: 48, 
+                height: 48, 
+                borderRadius: '8px', 
+                backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                overflow: 'hidden',
+                border: '1px solid var(--border-color-split)',
+                flexShrink: 0
+              }}
+            >
+              <CachedImage
+                src={imageUrl}
+                alt={record.name}
+                width={48}
+                height={48}
+                style={{ objectFit: 'scale-down' }}
+                isApiImage={false}
+              />
+            </div>
             <Flex vertical>
               <Text strong style={{ fontSize: '14px' }}>
                 {record.name}

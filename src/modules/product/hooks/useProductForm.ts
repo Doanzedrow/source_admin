@@ -1,15 +1,15 @@
-import { useEffect } from 'react';
+import { useMemo, useEffect } from 'react';
 import { Form } from 'antd';
 import type { Product } from '../data/product.types';
+import { PRODUCT_TYPE } from '../data/product.constants';
+import { useGetAllCategoriesQuery } from '@/modules/category/api/categoryApi';
 
 interface UseProductFormProps {
   initialValues: Product | null;
   onSave: (values: any) => void;
 }
 
-/**
- * Safely parses numbers, stripping potential thousand separators.
- */
+
 const safeParseNumber = (val: any): number => {
   if (val === undefined || val === null || val === '') return 0;
   if (typeof val === 'number') return val;
@@ -29,10 +29,7 @@ export const useProductForm = ({ initialValues, onSave }: UseProductFormProps) =
       form.setFieldsValue({
         ...initialValues,
         category: initialValues.category?._id,
-        thumbnail:
-          initialValues.thumbnail?.thumbnail?.path ||
-          initialValues.thumbnail?.thumbnail?.sizes?.product_square?.path ||
-          '',
+        thumbnail: initialValues.thumbnail?._id || '',
         status: initialValues.status === 1,
         priceSaleWithTax: priceSaleWithTax,
       });
@@ -42,9 +39,13 @@ export const useProductForm = ({ initialValues, onSave }: UseProductFormProps) =
     }
   }, [initialValues, form]);
 
-  /**
-   * Universal onValuesChange for bidirectional price calculation.
-   */
+  const initialThumbnailPath = useMemo(() => {
+    return initialValues?.thumbnail?.thumbnail?.path || 
+           initialValues?.thumbnail?.thumbnail?.sizes?.product_square?.path || 
+           '';
+  }, [initialValues]);
+
+  
   const onValuesChange = (changed: any, all: any) => {
     const taxPercentage = safeParseNumber(all.taxPercentage);
 
@@ -59,31 +60,38 @@ export const useProductForm = ({ initialValues, onSave }: UseProductFormProps) =
     }
   };
 
-  const handleSubmit = async () => {
-    try {
-      const values = await form.validateFields();
-      const trimmed = Object.fromEntries(
-        Object.entries(values).map(([k, v]) => [k, typeof v === 'string' ? v.trim() : v])
-      );
+  const handleSubmit = (values: any) => {
+    const trimmed = Object.fromEntries(
+      Object.entries(values).map(([k, v]) => [k, typeof v === 'string' ? v.trim() : v])
+    );
 
-      const priceSale = safeParseNumber(trimmed.priceSale);
-      const taxPercentage = safeParseNumber(trimmed.taxPercentage);
-      const priceSaleWithTax = safeParseNumber(trimmed.priceSaleWithTax);
+    const priceSale = safeParseNumber(trimmed.priceSale);
+    const taxPercentage = safeParseNumber(trimmed.taxPercentage);
+    const priceSaleWithTax = safeParseNumber(trimmed.priceSaleWithTax);
 
-      onSave({
-        ...trimmed,
-        status: trimmed.status ? 1 : 0,
-        priceSale,
-        taxPercentage,
-        priceSaleWithTax,
-        taxAmount: priceSaleWithTax - priceSale,
-      });
-    } catch {}
+    onSave({
+      ...trimmed,
+      type: PRODUCT_TYPE.REGULAR,
+      status: trimmed.status ? 1 : 0,
+      priceSale,
+      taxPercentage,
+      priceSaleWithTax,
+      taxAmount: priceSaleWithTax - priceSale,
+    });
   };
+
+  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery({ type: 1 });
+
+  const categories = useMemo(() => {
+    return categoriesData?.result || [];
+  }, [categoriesData]);
 
   return {
     form,
     onValuesChange,
     handleSubmit,
+    categories,
+    isCategoriesLoading,
+    initialThumbnailPath,
   };
 };

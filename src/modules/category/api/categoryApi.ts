@@ -39,10 +39,11 @@ export const categoryApi = baseApi.injectEndpoints({
       }),
       providesTags: (result) => providesList(result, TAG_TYPES.CATEGORY),
     }),
-    getAllCategories: builder.query<ApiResponse<Category[]>, void>({
-      query: () => ({
+    getAllCategories: builder.query<ApiResponse<Category[]>, { type?: number } | void>({
+      query: (params) => ({
         url: generateEndpointVersionning(endpoints.getAll),
         method: HTTP_METHOD.GET,
+        params,
       }),
       providesTags: (result) => providesList(result, TAG_TYPES.CATEGORY),
     }),
@@ -57,7 +58,7 @@ export const categoryApi = baseApi.injectEndpoints({
       query: (body) => ({
         url: generateEndpointVersionning(endpoints.create),
         method: HTTP_METHOD.POST,
-        body,
+        data: body,
       }),
       invalidatesTags: [{ type: TAG_TYPES.CATEGORY, id: 'LIST' }],
     }),
@@ -65,7 +66,7 @@ export const categoryApi = baseApi.injectEndpoints({
       query: ({ id, body }) => ({
         url: generateEndpointVersionning(endpoints.edit).replace(PARAMS_KEY, id),
         method: HTTP_METHOD.PUT,
-        body,
+        data: body,
       }),
       invalidatesTags: (_result, _error, { id }) => [
         { type: TAG_TYPES.CATEGORY, id },
@@ -76,7 +77,7 @@ export const categoryApi = baseApi.injectEndpoints({
       query: ({ id, status }) => ({
         url: `${generateEndpointVersionning(endpoints.switchStatus)}/${id}`,
         method: HTTP_METHOD.PATCH,
-        body: { status },
+        data: { status },
       }),
       invalidatesTags: (_result, _error, { id }) => [
         { type: TAG_TYPES.CATEGORY, id },
