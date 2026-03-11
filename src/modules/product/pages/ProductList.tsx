@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useState, memo, useEffect } from 'react';
+import React, { useMemo, useCallback, useState, memo, useEffect, useDeferredValue } from 'react';
 import { Space, Flex, Tag, Switch, Select, Typography, Col } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/components/common/AppButton';
@@ -260,6 +260,8 @@ const ProductList = () => {
     [selectedIds]
   );
 
+  const deferredData = useDeferredValue(data);
+
   return (
     <div className="product-list-wrapper">
       <SEO title={t('seoTitle')} description={t('seoDescription')} />
@@ -323,7 +325,7 @@ const ProductList = () => {
             <AppTable
               className="product-table"
               columns={columns}
-              dataSource={data}
+              dataSource={deferredData}
               rowKey="_id"
               pagination={{
                 total,

@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState, memo, useEffect } from 'react';
+import { useMemo, useCallback, useState, memo, useEffect, useDeferredValue } from 'react';
 import { Space, Tag, Switch, Typography, Col } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/components/common/AppButton';
@@ -121,6 +121,8 @@ const CategoryList = () => {
     },
   ], [t, switchingId, params.page, params.page_size, handleSwitchStatus, handleDelete]);
 
+  const deferredData = useDeferredValue(data);
+
   return (
     <div className="category-list-wrapper">
       <SEO title={t('seoTitle')} description={t('seoDescription')} />
@@ -149,7 +151,7 @@ const CategoryList = () => {
             <AppTable
               className="category-table"
               columns={columns}
-              dataSource={data}
+              dataSource={deferredData}
               rowKey="_id"
               pagination={{
                 total,
