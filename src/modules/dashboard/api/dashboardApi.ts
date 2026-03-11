@@ -11,13 +11,15 @@ import type {
   NetRevenueParams,
   ChartLabelTotalData,
   TopProductParams,
-  TopCustomerParams
+  TopCustomerParams,
+  DashboardOrder,
+  DashboardOrderParams
 } from '../data/dashboard.types';
 
 const MODULE_NAME = 'dashboard';
 const ACTIVITY_MODULE = 'activity';
 
-const endpoints: Record<'todayStatistics' | 'recentActivities' | 'chartNetRevenue' | 'chartTopProduct' | 'chartTopCustomer', Endpoint> = {
+const endpoints: Record<'todayStatistics' | 'recentActivities' | 'chartNetRevenue' | 'chartTopProduct' | 'chartTopCustomer' | 'orders' | 'draftOrders', Endpoint> = {
   todayStatistics: {
     endpoint: `/${MODULE_NAME}/today-statistics`,
   },
@@ -32,6 +34,12 @@ const endpoints: Record<'todayStatistics' | 'recentActivities' | 'chartNetRevenu
   },
   chartTopCustomer: {
     endpoint: `/${MODULE_NAME}/chart-top-customer`,
+  },
+  orders: {
+    endpoint: `/${MODULE_NAME}/order`,
+  },
+  draftOrders: {
+    endpoint: `/${MODULE_NAME}/draftOrder`,
   },
 };
 
@@ -71,6 +79,20 @@ export const dashboardApi = baseApi.injectEndpoints({
         params,
       }),
     }),
+    getDashboardOrders: builder.query<DashboardResponse<PaginatedResult<DashboardOrder>>, DashboardOrderParams>({
+      query: (params) => ({
+        url: generateEndpointVersionning(endpoints.orders),
+        method: HTTP_METHOD.GET,
+        params,
+      }),
+    }),
+    getDashboardDraftOrders: builder.query<DashboardResponse<PaginatedResult<DashboardOrder>>, DashboardOrderParams>({
+      query: (params) => ({
+        url: generateEndpointVersionning(endpoints.draftOrders),
+        method: HTTP_METHOD.GET,
+        params,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -80,5 +102,7 @@ export const {
   useGetRecentActivitiesQuery,
   useGetChartNetRevenueQuery,
   useGetTopProductsQuery,
-  useGetTopCustomersQuery
+  useGetTopCustomersQuery,
+  useGetDashboardOrdersQuery,
+  useGetDashboardDraftOrdersQuery
 } = dashboardApi;

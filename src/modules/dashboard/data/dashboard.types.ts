@@ -48,9 +48,15 @@ export interface DashboardResponse<T> {
 
 export interface PaginatedResult<T> {
   data: T[];
-  total: number;
-  page: number;
-  limit: number;
+  pagination?: {
+    total: number;
+    current_page: number;
+    page_size: number;
+    total_page: number;
+  };
+  total?: number;
+  page?: number;
+  limit?: number;
 }
 
 export interface ChartNetRevenueData {
@@ -83,4 +89,35 @@ export interface TopProductParams {
 export interface TopCustomerParams {
   startDate: string;
   endDate: string;
+}
+
+export interface DashboardOrderParams {
+  page: number;
+  page_size: number;
+  type: number;
+  startDate: string;
+  endDate: string;
+}
+
+export interface DashboardOrder {
+  _id: string;
+  id?: number;
+  code?: string;
+  orderCode?: string;
+  createdAt: string;
+  customer?: {
+    fullname?: string;
+    name?: string;
+    phone?: string;
+  };
+  totalAmount?: number;
+  value?: number;
+  expectedDeliveryDate?: string;
+  deliveryDate?: string;
+  orderStatus?: number;
+  status?: number;
+  paymentStatus?: number;
+  depositAmount?: number;
+  remainingAmount?: number;
+  [key: string]: any;
 }

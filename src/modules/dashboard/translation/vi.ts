@@ -35,5 +35,39 @@ export default {
     title: "Top 10 khách hàng theo doanh thu"
   },
   loading: "Đang tải...",
-  unknownUser: "Người dùng không xác định"
+  unknownUser: "Người dùng không xác định",
+  orders: {
+    title: "Quản lý đơn hàng",
+    tabs: {
+      new: "Đơn hàng mới",
+      deposit: "Đơn hàng đặt cọc",
+      draft: "Đơn hàng chờ duyệt"
+    },
+    table: {
+      orderCode: "Mã đơn hàng",
+      createdAt: "Ngày tạo",
+      customer: "Khách hàng",
+      totalAmount: "Thành tiền",
+      depositAmount: "Đã cọc",
+      remainingAmount: "Còn lại",
+      expectedDeliveryDate: "Ngày giao đơn",
+      orderStatus: "Trạng thái",
+      paymentStatus: "Thanh toán",
+      summaryTotal: "Tổng cộng (Trang này):"
+    },
+    status: {
+      draft: "Đang thực hiện",
+      inProduction: "Đang sản xuất",
+      produced: "Đã sản xuất",
+      delivered: "Đã giao hàng",
+      refunded: "Đã hoàn lại",
+      canceled: "Đã hủy"
+    },
+    paymentStatus: {
+      error: "Lỗi",
+      unpaid: "Chưa thanh toán",
+      paid: "Đã thanh toán",
+      deposit: "Đặt cọc"
+    }
+  }
 };

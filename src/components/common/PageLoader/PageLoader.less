@@ -17,9 +17,15 @@
     
     .pulse-logo {
       width: 180px;
+      max-width: 90vw; /* Đảm bảo an toàn tuyết đối không bao giờ vượt qua màn hình gốc */
       height: auto;
       animation: pulse-animation 1.5s infinite ease-in-out;
       filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.1));
+
+      /* Thu nhỏ Logo nhỏ nhắn hơn nữa trên màn hình điện thoại cho tinh tế và vừa mắt hơn */
+      @media (max-width: 767px) {
+        width: 100px;
+      }
     }
   }
 }

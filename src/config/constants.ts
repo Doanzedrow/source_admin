@@ -22,6 +22,12 @@ export const APP_COLOR_PRIMARY = '#d3929a';
 export const APP_NAME = 'SPA Thanh Xuân';
 
 // ==========================================
+// PAGINATION CONFIG
+// ==========================================
+export const DEFAULT_PAGE_SIZE = 20;
+export const PAGE_SIZE_OPTIONS = ['10', '20', '50', '100'];
+
+// ==========================================
 // I18N CONFIGURATION (SUPPORTED LANGUAGES)
 // ==========================================
 export const SUPPORTED_LANGUAGES = [

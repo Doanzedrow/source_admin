@@ -1,6 +1,27 @@
 @import '../../../styles/variables.less';
 
 .dashboard-page {
+  /* Fix chống vỡ Layout do DatePicker Picker siêu dài trên Mobile đè bẹp Card Header */
+  .ant-card-head-wrapper {
+    @media (max-width: 575px) {
+      flex-wrap: wrap;
+      
+      .ant-card-head-title {
+        min-width: 100%;
+        padding: 8px 0 0 0;
+      }
+
+      .ant-card-extra {
+        min-width: 100%;
+        padding: 8px 0;
+
+        .ant-picker {
+          width: 100% !important; /* Dãn toàn màn hình, không trồi ra ngang */
+        }
+      }
+    }
+  }
+
   .dashboard-section-header {
     margin-bottom: var(--space-md);
 
@@ -15,7 +36,6 @@
     background: var(--body-bg);
     border-radius: var(--border-radius-lg);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-    margin-bottom: var(--space-lg);
     border: none;
 
     .ant-card-head {
@@ -82,26 +102,31 @@
 
         .item-info {
           flex: 1;
+          min-width: 0; /* Siết chặt Flexbox, cấm Stretch bóp méo không gian làm tràn bề ngang thẻ */
+
+          /* Bật text-overflow bảo vệ vỡ khối chữ dài trên Tablet hẹp */
+          .label, .value, .sub-value {
+             display: block;
+             white-space: nowrap;
+             overflow: hidden;
+             text-overflow: ellipsis;
+          }
+          
           .label {
             font-size: 13px;
             color: var(--text-secondary);
             margin-bottom: 4px;
-            display: block;
-            white-space: nowrap;
           }
           .value {
             font-size: 18px;
             font-weight: 700;
             color: var(--text-primary);
             line-height: 1.2;
-            white-space: nowrap;
           }
           .sub-value {
             font-size: 12px;
             color: var(--text-secondary);
             margin-top: 4px;
-            display: block;
-            white-space: nowrap;
           }
         }
       }
@@ -140,6 +165,13 @@
       margin-bottom: var(--space-lg);
       display: flex;
       gap: var(--space-lg);
+      overflow-x: auto; /* Màn hình càng hẹp thì cho trượt thanh tab qua lại */
+      white-space: nowrap;
+
+      /* Vuốt trơn tru giấu thanh cuộn trên mobile */
+      &::-webkit-scrollbar {
+        display: none;
+      }
 
       .tab-item {
         padding: var(--space-sm) 0;
@@ -252,19 +284,38 @@
     }
   }
 
+  .recent-activities-col {
+    @media (min-width: 992px) {
+      position: relative;
+    }
+  }
+
+  .recent-activities-wrapper {
+    @media (min-width: 992px) {
+      position: absolute;
+      top: 0;
+      left: 12px;
+      right: 12px;
+      bottom: 0;
+    }
+    @media (max-width: 991px) {
+      position: relative;
+      height: 600px;
+    }
+  }
+
   .activity-sidebar {
     background: var(--body-bg);
     border-radius: var(--border-radius-lg);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
     height: 100%;
-    margin-bottom: var(--space-lg);
     display: flex;
     flex-direction: column;
 
     .ant-card-body {
       flex: 1;
       overflow-y: auto;
-      max-height: calc(100vh - 200px); /* Đặt lại giới hạn trượt thân thiện để phần thẻ RecentActivities không bị giãn tự do ra ngoài */
+      min-height: 0;
     }
 
     .ant-card-head {
@@ -335,10 +386,27 @@
 
   .top-products-card,
   .top-customers-card {
-    margin-top: var(--space-lg);
+    /* Đã bị xóa bỏ margin-top dư thừa ở đây */
 
     .ant-card-body {
       padding: var(--space-lg);
+      
+      /* Fix bể bộ lọc Filter kép (Select + Date) trên màn hình Điện thoại cực nhỏ */
+      > .ant-flex {
+        @media (max-width: 575px) {
+          flex-wrap: wrap;
+          
+          > * {
+            flex: 1 1 100% !important; /* Cho rơi xuống thành 2 hàng 100% độ rộng thay vì chèn ép nhau */
+            width: 100% !important;
+
+            .ant-picker {
+               width: 100% !important;
+               display: flex;
+            }
+          }
+        }
+      }
     }
 
     .horizontal-bar-chart {
@@ -434,6 +502,24 @@
         color: var(--text-secondary);
         padding-top: 8px;
         border-top: 1px solid var(--border-color);
+      }
+
+      /* Quy tắc Responsive tối thượng cho Đồ thị Cây ngang trên Mobile (Tự làm ngắn nhãn Label) */
+      @media (max-width: 767px) {
+        .grid-lines-vertical {
+          left: 80px; /* Thu hẹp ranh giới chừa cho Biểu đồ dài ra */
+        }
+        
+        .bar-list .bar-item .bar-label {
+          width: 80px;
+          text-align: left;
+          font-size: 12px; /* Chữ nhỏ gọn gàng hơn */
+        }
+
+        .x-axis-labels-horizontal {
+          left: 80px;
+          font-size: 11px;
+        }
       }
     }
   }

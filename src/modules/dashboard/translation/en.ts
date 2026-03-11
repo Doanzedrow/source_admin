@@ -35,5 +35,39 @@ export default {
     title: "Top 10 Customers by Revenue"
   },
   loading: "Loading...",
-  unknownUser: "Unknown User"
+  unknownUser: "Unknown User",
+  orders: {
+    title: "Order Management",
+    tabs: {
+      new: "New Orders",
+      deposit: "Deposit Orders",
+      draft: "Pending Orders"
+    },
+    table: {
+      orderCode: "Order Code",
+      createdAt: "Created Date",
+      customer: "Customer",
+      totalAmount: "Total Amount",
+      depositAmount: "Deposited",
+      remainingAmount: "Remaining",
+      expectedDeliveryDate: "Delivery Date",
+      orderStatus: "Status",
+      paymentStatus: "Payment",
+      summaryTotal: "Total (This page):"
+    },
+    status: {
+      draft: "In Progress",
+      inProduction: "In Production",
+      produced: "Produced",
+      delivered: "Delivered",
+      refunded: "Refunded",
+      canceled: "Canceled"
+    },
+    paymentStatus: {
+      error: "Error",
+      unpaid: "Unpaid",
+      paid: "Paid",
+      deposit: "Deposit"
+    }
+  }
 };

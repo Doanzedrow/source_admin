@@ -1,0 +1,31 @@
+@import '../../../styles/variables.less';
+
+.app-table-wrapper {
+  overflow: hidden;
+  border-radius: var(--border-radius-base);
+
+  .ant-table-wrapper {
+    background: transparent;
+
+    .ant-table-thead > tr > th {
+      background: var(--bg-color);
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    .ant-table-tbody > tr > td {
+      border-bottom: 1px dashed var(--border-color);
+    }
+
+      .ant-table-tbody > tr.ant-table-row:hover > td {
+      background-color: fade(@primary-color, 3%) !important;
+    }
+  
+    .ant-table-tbody > tr.summary-row-highlight > td {
+      background-color: fade(@primary-color, 6%);
+      border-bottom: 1px solid fade(@primary-color, 20%);
+    }
+  }
+}

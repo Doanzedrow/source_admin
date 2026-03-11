@@ -7,6 +7,7 @@ import { formatCurrency } from '@/utils/format';
 import { useGetTopCustomersQuery } from '../api/dashboardApi';
 import type { TopCustomerParams } from '../data/dashboard.types';
 import { DateFilter } from '@/components/common/DateFilter';
+import { HorizontalBarChartSkeleton } from './skeletons';
 
 export const TopCustomersChart: React.FC = () => {
   const { t } = useTranslation(['dashboard', 'translation']);
@@ -42,7 +43,7 @@ export const TopCustomersChart: React.FC = () => {
 
         <div className="horizontal-bar-chart">
           {isLoading ? (
-            <div className="chart-loading-placeholder">{t('loading')}</div>
+            <HorizontalBarChartSkeleton />
           ) : (
           <>
             <div className="grid-lines-vertical">
