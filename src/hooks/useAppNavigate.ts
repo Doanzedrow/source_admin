@@ -6,12 +6,18 @@ export const useAppNavigate = () => {
 
   const goToDashboard = () => navigate(rc(RouteKey.Dashboard).path);
   const goToLogin = () => navigate(rc(RouteKey.Login).path);
+  const goToProducts = () => navigate(rc(RouteKey.Products).path);
+  const goToProductCreate = () => navigate(rc(RouteKey.ProductCreate).path);
+  const goToProductEdit = (id: string) => navigate(rc(RouteKey.ProductEdit).path.replace(':id', id));
   
   const to = (path: string, options?: any) => navigate(path, options);
 
   return {
     goToDashboard,
     goToLogin,
+    goToProducts,
+    goToProductCreate,
+    goToProductEdit,
     to,
   };
 };

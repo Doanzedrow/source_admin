@@ -11,6 +11,8 @@ export const RouteKey = {
   Login: 'login',
   Dashboard: 'dashboard',
   Products: 'products',
+  ProductCreate: 'product-create',
+  ProductEdit: 'product-edit',
   Settings: 'settings',
   NotFound: 'notfound',
 } as const;
@@ -54,6 +56,22 @@ export const routesArray: RouteConfig[] = [
     layout: 'main',
     allowedRoles: ['superadmin', 'admin'],
     component: lazy(() => import('@/modules/product/pages/ProductList')),
+  },
+  {
+    id: RouteKey.ProductCreate,
+    name: 'Create Product',
+    path: '/products/create',
+    layout: 'main',
+    allowedRoles: ['superadmin', 'admin'],
+    component: lazy(() => import('@/modules/product/pages/ProductUpsert')),
+  },
+  {
+    id: RouteKey.ProductEdit,
+    name: 'Edit Product',
+    path: '/products/edit/:id',
+    layout: 'main',
+    allowedRoles: ['superadmin', 'admin'],
+    component: lazy(() => import('@/modules/product/pages/ProductUpsert')),
   },
   {
     id: RouteKey.Settings,

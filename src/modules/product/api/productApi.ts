@@ -8,12 +8,18 @@ import type { Product, PaginatedResult } from '../data/product.types';
 
 const MODULE_NAME = 'product';
 
-const endpoints: Record<'listPagination' | 'switchStatus', Endpoint> = {
+const endpoints: Record<'listPagination' | 'switchStatus' | 'create' | 'update', Endpoint> = {
   listPagination: {
     endpoint: `/${MODULE_NAME}/list-pagination`,
   },
   switchStatus: {
     endpoint: `/${MODULE_NAME}/switchStatus`,
+  },
+  create: {
+    endpoint: `/${MODULE_NAME}`,
+  },
+  update: {
+    endpoint: `/${MODULE_NAME}`,
   },
 };
 
@@ -33,6 +39,25 @@ export const productApi = baseApi.injectEndpoints({
             ]
           : [{ type: TAG_TYPES.PRODUCT, id: 'LIST' }],
     }),
+    createProduct: builder.mutation<ApiResponse<Product>, Partial<Product>>({
+      query: (body) => ({
+        url: generateEndpointVersionning(endpoints.create),
+        method: HTTP_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: [{ type: TAG_TYPES.PRODUCT, id: 'LIST' }],
+    }),
+    updateProduct: builder.mutation<ApiResponse<Product>, { id: string; body: Partial<Product> }>({
+      query: ({ id, body }) => ({
+        url: `${generateEndpointVersionning(endpoints.update)}/${id}`,
+        method: HTTP_METHOD.PUT,
+        body,
+      }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: TAG_TYPES.PRODUCT, id },
+        { type: TAG_TYPES.PRODUCT, id: 'LIST' },
+      ],
+    }),
     switchStatus: builder.mutation<ApiResponse<any>, { id: string; status: number }>({
       query: ({ id, status }) => ({
         url: `${generateEndpointVersionning(endpoints.switchStatus)}/${id}`,
@@ -48,4 +73,9 @@ export const productApi = baseApi.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useGetProductListQuery, useSwitchStatusMutation } = productApi;
+export const { 
+  useGetProductListQuery, 
+  useSwitchStatusMutation,
+  useCreateProductMutation,
+  useUpdateProductMutation,
+} = productApi;

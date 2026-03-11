@@ -9,6 +9,7 @@ import { useProductList } from '@/modules/product/hooks/useProductList';
 import type { Product } from '@/modules/product/data/product.types';
 import { formatCurrency } from '@/utils/format';
 import { IMAGE_URL } from '@/config/constants';
+import { useAppNavigate } from '@/hooks/useAppNavigate';
 
 import '../styles/product.less';
 
@@ -16,11 +17,11 @@ const { Text } = Typography;
 
 const ProductList = () => {
   const { t } = useTranslation(['product', 'translation']);
+  const { goToProductCreate, goToProductEdit } = useAppNavigate();
   const { 
     data, 
     isLoading, 
     handleDelete, 
-    handleEdit, 
     handleSwitchStatus, 
     switchingId,
     params, 
@@ -151,7 +152,7 @@ const ProductList = () => {
       align: 'right' as const,
       render: (_: unknown, record: Product) => (
         <Space size="small">
-          <AppButton type="link" onClick={() => handleEdit(record._id)}>
+          <AppButton type="link" onClick={() => goToProductEdit(record._id)}>
             {t('common.actions.edit', { ns: 'translation' })}
           </AppButton>
           <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
@@ -167,7 +168,7 @@ const ProductList = () => {
       <SEO title={t('seoTitle')} description={t('seoDescription')} />
       <AppCard
         title={t('title')}
-        extra={<AppButton type="primary">{t('addProduct')}</AppButton>}
+        extra={<AppButton type="primary" onClick={goToProductCreate}>{t('addProduct')}</AppButton>}
         className="product-card"
       >
         <AppTable

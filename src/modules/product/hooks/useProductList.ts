@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppNotify } from '@/hooks/useAppNotify';
-import { useGetProductListQuery, useSwitchStatusMutation } from '../api/productApi';
+import { 
+  useGetProductListQuery, 
+  useSwitchStatusMutation
+} from '../api/productApi';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants';
+import type { Product } from '../data/product.types';
 
 export const useProductList = () => {
   const { t } = useTranslation(['product', 'translation']);
@@ -26,10 +30,6 @@ export const useProductList = () => {
 
   const handleDelete = (id: string) => {
     console.log('Delete product Id:', id);
-  };
-
-  const handleEdit = (id: string) => {
-    console.log('Edit product Id:', id);
   };
 
   const handleSwitchStatus = async (id: string, currentStatus: number) => {
@@ -57,7 +57,6 @@ export const useProductList = () => {
     isLoading,
     switchingId,
     handleDelete,
-    handleEdit,
     handleSwitchStatus,
     params,
     handlePageChange,
