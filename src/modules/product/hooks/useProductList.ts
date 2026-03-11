@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppNotify } from '@/hooks/useAppNotify';
 import { useAppConfirm } from '@/hooks/useAppConfirm';
@@ -28,20 +28,30 @@ export const useProductList = () => {
   const { data: categoriesData } = useGetAllCategoriesQuery({ type: 1 });
   const categories = useMemo(() => categoriesData?.result || [], [categoriesData]);
 
+  // Create a memoized map for O(1) category lookup
+  const categoryMap = useMemo(() => {
+    const map = new Map<string, string>();
+    categories.forEach(c => map.set(c.code, c._id));
+    return map;
+  }, [categories]);
+
   const apiParams = useMemo(() => {
     const params = { ...filters };
-    if (params.category && categories.length > 0) {
-      const category = categories.find(c => c.code === params.category);
-      if (category) {
-        params.category = category._id;
+    
+    // Quick lookup using Map instead of .find()
+    if (params.category) {
+      const categoryId = categoryMap.get(params.category);
+      if (categoryId) {
+        params.category = categoryId;
       }
     }
+    
     if (params.status !== undefined && params.status !== null) {
       params.status = Number(params.status);
     }
     
     return params;
-  }, [filters, categories]);
+  }, [filters, categoryMap]);
 
   const isCategoryReady = !filters.category || (filters.category && categories.some(c => c.code === filters.category));
 
@@ -53,14 +63,14 @@ export const useProductList = () => {
   const [batchDeleteProducts, { isLoading: isBatchDeleting }] = useBatchDeleteProductsMutation();
   const { confirmDelete, confirmBatchDelete } = useAppConfirm();
 
-  const handlePageChange = (page: number, pageSize?: number) => {
+  const handlePageChange = useCallback((page: number, pageSize?: number) => {
     setFilters({
       page,
       page_size: pageSize || filters.page_size,
     });
-  };
+  }, [filters.page_size, setFilters]);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = useCallback((id: string) => {
     confirmDelete({
       onOk: async () => {
         try {
@@ -77,9 +87,9 @@ export const useProductList = () => {
         }
       },
     });
-  };
+  }, [confirmDelete, deleteProduct, notification, t]);
 
-  const handleBatchDelete = (ids: string[], onSuccess?: () => void) => {
+  const handleBatchDelete = useCallback((ids: string[], onSuccess?: () => void) => {
     if (ids.length === 0) return;
 
     confirmBatchDelete(ids.length, async () => {
@@ -97,9 +107,9 @@ export const useProductList = () => {
         });
       }
     });
-  };
+  }, [confirmBatchDelete, batchDeleteProducts, notification, t]);
 
-  const handleSwitchStatus = async (id: string, currentStatus: number) => {
+  const handleSwitchStatus = useCallback(async (id: string, currentStatus: number) => {
     try {
       setSwitchingId(id);
       const newStatus = currentStatus === 1 ? 0 : 1;
@@ -117,7 +127,7 @@ export const useProductList = () => {
     } finally {
       setSwitchingId(null);
     }
-  };
+  }, [switchStatus, notification, t]);
 
   return {
     data: data?.result?.data || [],

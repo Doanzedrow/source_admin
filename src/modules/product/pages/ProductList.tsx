@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useState } from 'react';
+import React, { useMemo, useCallback, useState, memo } from 'react';
 import { Space, Flex, Tag, Switch, Select, Typography, Col, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/components/common/AppButton';
@@ -218,11 +218,13 @@ const ProductList = () => {
     },
   ], [t, params.page, params.page_size, switchingId, goToProductEdit, handleDelete, handleSwitchStatus]);
 
-  const rowSelection = {
+  // Stabilize rowSelection to avoid Table recalculating columns on every minor state change
+  const rowSelection = useMemo(() => ({
     type: 'checkbox' as const,
     selectedRowKeys: selectedIds,
     onChange: (keys: React.Key[]) => setSelectedIds(keys as string[]),
-  };
+    preserveSelectedRowKeys: true, // Optimizes for large datasets
+  }), [selectedIds]);
 
   return (
     <div className="product-list-wrapper">
@@ -323,4 +325,4 @@ const ProductList = () => {
   );
 };
 
-export default ProductList;
+export default memo(ProductList);
