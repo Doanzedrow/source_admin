@@ -8,7 +8,11 @@ import { AppMediaUpload } from '@/components/common/AppMediaUpload';
 import { AppTable } from '@/components/common/AppTable';
 import { useProductVariantSelector } from '../hooks/useProductVariantSelector';
 
-
+/**
+ * ProductVariantSelector
+ * Management of product specific variants, prices and thumbnails.
+ * Enhanced with intelligent duplicate filtering and empty state handling.
+ */
 export const ProductVariantSelector: React.FC = () => {
   const { 
     t, 
@@ -43,86 +47,140 @@ export const ProductVariantSelector: React.FC = () => {
               dataIndex: 'attribute',
               key: 'attribute',
               width: 180,
-              render: (_: any, field: any) => (
-                <Form.Item
-                  {...field}
-                  name={[field.name, 'attribute']}
-                  rules={[{ required: true, message: '' }]}
-                  noStyle
-                >
-                  <Select
-                    showSearch
-                    placeholder={t('placeholder.selectAttribute', { ns: 'attribute' })}
-                    options={attributeOptions}
-                    loading={isAttributesLoading}
-                    size="large"
-                    style={{ width: '100%' }}
-                  />
-                </Form.Item>
-              ),
+              render: (_: any, field: any) => {
+                const { key, ...restField } = field;
+                return (
+                  <Form.Item shouldUpdate noStyle key={key}>
+                    {({ getFieldValue }) => {
+                      const allVariants = getFieldValue('variants') || [];
+                      
+                      const filteredAttributeOptions = attributeOptions.filter(attr => {
+                        const availableVariants = getVariantsByAttributeId(attr.value);
+                        if (availableVariants.length === 0) return false;
+
+                        const selectedVariantsForThisAttr = allVariants
+                          .filter((v: any, idx: number) => v.attribute === attr.value && idx !== field.name)
+                          .map((v: any) => v.variant);
+
+                        return selectedVariantsForThisAttr.length < availableVariants.length;
+                      });
+
+                      return (
+                        <Form.Item
+                          {...restField}
+                          name={[field.name, 'attribute']}
+                          rules={[{ required: true, message: '' }]}
+                          noStyle
+                        >
+                          <Select
+                            showSearch
+                            placeholder={t('placeholder.selectAttribute', { ns: 'attribute' })}
+                            options={filteredAttributeOptions}
+                            loading={isAttributesLoading}
+                            size="large"
+                            style={{ width: '100%' }}
+                            onChange={() => {
+                              form.setFieldValue(['variants', field.name, 'variant'], undefined);
+                            }}
+                          />
+                        </Form.Item>
+                      );
+                    }}
+                  </Form.Item>
+                );
+              },
             },
             {
               title: t('form.variant', { ns: 'attribute' }),
               dataIndex: 'variant',
               key: 'variant',
               width: 200,
-              render: (_: any, field: any) => (
-                <Form.Item shouldUpdate={(prev, curr) => prev.variants?.[field.name]?.attribute !== curr.variants?.[field.name]?.attribute} noStyle>
-                  {({ getFieldValue }) => {
-                    const attributeId = getFieldValue(['variants', field.name, 'attribute']);
-                    const variantOptions = getVariantsByAttributeId(attributeId).map(v => ({
-                      label: v.name,
-                      value: v._id,
-                    }));
+              render: (_: any, field: any) => {
+                const { key, ...restField } = field;
+                return (
+                  <Form.Item shouldUpdate noStyle key={key}>
+                    {({ getFieldValue }) => {
+                      const allVariants = getFieldValue('variants') || [];
+                      const currentAttributeId = getFieldValue(['variants', field.name, 'attribute']);
+                      
+                      if (!currentAttributeId) {
+                        return (
+                          <Select
+                            placeholder={t('form.variantName', { ns: 'attribute' })}
+                            disabled
+                            size="large"
+                            style={{ width: '100%' }}
+                          />
+                        );
+                      }
 
-                    return (
-                      <Form.Item
-                        {...field}
-                        name={[field.name, 'variant']}
-                        rules={[{ required: true, message: '' }]}
-                        noStyle
-                      >
-                        <Select
-                          showSearch
-                          placeholder={t('form.variantName', { ns: 'attribute' })}
-                          options={variantOptions}
-                          disabled={!attributeId}
-                          size="large"
-                          style={{ width: '100%' }}
-                        />
-                      </Form.Item>
-                    );
-                  }}
-                </Form.Item>
-              ),
+                      const selectedVariantIds = allVariants
+                        .filter((v: any, idx: number) => v.attribute === currentAttributeId && idx !== field.name && v.variant)
+                        .map((v: any) => v.variant);
+
+                      const variantOptions = getVariantsByAttributeId(currentAttributeId)
+                        .filter(v => !selectedVariantIds.includes(v._id))
+                        .map(v => ({
+                          label: v.name,
+                          value: v._id,
+                        }));
+
+                      return (
+                        <Form.Item
+                          {...restField}
+                          name={[field.name, 'variant']}
+                          rules={[{ required: true, message: '' }]}
+                          noStyle
+                        >
+                          <Select
+                            showSearch
+                            placeholder={t('form.variantName', { ns: 'attribute' })}
+                            options={variantOptions}
+                            size="large"
+                            style={{ width: '100%' }}
+                          />
+                        </Form.Item>
+                      );
+                    }}
+                  </Form.Item>
+                );
+              },
             },
             {
               title: t('form.price', { ns: 'attribute' }),
               dataIndex: 'price',
               key: 'price',
               width: 160,
-              render: (_: any, field: any) => (
-                <AppInputPrice
-                  {...field}
-                  name={[field.name, 'price']}
-                  placeholder={t('common.price', { ns: 'translation' })}
-                  noStyle
-                />
-              ),
+              render: (_: any, field: any) => {
+                const { key, ...restField } = field;
+                return (
+                  <AppInputPrice
+                    key={key}
+                    {...restField}
+                    name={[field.name, 'price']}
+                    placeholder={t('common.price', { ns: 'translation' })}
+                    noStyle
+                  />
+                );
+              },
             },
             {
               title: t('form.priceAfterTax', { ns: 'product' }),
               dataIndex: 'priceWithTax',
               key: 'priceWithTax',
               width: 160,
-              render: (_: any, field: any) => (
-                <AppInputPrice
-                  {...field}
-                  name={[field.name, 'priceWithTax']}
-                  placeholder={t('form.priceAfterTax', { ns: 'product' })}
-                  noStyle
-                />
-              ),
+              render: (_: any, field: any) => {
+                const { key, ...restField } = field;
+                return (
+                  <AppInputPrice
+                    key={key}
+                    {...restField}
+                    name={[field.name, 'priceWithTax']}
+                    placeholder={t('form.priceAfterTax', { ns: 'product' })}
+                    noStyle
+                  />
+                );
+              },
             },
             {
               title: t('form.image', { ns: 'attribute' }),
@@ -131,9 +189,11 @@ export const ProductVariantSelector: React.FC = () => {
               width: 100,
               render: (_: any, field: any) => {
                 const variantData = form.getFieldValue(['variants', field.name]);
+                const { key, ...restField } = field;
                 return (
                   <Form.Item
-                    {...field}
+                    key={key}
+                    {...restField}
                     name={[field.name, 'thumbnail']}
                     noStyle
                   >

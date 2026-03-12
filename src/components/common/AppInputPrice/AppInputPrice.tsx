@@ -8,6 +8,9 @@ interface AppInputPriceProps extends Omit<InputNumberProps, 'name' | 'formatter'
   rules?: any[];
   currency?: string;
   id?: string;
+  isListField?: boolean;
+  fieldKey?: number;
+  noStyle?: boolean;
 }
 
 const ALLOWED_KEYS = new Set([
@@ -47,6 +50,10 @@ export const AppInputPrice: React.FC<AppInputPriceProps> = ({
   currency = '₫',
   style,
   id,
+  // Desctructure list-related props to prevent them from being passed to InputNumber
+  isListField,
+  fieldKey,
+  noStyle,
   ...props
 }) => {
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -57,7 +64,14 @@ export const AppInputPrice: React.FC<AppInputPriceProps> = ({
   const inputId = id || (typeof name === 'string' ? name : undefined);
   
   return (
-    <Form.Item label={label} name={name} rules={rules} htmlFor={inputId}>
+    <Form.Item 
+      label={label} 
+      name={name} 
+      rules={rules} 
+      htmlFor={inputId} 
+      isListField={isListField}
+      noStyle={noStyle}
+    >
       <InputNumber
         id={inputId}
         size="large"
@@ -70,7 +84,6 @@ export const AppInputPrice: React.FC<AppInputPriceProps> = ({
         onKeyDown={handleKeyDown}
         controls={false}
         className="app-input-right"
-        // Ant Design v5 suffix for InputNumber:
         suffix={currency} 
         {...props}
       />

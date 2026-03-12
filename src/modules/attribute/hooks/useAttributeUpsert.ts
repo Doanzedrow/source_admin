@@ -26,20 +26,20 @@ export const useAttributeUpsert = () => {
       if (id) {
         await updateAttribute({ id, body: values }).unwrap();
         notification.success({
-          message: t('common.messages.success', { ns: 'translation' }),
+          title: t('common.messages.success', { ns: 'translation' }),
           description: t('messages.updateSuccess'),
         });
       } else {
         await createAttribute(values).unwrap();
         notification.success({
-          message: t('common.messages.success', { ns: 'translation' }),
+          title: t('common.messages.success', { ns: 'translation' }),
           description: t('messages.createSuccess'),
         });
       }
       goToAttributes();
     } catch (error: any) {
       notification.error({
-        message: id ? t('messages.updateError') : t('messages.createError'),
+        title: id ? t('messages.updateError') : t('messages.createError'),
         description: error?.data?.message || error?.message,
       });
     }

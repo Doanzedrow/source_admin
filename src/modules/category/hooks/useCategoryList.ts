@@ -56,12 +56,12 @@ export const useCategoryList = () => {
       const newStatus = currentStatus === 1 ? 0 : 1;
       await switchStatus({ id, status: newStatus }).unwrap();
       notification.success({
-        message: t('common.messages.success', { ns: 'translation' }),
+        title: t('common.messages.success', { ns: 'translation' }),
         description: t('messages.updateStatusSuccess'),
       });
     } catch (error: any) {
       notification.error({
-        message: t('messages.updateStatusError'),
+        title: t('messages.updateStatusError'),
         description: error?.data?.message || error?.message,
       });
     } finally {
@@ -75,12 +75,12 @@ export const useCategoryList = () => {
         try {
           await deleteCategory(id).unwrap();
           notification.success({
-            message: t('common.messages.success', { ns: 'translation' }),
+            title: t('common.messages.success', { ns: 'translation' }),
             description: t('messages.deleteSuccess'),
           });
         } catch (error: any) {
           notification.error({
-            message: t('messages.deleteError'),
+            title: t('messages.deleteError'),
             description: error?.data?.message || error?.message,
           });
         }
@@ -95,13 +95,13 @@ export const useCategoryList = () => {
       try {
         await batchDeleteCategories(ids).unwrap();
         notification.success({
-          message: t('common.messages.success', { ns: 'translation' }),
+          title: t('common.messages.success', { ns: 'translation' }),
           description: t('messages.deleteSuccess'),
         });
         onSuccess?.();
       } catch (error: any) {
         notification.error({
-          message: t('messages.deleteError'),
+          title: t('messages.deleteError'),
           description: error?.data?.message || error?.message,
         });
       }

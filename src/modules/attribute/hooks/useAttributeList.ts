@@ -71,12 +71,12 @@ export const useAttributeList = () => {
           try {
             await deleteAttribute(id).unwrap();
             notification.success({
-              message: t('common.messages.success', { ns: 'translation' }),
+              title: t('common.messages.success', { ns: 'translation' }),
               description: t('messages.deleteSuccess'),
             });
           } catch (error: any) {
             notification.error({
-              message: t('messages.deleteError'),
+              title: t('messages.deleteError'),
               description: error?.data?.message || error?.message,
             });
           }
@@ -94,13 +94,13 @@ export const useAttributeList = () => {
         try {
           await batchDeleteAttributes(ids).unwrap();
           notification.success({
-            message: t('common.messages.success', { ns: 'translation' }),
+            title: t('common.messages.success', { ns: 'translation' }),
             description: t('messages.deleteSuccess'),
           });
           onSuccess?.();
         } catch (error: any) {
           notification.error({
-            message: t('messages.deleteError'),
+            title: t('messages.deleteError'),
             description: error?.data?.message || error?.message,
           });
         }

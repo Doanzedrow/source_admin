@@ -62,19 +62,19 @@ export const useVariantManager = ({ attributeId }: UseVariantManagerProps) => {
           attributeId, 
           body: values 
         }).unwrap();
-        notification.success({ message: t('messages.updateSuccess') });
+        notification.success({ title: t('messages.updateSuccess') });
       } else {
         await createVariant({ 
           ...values, 
           attribute: attributeId, 
           status: 1 
         }).unwrap();
-        notification.success({ message: t('messages.createSuccess') });
+        notification.success({ title: t('messages.createSuccess') });
       }
       setIsModalOpen(false);
     } catch (error: any) {
       notification.error({
-        message: t('common.messages.error', { ns: 'translation' }),
+        title: t('common.messages.error', { ns: 'translation' }),
         description: error?.data?.message || error?.message,
       });
     }
@@ -85,9 +85,9 @@ export const useVariantManager = ({ attributeId }: UseVariantManagerProps) => {
       onOk: async () => {
         try {
           await deleteVariant({ id, attributeId }).unwrap();
-          notification.success({ message: t('messages.deleteSuccess') });
+          notification.success({ title: t('messages.deleteSuccess') });
         } catch (error: any) {
-          notification.error({ message: t('messages.deleteError') });
+          notification.error({ title: t('messages.deleteError') });
         }
       },
     });
@@ -96,10 +96,10 @@ export const useVariantManager = ({ attributeId }: UseVariantManagerProps) => {
   const handleSwitchStatus = async (id: string) => {
     try {
       await switchStatus({ id, attributeId }).unwrap();
-      notification.success({ message: t('messages.updateSuccess') });
+      notification.success({ title: t('messages.updateSuccess') });
     } catch (error: any) {
       notification.error({
-        message: t('common.messages.error', { ns: 'translation' }),
+        title: t('common.messages.error', { ns: 'translation' }),
         description: error?.data?.message || error?.message,
       });
     }

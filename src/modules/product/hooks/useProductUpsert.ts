@@ -27,20 +27,20 @@ export const useProductUpsert = () => {
       if (id) {
         await updateProduct({ id, body: { ...values, type: PRODUCT_TYPE.REGULAR } }).unwrap();
         notification.success({
-          message: t('common.messages.success', { ns: 'translation' }),
+          title: t('common.messages.success', { ns: 'translation' }),
           description: t('messages.updateSuccess'),
         });
       } else {
         await createProduct({ ...values, type: PRODUCT_TYPE.REGULAR }).unwrap();
         notification.success({
-          message: t('common.messages.success', { ns: 'translation' }),
+          title: t('common.messages.success', { ns: 'translation' }),
           description: t('messages.createSuccess'),
         });
       }
       goToProducts();
     } catch (error: any) {
       notification.error({
-        message: id ? t('messages.updateError') : t('messages.createError'),
+        title: id ? t('messages.updateError') : t('messages.createError'),
         description: error?.data?.message || error?.message,
       });
     }

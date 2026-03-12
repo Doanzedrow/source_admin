@@ -25,15 +25,15 @@ export const useCategoryUpsert = () => {
     try {
       if (id) {
         await updateCategory({ id, body: values }).unwrap();
-        notification.success({ message: t('messages.updateSuccess') });
+        notification.success({ title: t('messages.updateSuccess') });
       } else {
         await createCategory(values).unwrap();
-        notification.success({ message: t('messages.createSuccess') });
+        notification.success({ title: t('messages.createSuccess') });
       }
       navigate(rc(RouteKey.Category).path);
     } catch (error: any) {
       notification.error({
-        message: id ? t('messages.updateError') : t('messages.createError'),
+        title: id ? t('messages.updateError') : t('messages.createError'),
         description: error?.data?.message || error?.message,
       });
     }

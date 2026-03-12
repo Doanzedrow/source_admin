@@ -14,10 +14,15 @@ import { useProductForm } from '../hooks/useProductForm';
 
 import '../styles/product-form.less';
 
-const ProductUpsert: React.FC = () => {
-  const { id, t, goToProducts, currentProduct, loading, isDetailLoading, handleSave } =
-    useProductUpsert();
 
+const ProductUpsertForm: React.FC<{
+  id?: string;
+  currentProduct: any;
+  loading: boolean;
+  handleSave: (values: any) => void;
+  t: any;
+  goToProducts: () => void;
+}> = ({ id, currentProduct, loading, handleSave, t, goToProducts }) => {
   const {
     form,
     handleSubmit,
@@ -30,7 +35,55 @@ const ProductUpsert: React.FC = () => {
     onSave: handleSave,
   });
 
-  if (id && isDetailLoading) return <AppLoader />;
+  return (
+    <Form
+      form={form}
+      layout="vertical"
+      disabled={loading}
+      onFinish={handleSubmit}
+      onValuesChange={onValuesChange}
+      scrollToFirstError
+      requiredMark={false}
+    >
+      <div
+        className="product-upsert-main-container"
+        style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
+      >
+        <AppCard className="form-container">
+          <ProductForm
+            categories={categories}
+            isCategoriesLoading={isCategoriesLoading}
+            initialThumbnailPath={initialThumbnailPath}
+            t={t}
+          />
+        </AppCard>
+
+        <ProductVariantSelector />
+
+        <FormActions isSticky={true} style={{ margin: 0 }}>
+          <AppButton onClick={goToProducts} size="large">
+            {t('common.actions.cancel', { ns: 'translation' })}
+          </AppButton>
+          <AppButton
+            type="primary"
+            htmlType="submit"
+            loading={loading}
+            size="large"
+            style={{ minWidth: 150 }}
+          >
+            {id
+              ? t('common.actions.update', { ns: 'translation' })
+              : t('common.actions.create', { ns: 'translation' })}
+          </AppButton>
+        </FormActions>
+      </div>
+    </Form>
+  );
+};
+
+const ProductUpsert: React.FC = () => {
+  const { id, t, goToProducts, currentProduct, loading, isDetailLoading, handleSave } =
+    useProductUpsert();
 
   const title = id ? t('titleEdit') : t('titleCreate');
 
@@ -47,48 +100,18 @@ const ProductUpsert: React.FC = () => {
         />
       </div>
 
-      <Form
-        form={form}
-        layout="vertical"
-        disabled={loading}
-        onFinish={handleSubmit}
-        onValuesChange={onValuesChange}
-        scrollToFirstError
-        requiredMark={false}
-      >
-        <div
-          className="product-upsert-main-container"
-          style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
-        >
-          <AppCard className="form-container">
-            <ProductForm
-              categories={categories}
-              isCategoriesLoading={isCategoriesLoading}
-              initialThumbnailPath={initialThumbnailPath}
-              t={t}
-            />
-          </AppCard>
-
-          <ProductVariantSelector />
-
-          <FormActions isSticky={true} style={{margin: 0}}>
-            <AppButton onClick={goToProducts} size="large">
-              {t('common.actions.cancel', { ns: 'translation' })}
-            </AppButton>
-            <AppButton
-              type="primary"
-              htmlType="submit"
-              loading={loading}
-              size="large"
-              style={{ minWidth: 150 }}
-            >
-              {id
-                ? t('common.actions.update', { ns: 'translation' })
-                : t('common.actions.create', { ns: 'translation' })}
-            </AppButton>
-          </FormActions>
-        </div>
-      </Form>
+      {id && isDetailLoading ? (
+        <AppLoader />
+      ) : (
+        <ProductUpsertForm
+          id={id}
+          currentProduct={currentProduct}
+          loading={loading}
+          handleSave={handleSave}
+          t={t}
+          goToProducts={goToProducts}
+        />
+      )}
     </div>
   );
 };

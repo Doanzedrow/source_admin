@@ -53,7 +53,7 @@ export const useLogin = () => {
       goToDashboard();
     } catch (error: any) {
       notification.error({
-        message: t('errors.loginFailed'),
+        title: t('errors.loginFailed'),
         description: error.message || t('errors.checkCredentials'),
       });
     }
