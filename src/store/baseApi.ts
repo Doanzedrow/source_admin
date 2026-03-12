@@ -4,6 +4,8 @@ import axiosInstance from '@/utils/axiosInstance';
 import type { AxiosRequestConfig } from 'axios';
 import { TAG_TYPES } from './tags';
 
+import { tokenUtil } from '@/utils/token';
+
 const axiosBaseQuery =
   (
     { baseUrl }: { baseUrl: string } = { baseUrl: '' }
@@ -19,6 +21,18 @@ const axiosBaseQuery =
     unknown
   > =>
     async ({ url, method = 'GET', data, params, headers }) => {
+      const token = tokenUtil.getToken();
+      const isPublic = url.includes('/auth/login') || url.includes('/auth/refresh-token');
+
+      if (!token && !isPublic) {
+        return {
+          error: {
+            status: 401,
+            message: 'Authentication required',
+          },
+        };
+      }
+
       try {
         const result = await axiosInstance({
           url: baseUrl + url,

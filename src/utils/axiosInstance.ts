@@ -15,6 +15,19 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = tokenUtil.getToken();
+    
+    // Public endpoints that don't need a token
+    const publicEndpoints = ['/auth/login', '/auth/refresh-token'];
+    const isPublic = publicEndpoints.some(endpoint => config.url?.includes(endpoint));
+
+    if (!token && !isPublic) {
+      // Return a rejected promise to stop the request before it leaves
+      return Promise.reject({
+        message: 'No authentication token found',
+        config
+      });
+    }
+
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }

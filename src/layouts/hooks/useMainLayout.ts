@@ -35,8 +35,8 @@ export const useMainLayout = () => {
 
   const handleUserMenuClick = ({ key }: { key: string }) => {
     if (key === 'logout') {
-      dispatch(performLogout());
       goToLogin();
+      dispatch(performLogout());
     }
   };
 

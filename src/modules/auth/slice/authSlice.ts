@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { batch } from 'react-redux';
 import { authApi } from '../api/authApi';
 import { tokenUtil } from '@/utils/token';
 import { baseApi } from '@/store/baseApi';
@@ -77,9 +78,11 @@ export const performLogout = () => (dispatch: AppDispatch) => {
     tokenUtil.removeToken();
     tokenUtil.removeLoggedUser();
   } finally {
-    // Reset all API states and clear auth data
-    dispatch(baseApi.util.resetApiState());
-    dispatch(clearState());
+    batch(() => {
+      // Reset all API states and clear auth data
+      dispatch(baseApi.util.resetApiState());
+      dispatch(clearState());
+    });
   }
 };
 
