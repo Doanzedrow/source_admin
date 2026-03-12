@@ -23,19 +23,19 @@ const PermissionList: React.FC = () => {
         render: (_: any, __: any, index: number) => index + 1,
       },
       {
-        title: t('columns.name', { ns: 'permission', defaultValue: 'Tên phân quyền' }),
+        title: t('columns.name'),
         dataIndex: 'name',
         key: 'name',
         render: (name: string) => <Text strong>{name}</Text>,
       },
       {
-        title: t('columns.module', { ns: 'permission', defaultValue: 'Module' }),
+        title: t('columns.module'),
         dataIndex: 'module',
         key: 'module',
         render: (module: string) => <Tag color="blue">{module}</Tag>,
       },
       {
-        title: t('columns.actions', { ns: 'permission', defaultValue: 'Hành động' }),
+        title: t('columns.actions'),
         key: 'actions_config',
         render: (_: any, record: Permission) => (
           <Space size="small">
@@ -55,7 +55,7 @@ const PermissionList: React.FC = () => {
         ),
       },
       {
-        title: t('columns.status', { ns: 'permission', defaultValue: 'Trạng thái' }),
+        title: t('columns.status'),
         dataIndex: 'status',
         key: 'status',
         align: 'center' as const,
@@ -93,9 +93,7 @@ const PermissionList: React.FC = () => {
       title={
         <Flex align="center" gap={8}>
           <SafetyCertificateOutlined style={{ color: 'var(--primary-color)' }} />
-          <span>
-            {t('permissionList', { ns: 'permission', defaultValue: 'Danh sách phân quyền' })}
-          </span>
+          <span>{t('permissionList')}</span>
           <Tag
             color="blue"
             style={{
@@ -114,7 +112,7 @@ const PermissionList: React.FC = () => {
       }
       extra={
         <AppButton type="primary" icon={<PlusOutlined />} onClick={goToPermissionCreate}>
-          {t('common.add', { ns: 'translation' })}
+          {t('common.actions.create', { ns: 'translation' })}
         </AppButton>
       }
       className="permission-card"
