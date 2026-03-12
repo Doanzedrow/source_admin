@@ -14,6 +14,10 @@ export const useAppNavigate = () => {
   const goToCategoryCreate = () => navigate(rc(RouteKey.CategoryCreate).path);
   const goToCategoryEdit = (id: string) => navigate(rc(RouteKey.CategoryEdit).path.replace(':id', id));
 
+  const goToAttributes = () => navigate(rc(RouteKey.Attributes).path);
+  const goToAttributeCreate = () => navigate(rc(RouteKey.AttributeCreate).path);
+  const goToAttributeEdit = (id: string) => navigate(rc(RouteKey.AttributeEdit).path.replace(':id', id));
+
   const to = (path: string, options?: any) => navigate(path, options);
 
   return {
@@ -25,6 +29,9 @@ export const useAppNavigate = () => {
     goToCategories,
     goToCategoryCreate,
     goToCategoryEdit,
+    goToAttributes,
+    goToAttributeCreate,
+    goToAttributeEdit,
     to,
   };
 };

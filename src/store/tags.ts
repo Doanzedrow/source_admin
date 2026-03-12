@@ -5,4 +5,5 @@ export const TAG_TYPES = {
   APPOINTMENT: 'Appointment',
   DASHBOARD: 'Dashboard',
   CATEGORY: 'Category',
+  ATTRIBUTE: 'Attribute',
 } as const;

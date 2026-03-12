@@ -4,6 +4,7 @@ export default {
   catalog: "Thông tin sản phẩm",
   products: "Sản phẩm",
   categories: "Loại sản phẩm",
+  attributes: "Thông số biến thể",
   users: "Người dùng",
   settings: "Cài đặt",
   login: "Đăng nhập",

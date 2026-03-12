@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect, useDeferredValue, useTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppNotify } from '@/hooks/useAppNotify';
 import { useAppConfirm } from '@/hooks/useAppConfirm';
@@ -12,10 +12,13 @@ import {
 import { DEFAULT_PAGE_SIZE } from '@/config/constants';
 import { useUrlFilters } from '@/hooks/useUrlFilters';
 import { useGetAllCategoriesQuery } from '@/modules/category/api/categoryApi';
+import { useAppNavigate } from '@/hooks/useAppNavigate';
 
 export const useProductList = () => {
   const { t } = useTranslation(['product', 'translation']);
   const { notification } = useAppNotify();
+  const { confirmDelete, confirmBatchDelete } = useAppConfirm();
+  const { goToProductCreate, goToProductEdit } = useAppNavigate();
 
   const { filters, setFilters, resetFilters } = useUrlFilters({
     page: 1,
@@ -25,7 +28,27 @@ export const useProductList = () => {
     status: undefined as number | undefined,
   });
 
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [switchingId, setSwitchingId] = useState<string | null>(null);
+  const [isReady, setIsReady] = useState(false);
+
+  const [localCategory, setLocalCategory] = useState<string | undefined>(filters.category);
+  const [localStatus, setLocalStatus] = useState<number | undefined>(
+    filters.status !== undefined ? Number(filters.status) : undefined
+  );
+  const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsReady(true), 10);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (filters.category !== localCategory) setLocalCategory(filters.category);
+    const apiStatus = filters.status !== undefined ? Number(filters.status) : undefined;
+    if (apiStatus !== localStatus) setLocalStatus(apiStatus);
+  }, [filters.category, filters.status]);
+
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery({
     type: 1,
   });
@@ -60,11 +83,11 @@ export const useProductList = () => {
   const { data, isLoading, isFetching } = useGetProductListQuery(apiParams, {
     skip: !!filters.category && (isCategoriesLoading || !isCategoryReady),
   });
+
   const [switchStatus] = useSwitchStatusMutation();
   const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
   const [batchDeleteProducts, { isLoading: isBatchDeleting }] = useBatchDeleteProductsMutation();
   const [batchUpdateStatus, { isLoading: isBatchUpdating }] = useBatchUpdateStatusMutation();
-  const { confirmDelete, confirmBatchDelete } = useAppConfirm();
 
   const handlePageChange = useCallback(
     (page: number, pageSize?: number) => {
@@ -74,6 +97,37 @@ export const useProductList = () => {
       });
     },
     [filters.page_size, setFilters]
+  );
+
+  const handleSearch = useCallback(
+    (val: string) => {
+      setFilters({ keyword: val, page: 1 });
+    },
+    [setFilters]
+  );
+
+  const handleCategoryChange = useCallback(
+    (val: string) => {
+      setLocalCategory(val);
+      setTimeout(() => {
+        startTransition(() => {
+          setFilters({ category: val, page: 1 });
+        });
+      }, 0);
+    },
+    [setFilters]
+  );
+
+  const handleStatusChange = useCallback(
+    (val: any) => {
+      setLocalStatus(val);
+      setTimeout(() => {
+        startTransition(() => {
+          setFilters({ status: val, page: 1 });
+        });
+      }, 0);
+    },
+    [setFilters]
   );
 
   const handleDelete = useCallback(
@@ -136,7 +190,6 @@ export const useProductList = () => {
           message: t('messages.updateStatusError'),
           description: error?.data?.message || error?.message,
         });
-        console.error('Switch status error:', error);
       } finally {
         setSwitchingId(null);
       }
@@ -164,20 +217,61 @@ export const useProductList = () => {
     [batchUpdateStatus, notification, t]
   );
 
+  const categoryOptions = useMemo(
+    () => categories.map((c) => ({ label: c.name, value: c.code })),
+    [categories]
+  );
+
+  const statusOptions = useMemo(
+    () => [
+      { label: t('status.active'), value: 1 },
+      { label: t('status.inactive'), value: 0 },
+    ],
+    [t]
+  );
+
+  const rowSelection = useMemo(
+    () => ({
+      type: 'checkbox' as const,
+      selectedRowKeys: selectedIds,
+      onChange: (keys: React.Key[]) => setSelectedIds(keys as string[]),
+      preserveSelectedRowKeys: true,
+    }),
+    [selectedIds]
+  );
+
+  const rawData = data?.result?.data || [];
+  const deferredData = useDeferredValue(rawData);
+
   return {
-    data: data?.result?.data || [],
+    data: deferredData,
     isLoading: isLoading || isDeleting || isBatchDeleting || isBatchUpdating || isCategoriesLoading,
     isFetching,
+    isReady,
+    isPending,
     switchingId,
     handleDelete,
     handleBatchDelete,
     handleBatchUpdateStatus,
     handleSwitchStatus,
+    handlePageChange,
+    handleSearch,
+    handleCategoryChange,
+    handleStatusChange,
     params: filters,
     setFilters,
     resetFilters,
     categories,
-    handlePageChange,
     total: data?.result?.pagination?.total || 0,
+    t,
+    rowSelection,
+    selectedIds,
+    setSelectedIds,
+    categoryOptions,
+    statusOptions,
+    localCategory,
+    localStatus,
+    goToProductCreate,
+    goToProductEdit,
   };
 };

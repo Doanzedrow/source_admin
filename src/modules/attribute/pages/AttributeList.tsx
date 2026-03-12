@@ -1,41 +1,39 @@
-import { useMemo, memo } from 'react';
-import { Space, Tag, Switch, Typography, Col } from 'antd';
+import React, { useMemo, memo } from 'react';
+import { Space, Tag, Typography, Col } from 'antd';
 import { AppButton } from '@/components/common/AppButton';
 import { AppCard } from '@/components/common/AppCard';
 import { AppTable } from '@/components/common/AppTable';
 import { SEO } from '@/components/common/SEO/SEO';
-import { useCategoryList } from '../hooks/useCategoryList';
-import type { Category } from '../data/category.types';
+import { useAttributeList } from '../hooks/useAttributeList';
 import { AppFilter } from '@/components/common/AppFilter/AppFilter';
 import { AppSearchInput } from '@/components/common/AppInput/AppSearchInput';
 import { AppLoader } from '@/components/common/AppLoader/AppLoader';
+import type { Attribute } from '../data/attribute.types';
 
-import '../styles/category.less';
+import '../styles/attribute.less';
 
 const { Text } = Typography;
 
-const CategoryList = () => {
-  const { 
-    data, 
-    isLoading, 
+const AttributeList = () => {
+  const {
+    data,
+    isLoading,
     isFetching,
     isReady,
-    switchingId,
     handleDelete,
     handleBatchDelete,
-    handleSwitchStatus,
-    params, 
-    resetFilters,
-    handlePageChange, 
+    params,
+    handlePageChange,
     handleSearch,
+    resetFilters,
     total,
     t,
     rowSelection,
     selectedIds,
     setSelectedIds,
-    goToCategoryCreate,
-    goToCategoryEdit,
-  } = useCategoryList();
+    goToAttributeCreate,
+    goToAttributeEdit,
+  } = useAttributeList();
 
   const columns = useMemo(() => [
     {
@@ -53,16 +51,11 @@ const CategoryList = () => {
       dataIndex: 'code',
       key: 'code',
       width: 150,
-      render: (code: string, record: Category) => (
-        <Text 
-          strong 
-          onClick={() => goToCategoryEdit(record._id)}
-          style={{ 
-            cursor: 'pointer',
-            transition: 'color 0.2s'
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--primary-color)')}
-          onMouseLeave={(e) => (e.currentTarget.style.color = 'inherit')}
+      render: (code: string, record: Attribute) => (
+        <Text
+          strong
+          onClick={() => goToAttributeEdit(record._id)}
+          style={{ cursor: 'pointer', color: 'var(--primary-color)' }}
         >
           {code}
         </Text>
@@ -72,54 +65,49 @@ const CategoryList = () => {
       title: t('columns.name'),
       dataIndex: 'name',
       key: 'name',
-      render: (name: string) => <Text strong>{name}</Text>,
     },
     {
-      title: t('columns.totalProduct'),
-      dataIndex: 'totalProduct',
-      key: 'totalProduct',
+      title: t('columns.isMultiple'),
+      dataIndex: 'isMultiple',
+      key: 'isMultiple',
       align: 'center' as const,
-      width: 120,
-      render: (count: number) => (
-        <Tag color="blue" style={{ borderRadius: '12px', padding: '0 12px' }}>
-          {count || 0}
-        </Tag>
-      ),
+      render: (val: boolean) =>
+        val ? (
+          <Tag color="blue">{t('common.yes', { ns: 'translation' })}</Tag>
+        ) : (
+          <Text type="secondary">-</Text>
+        ),
     },
     {
-      title: t('columns.type'),
-      dataIndex: 'type',
-      key: 'type',
-      width: 130,
-      render: (type: number) => (
-        <Tag color={type === 1 ? 'orange' : 'cyan'}>
-          {type === 1 ? t('type.product') : t('type.service')}
-        </Tag>
-      ),
+      title: t('columns.overridePrice'),
+      dataIndex: 'overridePrice',
+      key: 'overridePrice',
+      align: 'center' as const,
+      render: (val: boolean) =>
+        val ? (
+          <Tag color="orange">{t('common.yes', { ns: 'translation' })}</Tag>
+        ) : (
+          <Text type="secondary">-</Text>
+        ),
     },
     {
       title: t('columns.status'),
       dataIndex: 'status',
       key: 'status',
       align: 'center' as const,
-      width: 100,
-      render: (status: number, record: Category) => (
-        <Switch 
-          checked={status === 1} 
-          onChange={() => handleSwitchStatus(record._id, status)}
-          loading={switchingId === record._id}
-          size="small"
-        />
+      render: (status: number) => (
+        <Tag color={status === 1 ? 'success' : 'default'} style={{ borderRadius: '12px' }}>
+          {status === 1 ? t('status.active') : t('status.inactive')}
+        </Tag>
       ),
     },
     {
       title: t('columns.action'),
       key: 'action',
       align: 'right' as const,
-      width: 150,
-      render: (_: unknown, record: Category) => (
+      render: (_: unknown, record: Attribute) => (
         <Space size="small">
-          <AppButton type="link" onClick={() => goToCategoryEdit(record._id)}>
+          <AppButton type="link" onClick={() => goToAttributeEdit(record._id)}>
             {t('common.actions.edit', { ns: 'translation' })}
           </AppButton>
           <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
@@ -128,24 +116,22 @@ const CategoryList = () => {
         </Space>
       ),
     },
-  ], [t, switchingId, params.page, params.page_size, handleSwitchStatus, handleDelete, goToCategoryEdit]);
+  ], [t, params.page, params.page_size, handleDelete, goToAttributeEdit]);
 
   return (
-    <div className="category-list-wrapper">
-      <SEO title={t('seoTitle')} description={t('seoDescription')} />
-      
-      <div className="sticky-filter">
-        <AppFilter onReset={resetFilters} isLoading={isFetching && data.length > 0}>
-          <Col xs={24} sm={16} md={12} lg={12}>
-            <AppSearchInput
-              placeholder={t('filter.keyword')}
-              value={params.keyword}
-              debounceTime={300}
-              onSearch={handleSearch}
-            />
-          </Col>
-        </AppFilter>
-      </div>
+    <div className="attribute-list-wrapper">
+      <SEO title={t('title')} />
+
+      <AppFilter onReset={resetFilters} isLoading={isFetching && data.length > 0}>
+        <Col xs={24} md={12}>
+          <AppSearchInput
+            placeholder={t('filter.keyword')}
+            value={params.keyword}
+            debounceTime={300}
+            onSearch={handleSearch}
+          />
+        </Col>
+      </AppFilter>
 
       <AppCard
         title={t('title')}
@@ -160,8 +146,8 @@ const CategoryList = () => {
                 {t('common.actions.deleteSelected', { ns: 'translation', count: selectedIds.length })}
               </AppButton>
             )}
-            <AppButton type="primary" onClick={goToCategoryCreate}>
-              {t('addCategory')}
+            <AppButton type="primary" onClick={goToAttributeCreate}>
+              {t('titleCreate')}
             </AppButton>
           </Space>
         }
@@ -169,7 +155,6 @@ const CategoryList = () => {
         <div style={{ position: 'relative', minHeight: '400px' }}>
           {isReady && (
             <AppTable
-              className="category-table"
               columns={columns}
               dataSource={data}
               rowKey="_id"
@@ -183,10 +168,10 @@ const CategoryList = () => {
               rowSelection={rowSelection}
             />
           )}
-          
-          <AppLoader 
-            isLoading={!isReady || (isLoading && data.length === 0)} 
-            overlay 
+
+          <AppLoader
+            isLoading={!isReady || (isLoading && data.length === 0)}
+            overlay
             description={t('loading', { ns: 'translation' })}
           />
         </div>
@@ -195,4 +180,4 @@ const CategoryList = () => {
   );
 };
 
-export default memo(CategoryList);
+export default memo(AttributeList);

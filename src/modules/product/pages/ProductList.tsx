@@ -1,107 +1,53 @@
-import React, { useMemo, useCallback, useState, memo, useEffect, useDeferredValue, useTransition } from 'react';
+import React, { useMemo, memo } from 'react';
 import { Space, Flex, Tag, Switch, Select, Typography, Col } from 'antd';
-import { useTranslation } from 'react-i18next';
-import { AppButton } from '@/components/common/AppButton';
 import { AppCard } from '@/components/common/AppCard';
 import { AppTable } from '@/components/common/AppTable';
-import { CachedImage } from '@/components/common/CachedImage/CachedImage';
 import { SEO } from '@/components/common/SEO/SEO';
 import { useProductList } from '@/modules/product/hooks/useProductList';
-import type { Product } from '@/modules/product/data/product.types';
-import { formatCurrency } from '@/utils/format';
-import { getFullImageUrl } from '@/store/api/uploadApi';
-import { useAppNavigate } from '@/hooks/useAppNavigate';
-import { APP_ASSETS } from '@/config/assets';
 import { AppFilter } from '@/components/common/AppFilter/AppFilter';
 import { AppSearchInput } from '@/components/common/AppInput/AppSearchInput';
 import { AppLoader } from '@/components/common/AppLoader/AppLoader';
+import { AppButton } from '@/components/common/AppButton';
+import { CachedImage } from '@/components/common/CachedImage/CachedImage';
+import { formatCurrency } from '@/utils/format';
+import { getFullImageUrl } from '@/store/api/uploadApi';
+import { APP_ASSETS } from '@/config/assets';
+import type { Product } from '../data/product.types';
 
 import '../styles/product.less';
 
 const { Text } = Typography;
 
 const ProductList = () => {
-  const { t } = useTranslation(['product', 'translation']);
-  const { goToProductCreate, goToProductEdit } = useAppNavigate();
   const {
     data,
     isLoading,
     isFetching,
+    isReady,
+    isPending,
+    switchingId,
     handleDelete,
     handleBatchDelete,
     handleBatchUpdateStatus,
     handleSwitchStatus,
-    switchingId,
-    params,
-    setFilters,
-    resetFilters,
-    categories,
     handlePageChange,
+    handleSearch,
+    handleCategoryChange,
+    handleStatusChange,
+    params,
+    resetFilters,
     total,
+    t,
+    rowSelection,
+    selectedIds,
+    setSelectedIds,
+    categoryOptions,
+    statusOptions,
+    localCategory,
+    localStatus,
+    goToProductCreate,
+    goToProductEdit,
   } = useProductList();
-
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [localCategory, setLocalCategory] = useState<string | undefined>(params.category);
-  const [localStatus, setLocalStatus] = useState<number | undefined>(params.status !== undefined ? Number(params.status) : undefined);
-  const [isPending, startTransition] = useTransition();
-
-  const [isReady, setIsReady] = useState(false);
-  useEffect(() => {
-    const timer = setTimeout(() => setIsReady(true), 10);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    if (params.category !== localCategory) setLocalCategory(params.category);
-    const apiStatus = params.status !== undefined ? Number(params.status) : undefined;
-    if (apiStatus !== localStatus) setLocalStatus(apiStatus);
-  }, [params.category, params.status]);
-
-  const handleSearch = useCallback(
-    (val: string) => {
-      setFilters({ keyword: val, page: 1 });
-    },
-    [setFilters]
-  );
-
-  const handleCategoryChange = useCallback(
-    (val: string) => {
-      setLocalCategory(val);
-      // Use setTimeout to allow the UI to paint the select value update first
-      setTimeout(() => {
-        startTransition(() => {
-          setFilters({ category: val, page: 1 });
-        });
-      }, 0);
-    },
-    [setFilters]
-  );
-
-  const handleStatusChange = useCallback(
-    (val: any) => {
-      setLocalStatus(val);
-      // Use setTimeout to allow the UI to paint the select value update first
-      setTimeout(() => {
-        startTransition(() => {
-          setFilters({ status: val, page: 1 });
-        });
-      }, 0);
-    },
-    [setFilters]
-  );
-
-  const categoryOptions = useMemo(
-    () => categories.map((c) => ({ label: c.name, value: c.code })),
-    [categories]
-  );
-
-  const statusOptions = useMemo(
-    () => [
-      { label: t('status.active'), value: 1 },
-      { label: t('status.inactive'), value: 0 },
-    ],
-    [t]
-  );
 
   const columns = useMemo(
     () => [
@@ -115,7 +61,6 @@ const ProductList = () => {
           return <Text type="secondary">{rowNumber}</Text>;
         },
       },
-
       {
         title: t('columns.code'),
         dataIndex: 'code',
@@ -272,24 +217,12 @@ const ProductList = () => {
     ]
   );
 
-  const rowSelection = useMemo(
-    () => ({
-      type: 'checkbox' as const,
-      selectedRowKeys: selectedIds,
-      onChange: (keys: React.Key[]) => setSelectedIds(keys as string[]),
-      preserveSelectedRowKeys: true,
-    }),
-    [selectedIds]
-  );
-
-  const deferredData = useDeferredValue(data);
-
   return (
     <div className="product-list-wrapper">
       <SEO title={t('seoTitle')} description={t('seoDescription')} />
 
       <div className="sticky-filter">
-        <AppFilter onReset={resetFilters} isLoading={isFetching}>
+        <AppFilter onReset={resetFilters} isLoading={isFetching && data.length > 0}>
           <Col xs={24} sm={12} md={10} lg={10}>
             <AppSearchInput
               placeholder={t('filter.keyword')}
@@ -365,9 +298,9 @@ const ProductList = () => {
             <AppTable
               className="product-table"
               columns={columns}
-              dataSource={deferredData}
+              dataSource={data}
               rowKey="_id"
-              loading={isFetching}
+              loading={isFetching && data.length > 0}
               pagination={{
                 total,
                 current: params.page,
@@ -378,9 +311,9 @@ const ProductList = () => {
             />
           )}
 
-          <AppLoader 
-            isLoading={!isReady || (isLoading && data.length === 0)} 
-            overlay 
+          <AppLoader
+            isLoading={!isReady || (isLoading && data.length === 0)}
+            overlay
             description={t('loading', { ns: 'translation' })}
           />
         </div>

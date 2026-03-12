@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo, useEffect, useDeferredValue } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppNotify } from '@/hooks/useAppNotify';
 import { useAppConfirm } from '@/hooks/useAppConfirm';
@@ -10,11 +10,13 @@ import {
 } from '../api/categoryApi';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants';
 import { useUrlFilters } from '@/hooks/useUrlFilters';
+import { useAppNavigate } from '@/hooks/useAppNavigate';
 
 export const useCategoryList = () => {
   const { t } = useTranslation(['category', 'translation']);
   const { notification } = useAppNotify();
   const { confirmDelete, confirmBatchDelete } = useAppConfirm();
+  const { goToCategoryCreate, goToCategoryEdit } = useAppNavigate();
   
   const { filters, setFilters, resetFilters } = useUrlFilters({
     page: 1,
@@ -23,7 +25,14 @@ export const useCategoryList = () => {
     status: undefined as number | undefined,
   });
 
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [isReady, setIsReady] = useState(false);
   const [switchingId, setSwitchingId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsReady(true), 10);
+    return () => clearTimeout(timer);
+  }, []);
 
   const { data, isLoading, isFetching } = useGetCategoryListQuery(filters);
   const [switchStatus] = useSwitchCategoryStatusMutation();
@@ -36,6 +45,10 @@ export const useCategoryList = () => {
       page_size: pageSize || filters.page_size,
     });
   }, [filters.page_size, setFilters]);
+
+  const handleSearch = useCallback((val: string) => {
+    setFilters({ keyword: val, page: 1 });
+  }, [setFilters]);
 
   const handleSwitchStatus = useCallback(async (id: string, currentStatus: number) => {
     try {
@@ -95,18 +108,36 @@ export const useCategoryList = () => {
     });
   }, [confirmBatchDelete, batchDeleteCategories, notification, t]);
 
+  const rowSelection = useMemo(() => ({
+    type: 'checkbox' as const,
+    selectedRowKeys: selectedIds,
+    onChange: (keys: React.Key[]) => setSelectedIds(keys as string[]),
+    preserveSelectedRowKeys: true,
+  }), [selectedIds]);
+
+  const rawData = data?.result?.data || [];
+  const deferredData = useDeferredValue(rawData);
+
   return {
-    data: data?.result?.data || [],
+    data: deferredData,
     isLoading: isLoading || isDeleting || isBatchDeleting,
     isFetching,
+    isReady,
     switchingId,
     handleDelete,
     handleBatchDelete,
     handleSwitchStatus,
+    handleSearch,
     params: filters,
     setFilters,
     resetFilters,
     handlePageChange,
     total: data?.result?.pagination?.total || 0,
+    t,
+    rowSelection,
+    selectedIds,
+    setSelectedIds,
+    goToCategoryCreate,
+    goToCategoryEdit,
   };
 };
