@@ -15,11 +15,15 @@ export default {
     rememberAccount: "Remember account",
     switchAccount: "Sign in with a different account",
     backToRemembered: "Sign in as {{name}}",
+    identity: "Username or Email",
+    identityPlaceholder: "Enter your username or email...",
+    superAdmin: "Super Admin",
     bannerAlt: "Login Banner Background",
     logoAlt: "Application Logo",
   },
   errors: {
     invalidUsername: "Username must be 3–50 characters: letters, digits, dots, or underscores only",
+    invalidIdentity: "Invalid Username or Email",
     invalidPassword: "Password must be at least 6 characters",
     loginFailed: "Login failed. Please check your credentials.",
     checkCredentials: "Please verify your username and password."

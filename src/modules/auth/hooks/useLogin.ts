@@ -12,6 +12,8 @@ export interface RememberedUser {
   username: string;
   fullname?: string;
   avatar?: string;
+  isSuperAdmin?: boolean;
+  roleName?: string;
 }
 
 export const useLogin = () => {
@@ -37,16 +39,21 @@ export const useLogin = () => {
           : { ...values, captchaToken: 'wkey' };
 
       const response = await login(loginData).unwrap();
+      const user = response.result.user;
 
       if (rememberAccount) {
         const userToRemember: RememberedUser = {
-          username: loginData.username,
-          fullname: response.result.user?.fullname,
-          avatar: response.result.user?.avatar,
+          username: user?.userName || loginData.username,
+          fullname: user?.fullname,
+          avatar: user?.avatar,
+          isSuperAdmin: user?.isSuperAdmin,
+          roleName: user?.role?.name,
         };
         storage.localStorageSet(REMEMBERED_USER_KEY, userToRemember);
+        setRememberedUser(userToRemember);
       } else {
         storage.localStorageRemove(REMEMBERED_USER_KEY);
+        setRememberedUser(null);
       }
 
       setToken(response.result.access_token);

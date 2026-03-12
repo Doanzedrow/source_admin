@@ -15,11 +15,15 @@ export default {
     rememberAccount: "Nhớ tài khoản",
     switchAccount: "Đăng nhập bằng tài khoản khác",
     backToRemembered: "Đăng nhập với {{name}}",
+    identity: "Tên đăng nhập hoặc Email",
+    identityPlaceholder: "Nhập tài khoản hoặc email của bạn...",
+    superAdmin: "Quản trị cấp cao",
     bannerAlt: "Ảnh nền đăng nhập",
     logoAlt: "Logo ứng dụng",
   },
   errors: {
     invalidUsername: "Tên đăng nhập 3–50 ký tự, chỉ có chữ, số, dấu chấm và gạch dưới",
+    invalidIdentity: "Tên đăng nhập hoặc Email không hợp lệ",
     invalidPassword: "Mật khẩu phải từ 6 ký tự trở lên",
     loginFailed: "Đăng nhập thất bại. Kiểm tra lại thông tin.",
     checkCredentials: "Vui lòng kiểm tra lại tài khoản và mật khẩu."

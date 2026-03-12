@@ -8,7 +8,8 @@ export const REGEX = {
    * - Username: 3–50 chars, only letters/digits/underscore/dot, no leading dot/underscore
    * - Password: min 8 chars, at least 1 uppercase, 1 lowercase, 1 digit
    */
-  USERNAME: /^(?![_.])[a-zA-Z0-9_.]{3,50}(?<![_.])$/,
+  USERNAME: /^[a-zA-Z0-9_.@]{3,50}$/,
+  EMAIL: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/,
   PASSWORD: /.{6,}/,
 
   /**

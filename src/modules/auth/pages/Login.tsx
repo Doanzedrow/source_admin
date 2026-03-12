@@ -1,5 +1,5 @@
-import { Form, Checkbox, Avatar } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import { Form, Checkbox, Avatar, Flex, Tag } from 'antd';
+import { UserOutlined, CrownOutlined } from '@ant-design/icons';
 import { AppButton } from '@/components/common/AppButton';
 import { AppInput, AppPassword } from '@/components/common/AppInput';
 import CachedImage from '@/components/common/CachedImage/CachedImage';
@@ -61,9 +61,29 @@ const Login = () => {
                   className="remembered-avatar"
                 />
                 <div className="remembered-info">
-                  <span className="remembered-name">
-                    {rememberedUser.fullname || rememberedUser.username}
-                  </span>
+                  <Flex align="center" gap={4}>
+                    <span className="remembered-name">
+                      {rememberedUser.fullname || rememberedUser.username}
+                    </span>
+                    {rememberedUser.isSuperAdmin ? (
+                      <Tag 
+                        color="gold" 
+                        icon={<CrownOutlined />} 
+                        style={{ margin: 0, borderRadius: '4px', fontSize: '10px' }}
+                      >
+                        {t('form.superAdmin')}
+                      </Tag>
+                    ) : (
+                      rememberedUser.roleName && (
+                        <Tag 
+                          color="blue" 
+                          style={{ margin: 0, borderRadius: '4px', fontSize: '10px' }}
+                        >
+                          {rememberedUser.roleName}
+                        </Tag>
+                      )
+                    )}
+                  </Flex>
                   <span className="remembered-username">@{rememberedUser.username}</span>
                 </div>
               </div>
@@ -102,11 +122,19 @@ const Login = () => {
               <AppInput
                 id="username"
                 name="username"
-                label={t('form.username')}
-                placeholder={t('form.usernamePlaceholder')}
-                rules={[{ required: true, message: t('form.usernameFeedback') }]}
-                regex={REGEX.USERNAME}
-                regexMessage={t('errors.invalidUsername')}
+                label={t('form.identity')}
+                placeholder={t('form.identityPlaceholder')}
+                rules={[
+                  { required: true, message: t('form.usernameFeedback') },
+                  {
+                    validator: (_, value) => {
+                      if (!value || REGEX.USERNAME.test(value) || REGEX.EMAIL.test(value)) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error(t('errors.invalidIdentity')));
+                    },
+                  },
+                ]}
               />
 
               <AppPassword
