@@ -13,6 +13,8 @@ export default {
   employees: "Nhân viên",
   orders: "Đơn hàng",
   appointments: "Lịch hẹn",
+  permissions: "Phân quyền",
+  system: "Hệ thống",
   profile: "Hồ sơ",
   darkMode: "Chế độ Tối",
   lightMode: "Chế độ Sáng",
@@ -26,6 +28,8 @@ export default {
     yes: "Có",
     no: "Không",
     noData: "Không có dữ liệu",
+    active: "Hoạt động",
+    inactive: "Ngừng hoạt động",
     actions: {
       edit: "Sửa",
       delete: "Xóa",

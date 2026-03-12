@@ -25,7 +25,9 @@ export default {
     branch: "Branch",
     openingQty: "Opening",
     produceQty: "Produce",
-    saleQty: "Sale",
+    saleQty: "Total Sale",
+    morningSaleQty: "Morning",
+    afternoonSaleQty: "Afternoon",
     cancelQty: "Cancel",
     closingQty: "Closing",
     expectedQty: "Expected"
@@ -40,6 +42,7 @@ export default {
     category: "All Categories",
     status: "All Status",
     reset: "Reset",
+    branch: "All Branches",
     historyBranch: "Search branch...",
     historyDate: "Date range"
   },

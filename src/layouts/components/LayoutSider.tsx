@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import { UserOutlined, ShopOutlined, TransactionOutlined } from '@ant-design/icons';
+import { UserOutlined, ShopOutlined, TransactionOutlined, SafetyCertificateOutlined, SettingOutlined } from '@ant-design/icons';
 import { rc, RouteKey, routesArray } from '@/routes/routeConfig';
 import { usePermission } from '@/hooks/usePermission';
 import { APP_ASSETS } from '@/config/assets';
@@ -85,10 +85,22 @@ export const LayoutSider: React.FC<LayoutSiderProps> = ({
     },
     { key: '/orders', icon: <TransactionOutlined />, label: t('orders') },
     { key: '/appointments', icon: <ShopOutlined />, label: t('appointments') },
-    { 
-      key: rc(RouteKey.Settings).path, 
-      icon: rc(RouteKey.Settings).icon, 
-      label: t('settings') 
+    {
+      key: 'system-group',
+      icon: <SettingOutlined />,
+      label: t('system'),
+      children: [
+        { 
+          key: rc(RouteKey.Permission).path, 
+          icon: <SafetyCertificateOutlined />, 
+          label: t('permissions') 
+        },
+        { 
+          key: rc(RouteKey.Settings).path, 
+          icon: rc(RouteKey.Settings).icon, 
+          label: t('settings') 
+        },
+      ],
     },
   ];
 

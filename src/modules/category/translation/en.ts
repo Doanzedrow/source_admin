@@ -20,7 +20,8 @@ export default {
   },
   filter: {
     keyword: "Search by name, code",
-    status: "All status",
+    status: "All Status",
+    branch: "All Branches",
   },
   status: {
     active: "Active",

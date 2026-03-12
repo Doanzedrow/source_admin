@@ -21,6 +21,7 @@ export default {
   filter: {
     keyword: "Tìm theo tên, mã danh mục",
     status: "Tất cả trạng thái",
+    branch: "Tất cả chi nhánh",
   },
   status: {
     active: "Hoạt động",

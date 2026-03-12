@@ -13,6 +13,8 @@ export default {
   employees: "Employees",
   orders: "Orders",
   appointments: "Appointments",
+  permissions: "Permissions",
+  system: "System",
   profile: "Profile",
   darkMode: "Dark Mode",
   lightMode: "Light Mode",
@@ -26,6 +28,8 @@ export default {
     yes: "Yes",
     no: "No",
     noData: "No data available",
+    active: "Active",
+    inactive: "Inactive",
     actions: {
       edit: "Edit",
       delete: "Delete",

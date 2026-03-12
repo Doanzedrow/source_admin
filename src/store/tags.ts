@@ -7,4 +7,5 @@ export const TAG_TYPES = {
   CATEGORY: 'Category',
   ATTRIBUTE: 'Attribute',
   BRANCH: 'Branch',
+  PERMISSION: 'Permission',
 } as const;

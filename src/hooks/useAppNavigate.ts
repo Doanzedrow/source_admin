@@ -18,6 +18,10 @@ export const useAppNavigate = () => {
   const goToAttributeCreate = () => navigate(rc(RouteKey.AttributeCreate).path);
   const goToAttributeEdit = (id: string) => navigate(rc(RouteKey.AttributeEdit).path.replace(':id', id));
 
+  const goToPermissionList = () => navigate(rc(RouteKey.Permission).path);
+  const goToPermissionCreate = () => navigate(rc(RouteKey.PermissionCreate).path);
+  const goToPermissionEdit = (id: string) => navigate(rc(RouteKey.PermissionEdit).path.replace(':id', id));
+
   const to = (path: string, options?: any) => navigate(path, options);
 
   return {
@@ -32,6 +36,9 @@ export const useAppNavigate = () => {
     goToAttributes,
     goToAttributeCreate,
     goToAttributeEdit,
+    goToPermissionList,
+    goToPermissionCreate,
+    goToPermissionEdit,
     to,
   };
 };
