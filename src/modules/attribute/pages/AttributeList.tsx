@@ -8,6 +8,7 @@ import { useAttributeList } from '../hooks/useAttributeList';
 import { AppFilter } from '@/components/common/AppFilter/AppFilter';
 import { AppSearchInput } from '@/components/common/AppInput/AppSearchInput';
 import { PermissionGate } from '@/components/common/PermissionGate/PermissionGate';
+import { usePermission } from '@/hooks/usePermission';
 import type { Attribute } from '../data/attribute.types';
 
 import '../styles/attribute.less';
@@ -36,116 +37,140 @@ const AttributeList = () => {
     goToAttributeEdit,
   } = useAttributeList();
 
+  const { isSuperAdmin } = usePermission();
+
   const columns = useMemo(
-    () => [
-      {
-        title: t('columns.index'),
-        key: 'index',
-        width: 60,
-        align: 'center' as const,
-        render: (_: any, __: any, index: number) => {
-          const rowNumber = (params.page - 1) * params.page_size + index + 1;
-          return <Text type="secondary">{rowNumber}</Text>;
+    () => {
+      const base: any[] = [
+        {
+          title: t('columns.index'),
+          key: 'index',
+          width: 60,
+          align: 'center' as const,
+          render: (_: any, __: any, index: number) => {
+            const rowNumber = (params.page - 1) * params.page_size + index + 1;
+            return <Text type="secondary">{rowNumber}</Text>;
+          },
         },
-      },
-      {
-        title: t('columns.code'),
-        dataIndex: 'code',
-        key: 'code',
-        width: 150,
-        render: (code: string, record: Attribute) => (
-          <Text strong onClick={() => goToAttributeEdit(record._id)} className="clickable-code">
-            {code}
-          </Text>
-        ),
-      },
-      {
-        title: t('columns.name'),
-        dataIndex: 'name',
-        key: 'name',
-      },
-      {
-        title: t('columns.isMultiple'),
-        dataIndex: 'isMultiple',
-        key: 'isMultiple',
-        align: 'center' as const,
-        render: (val: boolean, record: Attribute) =>
-          val ? (
-            <Flex vertical gap={2} align="center">
-              <Tag color="blue" variant="filled" style={{ width: 'fit-content' }}>
+        {
+          title: t('columns.code'),
+          dataIndex: 'code',
+          key: 'code',
+          width: 150,
+          render: (code: string, record: Attribute) => (
+            <Text strong onClick={() => goToAttributeEdit(record._id)} className="clickable-code">
+              {code}
+            </Text>
+          ),
+        },
+        {
+          title: t('columns.name'),
+          dataIndex: 'name',
+          key: 'name',
+        },
+      ];
+
+      if (isSuperAdmin) {
+        base.push({
+          title: t('columns.branch', { defaultValue: 'Chi nhánh' }),
+          dataIndex: ['branch', 'name'],
+          key: 'branch',
+          width: 200,
+          render: (name: string, record: Attribute) => (
+            <Flex vertical>
+              <Text strong>{name}</Text>
+              <Text type="secondary" style={{ fontSize: '12px' }}>{record.branch?.code}</Text>
+            </Flex>
+          )
+        });
+      }
+
+      base.push(
+        {
+          title: t('columns.isMultiple'),
+          dataIndex: 'isMultiple',
+          key: 'isMultiple',
+          align: 'center' as const,
+          render: (val: boolean, record: Attribute) =>
+            val ? (
+              <Flex vertical gap={2} align="center">
+                <Tag color="blue" variant="filled" style={{ width: 'fit-content' }}>
+                  {t('common.yes', { ns: 'translation' })}
+                </Tag>
+                {record.maxSelect > 0 && (
+                  <Text type="secondary" style={{ fontSize: '11px' }}>
+                    {t('columns.maxSelect')}: {record.maxSelect}
+                  </Text>
+                )}
+              </Flex>
+            ) : (
+              <Text type="secondary">-</Text>
+            ),
+        },
+        {
+          title: t('columns.variants'),
+          dataIndex: 'variants',
+          key: 'variants',
+          align: 'center' as const,
+          render: (variants: any[]) => (
+            <Tag color="purple" variant="filled" style={{ borderRadius: '12px' }}>
+              {(variants || []).length}
+            </Tag>
+          ),
+        },
+        {
+          title: t('columns.overridePrice'),
+          dataIndex: 'overridePrice',
+          key: 'overridePrice',
+          align: 'center' as const,
+          render: (val: boolean) =>
+            val ? (
+              <Tag color="orange" variant="filled">
                 {t('common.yes', { ns: 'translation' })}
               </Tag>
-              {record.maxSelect > 0 && (
-                <Text type="secondary" style={{ fontSize: '11px' }}>
-                  {t('columns.maxSelect')}: {record.maxSelect}
-                </Text>
-              )}
-            </Flex>
-          ) : (
-            <Text type="secondary">-</Text>
-          ),
-      },
-      {
-        title: t('columns.variants'),
-        dataIndex: 'variants',
-        key: 'variants',
-        align: 'center' as const,
-        render: (variants: any[]) => (
-          <Tag color="purple" variant="filled" style={{ borderRadius: '12px' }}>
-            {(variants || []).length}
-          </Tag>
-        ),
-      },
-      {
-        title: t('columns.overridePrice'),
-        dataIndex: 'overridePrice',
-        key: 'overridePrice',
-        align: 'center' as const,
-        render: (val: boolean) =>
-          val ? (
-            <Tag color="orange" variant="filled">
-              {t('common.yes', { ns: 'translation' })}
+            ) : (
+              <Text type="secondary">-</Text>
+            ),
+        },
+        {
+          title: t('columns.status'),
+          dataIndex: 'status',
+          key: 'status',
+          align: 'center' as const,
+          render: (status: number) => (
+            <Tag
+              color={status === 1 ? 'success' : 'default'}
+              variant="filled"
+              style={{ borderRadius: '12px' }}
+            >
+              {status === 1 ? t('status.active') : t('status.inactive')}
             </Tag>
-          ) : (
-            <Text type="secondary">-</Text>
           ),
-      },
-      {
-        title: t('columns.status'),
-        dataIndex: 'status',
-        key: 'status',
-        align: 'center' as const,
-        render: (status: number) => (
-          <Tag
-            color={status === 1 ? 'success' : 'default'}
-            variant="filled"
-            style={{ borderRadius: '12px' }}
-          >
-            {status === 1 ? t('status.active') : t('status.inactive')}
-          </Tag>
-        ),
-      },
-      {
-        title: t('columns.action'),
-        key: 'action',
-        align: 'right' as const,
-        render: (_: unknown, record: Attribute) => (
-          <Space size="small">
-            <PermissionGate module="attribute" action="update">
-              <AppButton type="link" onClick={() => goToAttributeEdit(record._id)}>
-                {t('common.actions.edit', { ns: 'translation' })}
-              </AppButton>
-            </PermissionGate>
-            <PermissionGate module="attribute" action="delete">
-              <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
-                {t('common.actions.delete', { ns: 'translation' })}
-              </AppButton>
-            </PermissionGate>
-          </Space>
-        ),
-      },
-    ],
-    [t, params.page, params.page_size, handleDelete, goToAttributeEdit]
+        },
+        {
+          title: t('columns.action'),
+          key: 'action',
+          align: 'right' as const,
+          render: (_: unknown, record: Attribute) => (
+            <Space size="small">
+              <PermissionGate module="attribute" action="update">
+                <AppButton type="link" onClick={() => goToAttributeEdit(record._id)}>
+                  {t('common.actions.edit', { ns: 'translation' })}
+                </AppButton>
+              </PermissionGate>
+              <PermissionGate module="attribute" action="delete">
+                <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
+                  {t('common.actions.delete', { ns: 'translation' })}
+                </AppButton>
+              </PermissionGate>
+            </Space>
+          ),
+        }
+      );
+
+      return base;
+    },
+    [t, params.page, params.page_size, handleDelete, goToAttributeEdit, isSuperAdmin]
   );
 
   return (

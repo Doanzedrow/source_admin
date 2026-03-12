@@ -1,3 +1,4 @@
+import type { Branch } from '@/types';
 
 export interface Category {
   _id: string;
@@ -10,4 +11,5 @@ export interface Category {
   status: number;
   id: number;
   type: number;
+  branch?: Branch;
 }

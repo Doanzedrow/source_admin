@@ -1,11 +1,14 @@
 import React from 'react';
-import { Tag } from 'antd';
+import { Tag, Typography, Flex } from 'antd';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 import { formatCurrency, formatDateTime } from '@/utils/format';
 import type { DashboardOrder } from '../data/dashboard.types';
 import { getOrderStatus, getPaymentStatus } from '../constants/order';
 import { AppTable } from '@/components/common/AppTable';
+import { usePermission } from '@/hooks/usePermission';
+
+const { Text } = Typography;
 
 export interface DashboardOrdersTableProps {
   data: DashboardOrder[];
@@ -22,13 +25,14 @@ export const DashboardOrdersTable: React.FC<DashboardOrdersTableProps> = ({
   pagination = false,
   totalMetaData
 }) => {
+  const { isSuperAdmin } = usePermission();
   const { t } = useTranslation('dashboard');
 
   const totalAmount = totalMetaData?.totalAmount || 0;
   const depositAmount = totalMetaData?.totalDeposit || 0;
   const remainingAmount = totalMetaData?.totalRemaining || 0;
 
-  const columns: ColumnsType<DashboardOrder> = [
+  const baseColumns: any[] = [
     {
       title: '#',
       key: 'index',
@@ -52,6 +56,23 @@ export const DashboardOrdersTable: React.FC<DashboardOrdersTableProps> = ({
       key: 'createdAt',
       render: (text) => text ? formatDateTime(text) : '--'
     },
+  ];
+
+  if (isSuperAdmin) {
+    baseColumns.push({
+      title: t('columns.branch', { ns: 'dashboard', defaultValue: 'Chi nhánh' }),
+      dataIndex: ['branch', 'name'],
+      key: 'branch',
+      render: (name: string, record: any) => (
+        <Flex vertical>
+          <Text strong>{name}</Text>
+          <Text type="secondary" style={{ fontSize: '12px' }}>{record.branch?.code}</Text>
+        </Flex>
+      )
+    });
+  }
+
+  baseColumns.push(
     {
       title: t('orders.table.customer'),
       dataIndex: 'customer',
@@ -125,7 +146,9 @@ export const DashboardOrdersTable: React.FC<DashboardOrdersTableProps> = ({
         );
       }
     }
-  ];
+  );
+
+  const columns: ColumnsType<DashboardOrder> = baseColumns;
 
   return (
     <div className="orders-table-wrapper">

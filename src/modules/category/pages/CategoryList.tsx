@@ -1,5 +1,5 @@
 import { useMemo, memo } from 'react';
-import { Space, Tag, Switch, Typography, Col } from 'antd';
+import { Space, Tag, Switch, Typography, Col, Flex } from 'antd';
 import { AppButton } from '@/components/common/AppButton';
 import { AppCard } from '@/components/common/AppCard';
 import { AppTable } from '@/components/common/AppTable';
@@ -9,6 +9,7 @@ import type { Category } from '../data/category.types';
 import { AppFilter } from '@/components/common/AppFilter/AppFilter';
 import { AppSearchInput } from '@/components/common/AppInput/AppSearchInput';
 import { PermissionGate } from '@/components/common/PermissionGate/PermissionGate';
+import { usePermission } from '@/hooks/usePermission';
 
 import '../styles/category.less';
 
@@ -38,97 +39,121 @@ const CategoryList = () => {
     goToCategoryEdit,
   } = useCategoryList();
 
-  const columns = useMemo(() => [
-    {
-      title: t('columns.index'),
-      key: 'index',
-      width: 60,
-      align: 'center' as const,
-      render: (_: any, __: any, index: number) => {
-        const rowNumber = (params.page - 1) * params.page_size + index + 1;
-        return <Text type="secondary">{rowNumber}</Text>;
+  const { isSuperAdmin } = usePermission();
+
+  const columns = useMemo(() => {
+    const base: any[] = [
+      {
+        title: t('columns.index'),
+        key: 'index',
+        width: 60,
+        align: 'center' as const,
+        render: (_: any, __: any, index: number) => {
+          const rowNumber = (params.page - 1) * params.page_size + index + 1;
+          return <Text type="secondary">{rowNumber}</Text>;
+        },
       },
-    },
-    {
-      title: t('columns.code'),
-      dataIndex: 'code',
-      key: 'code',
-      width: 150,
-      render: (code: string, record: Category) => (
-        <Text 
-          strong 
-          onClick={() => goToCategoryEdit(record._id)}
-          className="clickable-code"
-        >
-          {code}
-        </Text>
-      ),
-    },
-    {
-      title: t('columns.name'),
-      dataIndex: 'name',
-      key: 'name',
-      render: (name: string) => <Text strong>{name}</Text>,
-    },
-    {
-      title: t('columns.totalProduct'),
-      dataIndex: 'totalProduct',
-      key: 'totalProduct',
-      align: 'center' as const,
-      width: 120,
-      render: (count: number) => (
-        <Tag color="blue" variant="filled" style={{ borderRadius: '12px', padding: '0 12px' }}>
-          {count || 0}
-        </Tag>
-      ),
-    },
-    {
-      title: t('columns.type'),
-      dataIndex: 'type',
-      key: 'type',
-      width: 130,
-      render: (type: number) => (
-        <Tag color={type === 1 ? 'orange' : 'cyan'} variant="filled">
-          {type === 1 ? t('type.product') : t('type.service')}
-        </Tag>
-      ),
-    },
-    {
-      title: t('columns.status'),
-      dataIndex: 'status',
-      key: 'status',
-      align: 'center' as const,
-      width: 100,
-      render: (status: number, record: Category) => (
-        <Switch 
-          checked={status === 1} 
-          onChange={() => handleSwitchStatus(record._id, status)}
-          loading={switchingId === record._id}
-          size="small"
-        />
-      ),
-    },
-    {
-      title: t('columns.action'),
-      key: 'action',
-      align: 'right' as const,
-      width: 150,
-      render: (_: unknown, record: Category) => (
-        <Space size="small">
-          <PermissionGate module="category" action="update">
-            <AppButton type="link" onClick={() => goToCategoryEdit(record._id)}>
-              {t('common.actions.edit', { ns: 'translation' })}
-            </AppButton>
-          </PermissionGate>
-          <PermissionGate module="category" action="delete">
-            <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
-              {t('common.actions.delete', { ns: 'translation' })}
-            </AppButton>
-          </PermissionGate>
-        </Space>
-      ),
-    },
-  ], [t, switchingId, params.page, params.page_size, handleSwitchStatus, handleDelete, goToCategoryEdit]);
+      {
+        title: t('columns.code'),
+        dataIndex: 'code',
+        key: 'code',
+        width: 150,
+        render: (code: string, record: Category) => (
+          <Text 
+            strong 
+            onClick={() => goToCategoryEdit(record._id)}
+            className="clickable-code"
+          >
+            {code}
+          </Text>
+        ),
+      },
+      {
+        title: t('columns.name'),
+        dataIndex: 'name',
+        key: 'name',
+        render: (name: string) => <Text strong>{name}</Text>,
+      },
+      {
+        title: t('columns.totalProduct'),
+        dataIndex: 'totalProduct',
+        key: 'totalProduct',
+        align: 'center' as const,
+        width: 120,
+        render: (count: number) => (
+          <Tag color="blue" variant="filled" style={{ borderRadius: '12px', padding: '0 12px' }}>
+            {count || 0}
+          </Tag>
+        ),
+      },
+    ];
+
+    if (isSuperAdmin) {
+      base.push({
+        title: t('columns.branch', { defaultValue: 'Chi nhánh' }),
+        dataIndex: ['branch', 'name'],
+        key: 'branch',
+        width: 200,
+        render: (name: string, record: Category) => (
+          <Flex vertical gap={0}>
+            <Text strong>{name}</Text>
+            <Text type="secondary" style={{ fontSize: '12px' }}>{record.branch?.code}</Text>
+          </Flex>
+        )
+      });
+    }
+
+    base.push(
+      {
+        title: t('columns.type'),
+        dataIndex: 'type',
+        key: 'type',
+        width: 130,
+        render: (type: number) => (
+          <Tag color={type === 1 ? 'orange' : 'cyan'} variant="filled">
+            {type === 1 ? t('type.product') : t('type.service')}
+          </Tag>
+        ),
+      },
+      {
+        title: t('columns.status'),
+        dataIndex: 'status',
+        key: 'status',
+        align: 'center' as const,
+        width: 100,
+        render: (status: number, record: Category) => (
+          <Switch 
+            checked={status === 1} 
+            onChange={() => handleSwitchStatus(record._id, status)}
+            loading={switchingId === record._id}
+            size="small"
+          />
+        ),
+      },
+      {
+        title: t('columns.action'),
+        key: 'action',
+        align: 'right' as const,
+        width: 150,
+        render: (_: unknown, record: Category) => (
+          <Space size="small">
+            <PermissionGate module="category" action="update">
+              <AppButton type="link" onClick={() => goToCategoryEdit(record._id)}>
+                {t('common.actions.edit', { ns: 'translation' })}
+              </AppButton>
+            </PermissionGate>
+            <PermissionGate module="category" action="delete">
+              <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
+                {t('common.actions.delete', { ns: 'translation' })}
+              </AppButton>
+            </PermissionGate>
+          </Space>
+        ),
+      },
+    );
+
+    return base;
+  }, [t, switchingId, params.page, params.page_size, handleSwitchStatus, handleDelete, goToCategoryEdit, isSuperAdmin]);
 
   return (
     <div className="category-list-wrapper">

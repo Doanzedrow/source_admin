@@ -1,3 +1,5 @@
+import type { Branch } from '@/types';
+
 export interface AttributeVariant {
   _id: string;
   name: string;
@@ -19,4 +21,5 @@ export interface Attribute {
   variants: AttributeVariant[];
   createdAt?: string;
   updatedAt?: string;
+  branch?: Branch;
 }

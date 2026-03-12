@@ -12,6 +12,7 @@ import { formatCurrency } from '@/utils/format';
 import { getFullImageUrl } from '@/store/api/uploadApi';
 import { APP_ASSETS } from '@/config/assets';
 import { PermissionGate } from '@/components/common/PermissionGate/PermissionGate';
+import { usePermission } from '@/hooks/usePermission';
 import type { Product } from '../data/product.types';
 
 import '../styles/product.less';
@@ -50,159 +51,183 @@ const ProductList = () => {
     goToProductCreate,
     goToProductEdit,
   } = useProductList();
+  const { isSuperAdmin } = usePermission();
 
   const columns = useMemo(
-    () => [
-      {
-        title: t('columns.index'),
-        key: 'index',
-        width: 60,
-        align: 'center' as const,
-        render: (_: any, __: any, index: number) => {
-          const rowNumber = (params.page - 1) * params.page_size + index + 1;
-          return <Text type="secondary">{rowNumber}</Text>;
+    () => {
+      const base: any[] = [
+        {
+          title: t('columns.index'),
+          key: 'index',
+          width: 60,
+          align: 'center' as const,
+          render: (_: any, __: any, index: number) => {
+            const rowNumber = (params.page - 1) * params.page_size + index + 1;
+            return <Text type="secondary">{rowNumber}</Text>;
+          },
         },
-      },
-      {
-        title: t('columns.code'),
-        dataIndex: 'code',
-        key: 'code',
-        width: 160,
-        render: (code: string, record: Product) => (
-          <Text strong onClick={() => goToProductEdit(record._id)} className="clickable-code">
-            {code}
-          </Text>
-        ),
-      },
-      {
-        title: t('columns.name'),
-        key: 'product',
-        width: 300,
-        render: (_: any, record: Product) => {
-          const imagePath = record.thumbnail?.thumbnail?.path;
-          const imageUrl = getFullImageUrl(imagePath) || APP_ASSETS.PRODUCT_PLACEHOLDER;
+        {
+          title: t('columns.code'),
+          dataIndex: 'code',
+          key: 'code',
+          width: 160,
+          render: (code: string, record: Product) => (
+            <Text strong onClick={() => goToProductEdit(record._id)} className="clickable-code">
+              {code}
+            </Text>
+          ),
+        },
+        {
+          title: t('columns.name'),
+          key: 'product',
+          width: 300,
+          render: (_: any, record: Product) => {
+            const imagePath = record.thumbnail?.thumbnail?.path;
+            const imageUrl = getFullImageUrl(imagePath) || APP_ASSETS.PRODUCT_PLACEHOLDER;
 
-          return (
-            <Flex gap={12} align="center">
-              <div
-                style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: '8px',
-                  backgroundColor: 'rgba(0, 0, 0, 0.02)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  overflow: 'hidden',
-                  border: '1px solid var(--border-color-split)',
-                  flexShrink: 0,
-                }}
-              >
-                <CachedImage
-                  src={imageUrl}
-                  alt={record.name}
-                  width={48}
-                  height={48}
-                  style={{ objectFit: 'scale-down' }}
-                  isApiImage={false}
-                />
-              </div>
-              <Flex vertical>
-                <Text strong style={{ fontSize: '14px' }}>
-                  {record.name}
-                </Text>
+            return (
+              <Flex gap={12} align="center">
+                <div
+                  style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: '8px',
+                    backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflow: 'hidden',
+                    border: '1px solid var(--border-color-split)',
+                    flexShrink: 0,
+                  }}
+                >
+                  <CachedImage
+                    src={imageUrl}
+                    alt={record.name}
+                    width={48}
+                    height={48}
+                    style={{ objectFit: 'scale-down' }}
+                    isApiImage={false}
+                  />
+                </div>
+                <Flex vertical>
+                  <Text strong style={{ fontSize: '14px' }}>
+                    {record.name}
+                  </Text>
+                </Flex>
               </Flex>
-            </Flex>
-          );
+            );
+          },
         },
-      },
-      {
-        title: t('columns.category'),
-        dataIndex: ['category', 'name'],
-        key: 'category',
-        width: 150,
-      },
-      {
-        title: t('columns.price'),
-        dataIndex: 'priceSale',
-        key: 'priceSale',
-        align: 'right' as const,
-        render: (price: number) => <Text>{formatCurrency(price)}</Text>,
-      },
-      {
-        title: t('columns.tax'),
-        dataIndex: 'taxPercentage',
-        key: 'taxPercentage',
-        align: 'center' as const,
-        render: (tax: number) => <Text>{tax}%</Text>,
-      },
-      {
-        title: t('columns.totalPrice'),
-        dataIndex: 'priceSaleWithTax',
-        key: 'priceSaleWithTax',
-        align: 'right' as const,
-        render: (price: number) => (
-          <Text strong type="success">
-            {formatCurrency(price)}
-          </Text>
-        ),
-      },
-      {
-        title: t('columns.stock'),
-        dataIndex: 'stockCount',
-        key: 'stock',
-        align: 'center' as const,
-        render: (count: number) => (
-          <Tag
-            color={count > 10 ? 'success' : 'error'}
-            variant="filled"
-            style={{
-              margin: 0,
-              borderRadius: '12px',
-              padding: '0 12px',
-              fontWeight: 'bold',
-              minWidth: '45px',
-              textAlign: 'center',
-            }}
-          >
-            {count}
-          </Tag>
-        ),
-      },
-      {
-        title: t('columns.status'),
-        dataIndex: 'status',
-        key: 'status',
-        align: 'center' as const,
-        render: (status: number, record: Product) => (
-          <Switch
-            checked={status === 1}
-            onChange={() => handleSwitchStatus(record._id, status)}
-            loading={switchingId === record._id}
-            size="small"
-          />
-        ),
-      },
-      {
-        title: t('columns.action'),
-        key: 'action',
-        align: 'right' as const,
-        render: (_: unknown, record: Product) => (
-          <Space size="small">
-            <PermissionGate module="product" action="update">
-              <AppButton type="link" onClick={() => goToProductEdit(record._id)}>
-                {t('common.actions.edit', { ns: 'translation' })}
-              </AppButton>
-            </PermissionGate>
-            <PermissionGate module="product" action="delete">
-              <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
-                {t('common.actions.delete', { ns: 'translation' })}
-              </AppButton>
-            </PermissionGate>
-          </Space>
-        ),
-      },
-    ],
+        {
+          title: t('columns.category'),
+          dataIndex: ['category', 'name'],
+          key: 'category',
+          width: 150,
+        },
+      ];
+
+      if (isSuperAdmin) {
+        base.push({
+          title: t('columns.branch', { defaultValue: 'Chi nhánh' }),
+          dataIndex: ['branch', 'name'],
+          key: 'branch',
+          width: 200,
+          render: (name: string, record: Product) => (
+            <Flex vertical>
+              <Text strong>{name}</Text>
+              <Text type="secondary" style={{ fontSize: '12px' }}>{record.branch?.code}</Text>
+            </Flex>
+          )
+        });
+      }
+
+      base.push(
+        {
+          title: t('columns.price'),
+          dataIndex: 'priceSale',
+          key: 'priceSale',
+          align: 'right' as const,
+          render: (price: number) => <Text>{formatCurrency(price)}</Text>,
+        },
+        {
+          title: t('columns.tax'),
+          dataIndex: 'taxPercentage',
+          key: 'taxPercentage',
+          align: 'center' as const,
+          render: (tax: number) => <Text>{tax}%</Text>,
+        },
+        {
+          title: t('columns.totalPrice'),
+          dataIndex: 'priceSaleWithTax',
+          key: 'priceSaleWithTax',
+          align: 'right' as const,
+          render: (price: number) => (
+            <Text strong type="success">
+              {formatCurrency(price)}
+            </Text>
+          ),
+        },
+        {
+          title: t('columns.stock'),
+          dataIndex: 'stockCount',
+          key: 'stock',
+          align: 'center' as const,
+          render: (count: number) => (
+            <Tag
+              color={count > 10 ? 'success' : 'error'}
+              variant="filled"
+              style={{
+                margin: 0,
+                borderRadius: '12px',
+                padding: '0 12px',
+                fontWeight: 'bold',
+                minWidth: '45px',
+                textAlign: 'center',
+              }}
+            >
+              {count}
+            </Tag>
+          ),
+        },
+        {
+          title: t('columns.status'),
+          dataIndex: 'status',
+          key: 'status',
+          align: 'center' as const,
+          render: (status: number, record: Product) => (
+            <Switch
+              checked={status === 1}
+              onChange={() => handleSwitchStatus(record._id, status)}
+              loading={switchingId === record._id}
+              size="small"
+            />
+          ),
+        },
+        {
+          title: t('columns.action'),
+          key: 'action',
+          align: 'right' as const,
+          render: (_: unknown, record: Product) => (
+            <Space size="small">
+              <PermissionGate module="product" action="update">
+                <AppButton type="link" onClick={() => goToProductEdit(record._id)}>
+                  {t('common.actions.edit', { ns: 'translation' })}
+                </AppButton>
+              </PermissionGate>
+              <PermissionGate module="product" action="delete">
+                <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
+                  {t('common.actions.delete', { ns: 'translation' })}
+                </AppButton>
+              </PermissionGate>
+            </Space>
+          ),
+        }
+      );
+
+      return base;
+    },
+
     [
       t,
       switchingId,
@@ -211,6 +236,7 @@ const ProductList = () => {
       handleSwitchStatus,
       params.page,
       params.page_size,
+      isSuperAdmin,
     ]
   );
 

@@ -13,6 +13,12 @@ export interface Permission {
   status: number;
 }
 
+export interface Branch {
+  _id: string;
+  code: string;
+  name: string;
+}
+
 export interface UserRole {
   _id: string;
   name: string;
@@ -33,7 +39,7 @@ export interface User {
   role?: UserRole;
   avatar?: string;
   gender?: number;
-  branch?: string;
+  branch?: Branch;
 }
 
 export interface AuthState {
