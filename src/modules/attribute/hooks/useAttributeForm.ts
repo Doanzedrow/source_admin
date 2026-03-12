@@ -17,40 +17,36 @@ export const useAttributeForm = ({ initialValues, onSave, isLoading }: UseAttrib
       isMultiple: false,
       maxSelect: 1,
       overridePrice: false,
-      variants: [],
     }),
     []
   );
 
   useEffect(() => {
-    // Only set fields when not loading to avoid "not connected" warning
-    // Ant Design Form needs to be mounted before setFieldsValue can be called safely
     if (isLoading) return;
 
     if (initialValues) {
-      form.setFieldsValue(initialValues);
+      const { code, name, status, isMultiple, maxSelect, overridePrice } = initialValues;
+      form.setFieldsValue({
+        code,
+        name,
+        status,
+        isMultiple,
+        maxSelect,
+        overridePrice,
+      });
     } else {
       form.setFieldsValue(defaultValues);
     }
   }, [initialValues, form, defaultValues, isLoading]);
 
   const handleSubmit = (values: any) => {
-    const trimmed = {
+    const payload = {
       ...values,
       code: values.code?.trim(),
       name: values.name?.trim(),
     };
 
-    if (trimmed.variants) {
-      trimmed.variants = trimmed.variants.map((v: any) => ({
-        ...v,
-        name: v.name?.trim(),
-        code: v.code?.trim(),
-        status: v.status ?? 1,
-      }));
-    }
-
-    onSave(trimmed);
+    onSave(payload);
   };
 
   return {

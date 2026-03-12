@@ -11,7 +11,8 @@ export default {
     action: "Action",
     index: "#",
     maxSelect: "Max Select",
-    variants: "Values"
+    variants: "Values",
+    createdAt: "Created At"
   },
   filter: {
     keyword: "Search by name, code",

@@ -7,6 +7,7 @@ import { AppTable } from '@/components/common/AppTable';
 import { AppCard } from '@/components/common/AppCard';
 import { useVariantManager } from '../hooks/useVariantManager';
 import type { AttributeVariant } from '../data/attribute.types';
+import { formatDate } from '@/utils/format';
 
 const { Text } = Typography;
 
@@ -66,7 +67,7 @@ export const VariantManager: React.FC<VariantManagerProps> = ({ attributeId }) =
       dataIndex: 'name',
       key: 'name',
       width: 300,
-      render: (name: string) => <Text strong>{name}</Text>,
+      render: (name: string) => <Text>{name}</Text>,
     },
     {
       title: t('form.status'),
@@ -82,6 +83,13 @@ export const VariantManager: React.FC<VariantManagerProps> = ({ attributeId }) =
           loading={isSwitching}
         />
       ),
+    },
+    {
+      title: t('columns.createdAt'),
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      width: 150,
+      render: (date: string) => <Text type="secondary">{formatDate(date)}</Text>,
     },
     {
       title: t('columns.action'),

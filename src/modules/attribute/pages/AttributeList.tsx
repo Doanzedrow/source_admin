@@ -1,5 +1,5 @@
 import { useMemo, memo } from 'react';
-import { Space, Tag, Typography, Col } from 'antd';
+import { Space, Tag, Typography, Col, Flex } from 'antd';
 import { AppButton } from '@/components/common/AppButton';
 import { AppCard } from '@/components/common/AppCard';
 import { AppTable } from '@/components/common/AppTable';
@@ -73,17 +73,18 @@ const AttributeList = () => {
       align: 'center' as const,
       render: (val: boolean, record: Attribute) =>
         val ? (
-          <Space direction="vertical" size={0}>
-            <Tag color="blue">{t('common.yes', { ns: 'translation' })}</Tag>
+          <Flex vertical gap={2} align="center">
+            <Tag color="blue" style={{ width: 'fit-content' }}>
+              {t('common.yes', { ns: 'translation' })}
+            </Tag>
             {record.maxSelect > 0 && (
               <Text type="secondary" style={{ fontSize: '11px' }}>
                 {t('columns.maxSelect')}: {record.maxSelect}
               </Text>
             )}
-          </Space>
+          </Flex>
         ) : (
           <Text type="secondary">-</Text>
-
         ),
     },
     {

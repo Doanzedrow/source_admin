@@ -4,6 +4,8 @@ export interface AttributeVariant {
   code: string;
   status: number;
   order?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Attribute {

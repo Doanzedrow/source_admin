@@ -1,7 +1,8 @@
 import React from 'react';
-import { Form, Select, Row, Col, Switch, Typography, InputNumber } from 'antd';
+import { Form, Select, Row, Col, Switch, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { AppInput } from '@/components/common/AppInput';
+import { AppInputNumber } from '@/components/common/AppInputNumber';
 import { REGEX } from '@/utils/regex';
 
 const { Text, Paragraph } = Typography;
@@ -16,7 +17,6 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ form }) => {
 
   return (
     <div className="attribute-form-content">
-      {/* Section 1: Basic Information */}
       <div className="form-section">
         <Row gutter={[24, 0]}>
           <Col xs={24} md={12}>
@@ -57,7 +57,6 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ form }) => {
         </Row>
       </div>
 
-      {/* Section 2: Configuration */}
       <div className="form-section last-section">
         <Row gutter={[24, 24]}>
           <Col xs={24} md={12}>
@@ -66,23 +65,24 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ form }) => {
                 <Switch style={{ marginTop: '4px' }} />
               </Form.Item>
               <div>
-                <Text strong style={{ display: 'block' }}>{t('form.isMultiple')}</Text>
+                <Text strong style={{ display: 'block' }}>
+                  {t('form.isMultiple')}
+                </Text>
                 <Paragraph type="secondary" style={{ marginBottom: 0, fontSize: '13px' }}>
                   {t('form.isMultipleDesc')}
                 </Paragraph>
               </div>
             </div>
-            
+
             {isMultiple && (
               <div style={{ marginTop: '20px', paddingLeft: '52px' }}>
-                <Form.Item 
-                  name="maxSelect" 
+                <AppInputNumber
+                  name="maxSelect"
                   label={t('form.maxSelect')}
                   rules={[{ required: true }]}
-                  style={{ marginBottom: 0 }}
-                >
-                  <InputNumber min={1} style={{ width: '100%' }} size="large" />
-                </Form.Item>
+                  min={1}
+                  style={{ width: '100%' }}
+                />
               </div>
             )}
           </Col>
@@ -93,7 +93,9 @@ export const AttributeForm: React.FC<AttributeFormProps> = ({ form }) => {
                 <Switch style={{ marginTop: '4px' }} />
               </Form.Item>
               <div>
-                <Text strong style={{ display: 'block' }}>{t('form.overridePrice')}</Text>
+                <Text strong style={{ display: 'block' }}>
+                  {t('form.overridePrice')}
+                </Text>
                 <Paragraph type="secondary" style={{ marginBottom: 0, fontSize: '13px' }}>
                   {t('form.overridePriceDesc')}
                 </Paragraph>

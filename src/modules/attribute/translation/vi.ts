@@ -11,7 +11,8 @@ export default {
     action: "Hành động",
     index: "#",
     maxSelect: "Chọn tối đa",
-    variants: "Giá trị"
+    variants: "Giá trị",
+    createdAt: "Ngày tạo"
   },
   filter: {
     keyword: "Tìm theo tên, mã biến thể",
