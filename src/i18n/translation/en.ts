@@ -23,6 +23,8 @@ export default {
   notFound: "404 - Page not found!",
   systemSettings: "Professional System Settings",
   common: {
+    yes: "Yes",
+    no: "No",
     actions: {
       edit: "Edit",
       delete: "Delete",

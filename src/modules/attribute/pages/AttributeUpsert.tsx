@@ -70,7 +70,7 @@ const AttributeUpsert: React.FC = () => {
           </AppCard>
 
           {id ? (
-            <VariantManager attributeId={id} variants={currentAttribute?.variants || []} />
+            <VariantManager attributeId={id} />
           ) : (
             <AppCard
               title={

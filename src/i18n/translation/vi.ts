@@ -23,6 +23,8 @@ export default {
   notFound: "404 - Không tìm thấy trang này!",
   systemSettings: "Hệ thống Cài đặt chuyên môn",
   common: {
+    yes: "Có",
+    no: "Không",
     actions: {
       edit: "Sửa",
       delete: "Xóa",

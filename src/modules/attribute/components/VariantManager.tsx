@@ -1,81 +1,40 @@
-import React, { useState, useMemo } from 'react';
-import { Space, Typography, Tag, Modal, Form } from 'antd';
+import React, { useMemo } from 'react';
+import { Space, Typography, Modal, Form, Switch } from 'antd';
 import { PlusOutlined, DeleteOutlined, EditOutlined, TagsOutlined } from '@ant-design/icons';
-import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/components/common/AppButton';
 import { AppInput } from '@/components/common/AppInput';
 import { AppTable } from '@/components/common/AppTable';
 import { AppCard } from '@/components/common/AppCard';
-import { useAppNotify } from '@/hooks/useAppNotify';
-import { useAppConfirm } from '@/hooks/useAppConfirm';
-import { useCreateVariantMutation, useUpdateVariantMutation, useDeleteVariantMutation } from '../api/variantApi';
+import { useVariantManager } from '../hooks/useVariantManager';
 import type { AttributeVariant } from '../data/attribute.types';
 
 const { Text } = Typography;
 
 interface VariantManagerProps {
   attributeId: string;
-  variants: AttributeVariant[];
 }
 
-export const VariantManager: React.FC<VariantManagerProps> = ({ attributeId, variants = [] }) => {
-  const { t } = useTranslation(['attribute', 'translation']);
-  const { notification } = useAppNotify();
-  const { confirmDelete } = useAppConfirm();
-  const [form] = Form.useForm();
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingVariant, setEditingVariant] = useState<AttributeVariant | null>(null);
-
-  const [createVariant, { isLoading: isCreating }] = useCreateVariantMutation();
-  const [updateVariant, { isLoading: isUpdating }] = useUpdateVariantMutation();
-  const [deleteVariant, { isLoading: isDeleting }] = useDeleteVariantMutation();
-
-  const handleOpenModal = (variant?: AttributeVariant) => {
-    if (variant) {
-      setEditingVariant(variant);
-      form.setFieldsValue({
-        name: variant.name,
-        code: variant.code,
-      });
-    } else {
-      setEditingVariant(null);
-      form.resetFields();
-    }
-    setIsModalOpen(true);
-  };
-
-  const handleSave = async () => {
-    try {
-      const values = await form.validateFields();
-      if (editingVariant) {
-        await updateVariant({ id: editingVariant._id, body: values }).unwrap();
-        notification.success({ message: t('messages.updateSuccess') });
-      } else {
-        await createVariant({ ...values, attribute: attributeId, status: 1 }).unwrap();
-        notification.success({ message: t('messages.createSuccess') });
-      }
-      setIsModalOpen(false);
-    } catch (error: any) {
-      notification.error({
-        message: t('common.messages.error', { ns: 'translation' }),
-        description: error?.data?.message || error?.message,
-      });
-    }
-  };
-
-  const handleDelete = (id: string) => {
-    confirmDelete({
-      onOk: async () => {
-        try {
-          await deleteVariant(id).unwrap();
-          notification.success({ message: t('messages.deleteSuccess') });
-        } catch (error: any) {
-          notification.error({ message: t('messages.deleteError') });
-        }
-      },
-    });
-  };
+export const VariantManager: React.FC<VariantManagerProps> = ({ attributeId }) => {
+  const {
+    t,
+    form,
+    params,
+    isModalOpen,
+    setIsModalOpen,
+    editingVariant,
+    isCreating,
+    isUpdating,
+    isDeleting,
+    isSwitching,
+    isFetching,
+    variants,
+    total,
+    handleOpenModal,
+    handleSave,
+    handleDelete,
+    handleSwitchStatus,
+    handlePageChange,
+  } = useVariantManager({ attributeId });
 
   const columns = useMemo(() => [
     {
@@ -83,50 +42,77 @@ export const VariantManager: React.FC<VariantManagerProps> = ({ attributeId, var
       key: 'index',
       width: 60,
       align: 'center' as const,
-      render: (_: any, __: any, index: number) => index + 1,
-    },
-    {
-      title: t('form.variantName'),
-      dataIndex: 'name',
-      key: 'name',
-      render: (name: string) => <Text strong>{name}</Text>,
+      render: (_: any, __: any, index: number) => (
+        <Text type="secondary">{(params.page - 1) * params.page_size + index + 1}</Text>
+      ),
     },
     {
       title: t('form.variantCode'),
       dataIndex: 'code',
       key: 'code',
-      render: (code: string) => <Tag>{code}</Tag>,
+      width: 200,
+      render: (code: string, record: AttributeVariant) => (
+        <Text
+          strong
+          onClick={() => handleOpenModal(record)}
+          className="clickable-code"
+        >
+          {code}
+        </Text>
+      ),
+    },
+    {
+      title: t('form.variantName'),
+      dataIndex: 'name',
+      key: 'name',
+      width: 300,
+      render: (name: string) => <Text strong>{name}</Text>,
+    },
+    {
+      title: t('form.status'),
+      dataIndex: 'status',
+      key: 'status',
+      align: 'center' as const,
+      width: 120,
+      render: (status: number, record: AttributeVariant) => (
+        <Switch 
+          size="small" 
+          checked={status === 1} 
+          onChange={() => handleSwitchStatus(record._id)}
+          loading={isSwitching}
+        />
+      ),
     },
     {
       title: t('columns.action'),
       key: 'action',
       align: 'right' as const,
-      width: 120,
+      width: 150,
       render: (_: any, record: AttributeVariant) => (
-        <Space size="small">
+        <Space size="middle">
           <AppButton 
             type="text" 
-            icon={<EditOutlined />} 
+            icon={<EditOutlined style={{ fontSize: '16px' }} />} 
             onClick={() => handleOpenModal(record)} 
           />
           <AppButton 
             danger 
             type="text" 
-            icon={<DeleteOutlined />} 
+            icon={<DeleteOutlined style={{ fontSize: '16px' }} />} 
             onClick={() => handleDelete(record._id)} 
             loading={isDeleting} 
           />
         </Space>
       ),
     },
-  ], [t, isDeleting]);
+  ], [t, isDeleting, isSwitching, params, handleOpenModal, handleDelete, handleSwitchStatus]);
 
   return (
     <div className="variant-manager-section">
       <AppCard
         title={
           <Space>
-            <TagsOutlined />
+            <TagsOutlined style={{ color: 'var(--primary-color)' }} />
             <span>{t('form.variants')}</span>
           </Space>
         }
@@ -140,14 +126,19 @@ export const VariantManager: React.FC<VariantManagerProps> = ({ attributeId, var
           </AppButton>
         }
         className="variant-manager-card"
-        style={{ border: '1px solid var(--border-color-split)' }}
       >
         <AppTable
           columns={columns}
           dataSource={variants}
           rowKey="_id"
-          pagination={false}
-          size="small"
+          loading={isFetching}
+          pagination={{
+            total,
+            current: params.page,
+            pageSize: params.page_size,
+            onChange: handlePageChange,
+            showSizeChanger: true,
+          }}
         />
       </AppCard>
 
@@ -163,16 +154,16 @@ export const VariantManager: React.FC<VariantManagerProps> = ({ attributeId, var
       >
         <Form form={form} layout="vertical" style={{ marginTop: '20px' }}>
           <AppInput
-            name="name"
-            label={t('form.variantName')}
-            placeholder={t('form.variantName')}
-            rules={[{ required: true, message: t('validation.required', { field: t('form.variantName') }) }]}
-          />
-          <AppInput
             name="code"
             label={t('form.variantCode')}
             placeholder={t('form.variantCode')}
             rules={[{ required: true, message: t('validation.required', { field: t('form.variantCode') }) }]}
+          />
+          <AppInput
+            name="name"
+            label={t('form.variantName')}
+            placeholder={t('form.variantName')}
+            rules={[{ required: true, message: t('validation.required', { field: t('form.variantName') }) }]}
           />
         </Form>
       </Modal>
