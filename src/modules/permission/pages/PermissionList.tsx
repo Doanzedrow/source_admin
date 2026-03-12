@@ -138,7 +138,11 @@ const PermissionList: React.FC = () => {
             rowKey="_id"
             loading={isLoading || isFetching}
             showSkeleton={isLoading && permissions.length === 0}
-            pagination={false}
+            pagination={{
+              pageSize: 20,
+              showSizeChanger: false,
+              size: 'small',
+            }}
           />
         </ConfigProvider>
       </div>
