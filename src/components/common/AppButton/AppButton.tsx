@@ -3,7 +3,7 @@ import { Button } from 'antd';
 import type { ButtonProps } from 'antd';
 
 interface AppButtonProps extends ButtonProps {
-  label?: string; // Tùy chọn truyền chữ thông qua label
+  label?: string;
 }
 
 export const AppButton: React.FC<AppButtonProps> = ({ label, children, ...props }) => {

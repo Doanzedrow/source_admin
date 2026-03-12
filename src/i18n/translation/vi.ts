@@ -59,7 +59,14 @@ export default {
       chart: {
         hourSuffix: "h",
         weekdays: ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"],
-      }
+      },
+      price: "Giá",
+      image: "Hình ảnh",
+      description: "Mô tả",
+      status: "Trạng thái",
+      index: "#",
+      action: "Hành động",
+      note: "Ghi chú"
     }
   }
 };

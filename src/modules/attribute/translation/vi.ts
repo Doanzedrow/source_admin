@@ -36,10 +36,15 @@ export default {
     variantName: "Tên giá trị (VD: Đỏ, XL...)",
     variantCode: "Mã (VD: RED, XL...)",
     addVariantTip: "Vui lòng lưu thông tin biến thể chính trước khi thêm các giá trị (Màu sắc, Kích thước...)",
+    attribute: "Thuộc tính",
+    variant: "Giá trị",
+    price: "Giá bán",
+    image: "Ảnh đại diện",
   },
   placeholder: {
     name: "Nhập tên chính (VD: Màu sắc)",
     code: "Nhập mã chính (VD: MAUSAC)",
+    selectAttribute: "Chọn thuộc tính",
   },
   validation: {
     required: "{{field}} là bắt buộc",
