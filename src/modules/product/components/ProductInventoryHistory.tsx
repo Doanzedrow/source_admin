@@ -14,7 +14,6 @@ import { AppCard } from '@/components/common/AppCard';
 import { LazyInView } from '@/components/common/LazyInView';
 import { useProductInventoryHistory } from '../hooks/useProductInventoryHistory';
 import { formatDate } from '@/utils/format';
-import type { InventoryHistory } from '../data/product.types';
 import '../styles/product-history.less';
 
 const { Text } = Typography;
@@ -23,116 +22,140 @@ interface ProductInventoryHistoryProps {
   productId: string;
 }
 
-const VariantDetailList = memo(({ 
-  variants, 
-  t 
-}: { 
-  variants: any[], 
-  t: (key: string, options?: any) => string 
-}) => {
-  const variantColumns = useMemo(
-    () => [
-      {
-        title: '#',
-        key: 'index',
-        width: 50,
-        align: 'center' as const,
-        render: (_: any, __: any, index: number) => (
-          <Text type="secondary" style={{ fontSize: '11px' }}>{index + 1}</Text>
-        ),
-      },
-      {
-        title: t('form.variant', { ns: 'attribute', defaultValue: 'Biến thể' }),
-        dataIndex: 'items',
-        key: 'variant',
-        render: (items: any[]) => (
-          <Flex gap={6} wrap="wrap" align="center">
-            {items.map((item, index) => (
-              <React.Fragment key={item.variantId}>
-                <Flex align="center" gap={4}>
-                  <Text type="secondary" style={{ fontSize: '10px', textTransform: 'uppercase' }}>
-                    {item.attributeName}:
-                  </Text>
-                  <Text strong style={{ fontSize: '12px' }}>
-                    {item.variantName}
-                  </Text>
-                </Flex>
-                {index < items.length - 1 && (
-                  <Text type="secondary" style={{ color: '#d9d9d9' }}>
-                    |
-                  </Text>
-                )}
-              </React.Fragment>
-            ))}
-          </Flex>
-        ),
-      },
-      {
-        title: t('columns.openingQty', { ns: 'product' }),
-        dataIndex: 'openingQty',
-        key: 'openingQty',
-        align: 'center' as const,
-        width: 80,
-      },
-      {
-        title: t('columns.produceQty', { ns: 'product' }),
-        dataIndex: 'produceQty',
-        key: 'produceQty',
-        align: 'center' as const,
-        width: 80,
-        render: (val: number) => (
-          <Text type={val > 0 ? 'success' : 'secondary'}>{val > 0 ? `+${val}` : val}</Text>
-        ),
-      },
-      {
-        title: t('columns.saleQty', { ns: 'product' }),
-        dataIndex: 'saleQty',
-        key: 'saleQty',
-        align: 'center' as const,
-        width: 80,
-        render: (val: number) => (
-          <Text type={val > 0 ? 'danger' : 'secondary'}>{val > 0 ? `-${val}` : val}</Text>
-        ),
-      },
-      {
-        title: t('columns.closingQty', { ns: 'product' }),
-        dataIndex: 'closingQty',
-        key: 'closingQty',
-        align: 'center' as const,
-        width: 80,
-        render: (val: number) => <Text strong>{val}</Text>,
-      },
-    ],
-    [t]
-  );
+const VariantDetailList = memo(
+  ({ variants, t }: { variants: any[]; t: (key: string, options?: any) => string }) => {
+    const variantColumns = useMemo(
+      () => [
+        {
+          title: '#',
+          key: 'index',
+          width: 50,
+          align: 'center' as const,
+          render: (_: any, __: any, index: number) => (
+            <Text type="secondary" style={{ fontSize: '11px' }}>
+              {index + 1}
+            </Text>
+          ),
+        },
+        {
+          title: t('form.variant', { ns: 'attribute', defaultValue: 'Biến thể' }),
+          dataIndex: 'items',
+          key: 'variant',
+          render: (items: any[]) => (
+            <Flex gap={6} wrap="wrap" align="center">
+              {items.map((item, index) => (
+                <React.Fragment key={item.variantId}>
+                  <Flex align="center" gap={4}>
+                    <Text type="secondary" style={{ fontSize: '10px', textTransform: 'uppercase' }}>
+                      {item.attributeName}:
+                    </Text>
+                    <Text strong style={{ fontSize: '12px' }}>
+                      {item.variantName}
+                    </Text>
+                  </Flex>
+                  {index < items.length - 1 && (
+                    <Text type="secondary" style={{ color: '#d9d9d9' }}>
+                      |
+                    </Text>
+                  )}
+                </React.Fragment>
+              ))}
+            </Flex>
+          ),
+        },
+        {
+          title: t('columns.openingQty', { ns: 'product', defaultValue: 'Đầu' }),
+          dataIndex: 'openingQty',
+          key: 'openingQty',
+          align: 'center' as const,
+          width: 70,
+        },
+        {
+          title: t('columns.expectedQty', { ns: 'product', defaultValue: 'Dự kiến' }),
+          dataIndex: 'expectedQty',
+          key: 'expectedQty',
+          align: 'center' as const,
+          width: 70,
+          render: (val: number) => <Text type="secondary">{val || 0}</Text>,
+        },
+        {
+          title: t('columns.produceQty', { ns: 'product', defaultValue: 'Sản xuất' }),
+          dataIndex: 'produceQty',
+          key: 'produceQty',
+          align: 'center' as const,
+          width: 80,
+          render: (val: number) => <Text type={val > 0 ? 'success' : 'secondary'}>{val || 0}</Text>,
+        },
+        {
+          title: t('columns.saleQty', { ns: 'product', defaultValue: 'Tổng bán' }),
+          dataIndex: 'saleQty',
+          key: 'saleQty',
+          align: 'center' as const,
+          width: 80,
+          render: (val: number) => <Text type={val > 0 ? 'danger' : 'secondary'}>{val || 0}</Text>,
+        },
+        {
+          title: t('columns.morningSaleQty', { ns: 'product', defaultValue: 'Sáng' }),
+          dataIndex: 'morningSaleQty',
+          key: 'morningSaleQty',
+          align: 'center' as const,
+          width: 60,
+          render: (val: number) => <Text type="secondary">{val || 0}</Text>,
+        },
+        {
+          title: t('columns.afternoonSaleQty', { ns: 'product', defaultValue: 'Tối' }),
+          dataIndex: 'afternoonSaleQty',
+          key: 'afternoonSaleQty',
+          align: 'center' as const,
+          width: 60,
+          render: (val: number) => <Text type="secondary">{val || 0}</Text>,
+        },
+        {
+          title: t('columns.closingQty', { ns: 'product', defaultValue: 'Cuối' }),
+          dataIndex: 'closingQty',
+          key: 'closingQty',
+          align: 'center' as const,
+          width: 70,
+          render: (val: number) => <Text strong>{val}</Text>,
+        },
+        {
+          title: t('columns.cancelQty', { ns: 'product', defaultValue: 'Huỷ' }),
+          dataIndex: 'cancelQty',
+          key: 'cancelQty',
+          align: 'center' as const,
+          width: 60,
+          render: (val: number) => <Text type={val > 0 ? 'danger' : 'secondary'}>{val || 0}</Text>,
+        },
+      ],
+      [t]
+    );
 
-  return (
-    <div className="nested-variant-container">
-      <div className="nested-header">
-        <BoxPlotOutlined style={{ color: 'var(--primary-color)' }} />
-        <Text strong style={{ fontSize: '12px', color: '#8c8c8c', textTransform: 'uppercase' }}>
-          {t('variantDetails', { ns: 'product' })}
-        </Text>
-        <div className="header-line" />
+    return (
+      <div className="nested-variant-container">
+        <div className="nested-header">
+          <BoxPlotOutlined style={{ color: 'var(--primary-color)' }} />
+          <Text strong style={{ fontSize: '12px', color: '#8c8c8c', textTransform: 'uppercase' }}>
+            {t('variantDetails', { ns: 'product' })}
+          </Text>
+          <div className="header-line" />
+        </div>
+        <Table
+          columns={variantColumns}
+          dataSource={variants}
+          rowKey={(v) => v.items.map((i: any) => i.variantId).join('-')}
+          pagination={false}
+          size="small"
+          className="nested-variant-table"
+          bordered={false}
+        />
       </div>
-      <Table
-        columns={variantColumns}
-        dataSource={variants}
-        rowKey={(v) => v.items.map((i: any) => i.variantId).join('-')}
-        pagination={false}
-        size="small"
-        className="nested-variant-table"
-        bordered={false}
-      />
-    </div>
-  );
-});
+    );
+  }
+);
 
 const InventoryHistoryContent: React.FC<ProductInventoryHistoryProps> = ({ productId }) => {
-  const { 
-    t, data, isLoading, isReady, isEmpty, rawCount 
-  } = useProductInventoryHistory(productId);
-  
+  const { t, data, isLoading, isReady, isEmpty, rawCount } = useProductInventoryHistory(productId);
+
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
 
@@ -160,9 +183,6 @@ const InventoryHistoryContent: React.FC<ProductInventoryHistoryProps> = ({ produ
             <Text strong className="col-highlight">
               {formatDate(date)}
             </Text>
-            <Text type="secondary" style={{ fontSize: '11px' }}>
-              {t('recordedAt', { ns: 'product' })}
-            </Text>
           </Flex>
         ),
       },
@@ -170,27 +190,19 @@ const InventoryHistoryContent: React.FC<ProductInventoryHistoryProps> = ({ produ
         title: t('columns.branch', { ns: 'product', defaultValue: 'Chi nhánh' }),
         dataIndex: 'branch',
         key: 'branch',
+        width: 180,
         render: (branch: string) => (
           <Flex gap={8} align="center">
-            <div
-              style={{
-                width: 32,
-                height: 32,
-                borderRadius: '50%',
-                background: 'fade(@primary-color, 10%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <EnvironmentOutlined style={{ color: 'var(--primary-color)' }} />
-            </div>
-            <Text className="branch-text" style={{ fontSize: '13px' }}>{branch}</Text>
+            <EnvironmentOutlined style={{ color: 'var(--primary-color)' }} />
+
+            <Text className="branch-text" style={{ fontSize: '13px' }}>
+              {branch}
+            </Text>
           </Flex>
         ),
       },
       {
-        title: t('columns.openingQty', { ns: 'product', defaultValue: 'Đầu kỳ' }),
+        title: t('columns.openingQty', { ns: 'product', defaultValue: 'Tồn đầu' }),
         dataIndex: 'openingQty',
         key: 'openingQty',
         align: 'center' as const,
@@ -198,69 +210,6 @@ const InventoryHistoryContent: React.FC<ProductInventoryHistoryProps> = ({ produ
         render: (val: number) => (
           <Tag color="processing" variant="filled" className="qty-tag">
             {val}
-          </Tag>
-        ),
-      },
-      {
-        title: t('columns.produceQty', { ns: 'product', defaultValue: 'Nhập/SX' }),
-        dataIndex: 'produceQty',
-        key: 'produceQty',
-        align: 'center' as const,
-        width: 100,
-        render: (val: number) => (
-          <Flex align="center" justify="center" gap={4}>
-            {val > 0 && (
-              <ArrowUpOutlined style={{ color: 'var(--success-color)', fontSize: '10px' }} />
-            )}
-            <Text type={val > 0 ? 'success' : 'secondary'} strong={val > 0}>
-              {val > 0 ? `+${val}` : val}
-            </Text>
-          </Flex>
-        ),
-      },
-      {
-        title: t('columns.saleQty', { ns: 'product', defaultValue: 'Tổng bán' }),
-        dataIndex: 'saleQty',
-        key: 'saleQty',
-        align: 'center' as const,
-        width: 120,
-        render: (val: number, record: InventoryHistory) => (
-          <Flex vertical align="center" gap={2}>
-            <Flex align="center" gap={4}>
-              {val > 0 && (
-                <ArrowDownOutlined style={{ color: 'var(--error-color)', fontSize: '10px' }} />
-              )}
-              <Text strong type="danger">
-                {val > 0 ? `-${val}` : val}
-              </Text>
-            </Flex>
-            {(record.morningSaleQty > 0 || record.afternoonSaleQty > 0) && (
-              <Text
-                type="secondary"
-                style={{
-                  fontSize: '10px',
-                  background: '#f5f5f5',
-                  padding: '1px 6px',
-                  borderRadius: '10px',
-                }}
-              >
-                {record.morningSaleQty}
-                {t('shortMorning', { ns: 'product' })} · {record.afternoonSaleQty}
-                {t('shortAfternoon', { ns: 'product' })}
-              </Text>
-            )}
-          </Flex>
-        ),
-      },
-      {
-        title: t('columns.closingQty', { ns: 'product', defaultValue: 'Cuối kỳ' }),
-        dataIndex: 'closingQty',
-        key: 'closingQty',
-        align: 'center' as const,
-        width: 100,
-        render: (val: number) => (
-          <Tag color={val > 0 ? 'purple' : 'error'} variant="filled" className="qty-tag">
-            {val || 0}
           </Tag>
         ),
       },
@@ -277,8 +226,86 @@ const InventoryHistoryContent: React.FC<ProductInventoryHistoryProps> = ({ produ
           </Flex>
         ),
       },
+      {
+        title: t('columns.produceQty', { ns: 'product', defaultValue: 'Sản xuất' }),
+        dataIndex: 'produceQty',
+        key: 'produceQty',
+        align: 'center' as const,
+        width: 120,
+        render: (val: number) => (
+          <Flex align="center" justify="center" gap={4}>
+            {val > 0 && (
+              <ArrowUpOutlined style={{ color: 'var(--success-color)', fontSize: '10px' }} />
+            )}
+            <Text type={val > 0 ? 'success' : 'secondary'} strong={val > 0}>
+              {val || 0}
+            </Text>
+          </Flex>
+        ),
+      },
+      {
+        title: t('columns.saleQty', { ns: 'product', defaultValue: 'Tổng bán' }),
+        dataIndex: 'saleQty',
+        key: 'saleQty',
+        align: 'center' as const,
+        width: 120,
+        render: (val: number) => (
+          <Flex align="center" justify="center" gap={4}>
+            {val > 0 && (
+              <ArrowDownOutlined style={{ color: 'var(--error-color)', fontSize: '10px' }} />
+            )}
+            <Text strong type="danger">
+              {val || 0}
+            </Text>
+          </Flex>
+        ),
+      },
+      {
+        title: t('columns.morningSaleQty', { ns: 'product', defaultValue: 'Ca sáng' }),
+        dataIndex: 'morningSaleQty',
+        key: 'morningSaleQty',
+        align: 'center' as const,
+        width: 100,
+        render: (val: number) => (
+          <Text type="secondary" style={{ fontSize: '12px' }}>
+            {val || 0}
+          </Text>
+        ),
+      },
+      {
+        title: t('columns.afternoonSaleQty', { ns: 'product', defaultValue: 'Ca tối' }),
+        dataIndex: 'afternoonSaleQty',
+        key: 'afternoonSaleQty',
+        align: 'center' as const,
+        width: 100,
+        render: (val: number) => (
+          <Text type="secondary" style={{ fontSize: '12px' }}>
+            {val || 0}
+          </Text>
+        ),
+      },
+      {
+        title: t('columns.closingQty', { ns: 'product', defaultValue: 'Tồn cuối' }),
+        dataIndex: 'closingQty',
+        key: 'closingQty',
+        align: 'center' as const,
+        width: 100,
+        render: (val: number) => (
+          <Tag color={val > 0 ? 'purple' : 'error'} variant="filled" className="qty-tag">
+            {val || 0}
+          </Tag>
+        ),
+      },
+      {
+        title: t('columns.cancelQty', { ns: 'product', defaultValue: 'Huỷ' }),
+        dataIndex: 'cancelQty',
+        key: 'cancelQty',
+        align: 'center' as const,
+        width: 80,
+        render: (val: number) => <Text type={val > 0 ? 'danger' : 'secondary'}>{val || 0}</Text>,
+      },
     ],
-    [t]
+    [t, currentPage, pageSize]
   );
 
   return (
@@ -290,9 +317,9 @@ const InventoryHistoryContent: React.FC<ProductInventoryHistoryProps> = ({ produ
           <Flex gap={8} align="center">
             <HistoryOutlined style={{ color: 'var(--primary-color)' }} />
             <span>{t('inventoryHistory', { ns: 'product' })}</span>
-            <Badge 
-              count={rawCount} 
-              style={{ backgroundColor: 'var(--primary-color)', opacity: 0.6 }} 
+            <Badge
+              count={rawCount}
+              style={{ backgroundColor: 'var(--primary-color)', opacity: 0.6 }}
               overflowCount={999}
             />
           </Flex>
@@ -332,9 +359,9 @@ const InventoryHistoryContent: React.FC<ProductInventoryHistoryProps> = ({ produ
               size: 'small',
               showSizeChanger: false,
               hideOnSinglePage: false,
-              style: { marginTop: '16px', marginRight: '16px' }
+              style: { marginTop: '16px', marginRight: '16px' },
             }}
-            scroll={{ x: 1000 }}
+            scroll={{ x: 1100 }}
             expandable={{
               expandedRowRender: (record) => (
                 <VariantDetailList variants={record.variants || []} t={t} />
@@ -375,7 +402,7 @@ const InventoryHistoryContent: React.FC<ProductInventoryHistoryProps> = ({ produ
 
 export const ProductInventoryHistory: React.FC<ProductInventoryHistoryProps> = (props) => {
   return (
-    <LazyInView >
+    <LazyInView>
       <InventoryHistoryContent {...props} />
     </LazyInView>
   );
