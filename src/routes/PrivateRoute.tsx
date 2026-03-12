@@ -1,21 +1,23 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAppSelector } from '@/store/hooks';
-import { selectLoggedUser } from '@/modules/auth/slice/authSlice';
 import { useValidateTokenQuery } from '@/modules/auth/api/authApi';
 import { tokenUtil } from '@/utils/token';
 import MainLayout from '@/layouts/MainLayout';
 import { ErrorPage } from '@/components/common/ErrorPage';
 import { AppLoader } from '@/components/common/AppLoader/AppLoader';
-import type { Role } from '@/types';
+import { usePermission } from '@/hooks/usePermission';
 
 interface PrivateRouteProps {
-  allowedRoles: Role[];
+  allowedRoles: string[];
+  requiredPermission?: {
+    module: string;
+    action?: 'view' | 'create' | 'update' | 'delete';
+  };
 }
 
-export const PrivateRoute: React.FC<PrivateRouteProps> = ({ allowedRoles }) => {
+export const PrivateRoute: React.FC<PrivateRouteProps> = ({ allowedRoles, requiredPermission }) => {
   const token = tokenUtil.getToken();
-  const user = useAppSelector(selectLoggedUser);
+  const { user, can, isSuperAdmin } = usePermission();
 
   const { isLoading, isError } = useValidateTokenQuery(undefined, {
     skip: !token || !!user,
@@ -36,14 +38,22 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({ allowedRoles }) => {
     return <Navigate to="/login" replace />;
   }
 
-  const userRoles: Role[] = [];
-  if (user.isSuperAdmin) userRoles.push('superadmin');
-  if (user.isAdmin || user.role?.name?.toLowerCase() === 'admin') userRoles.push('admin');
-  if (typeof user.role === 'string') userRoles.push(user.role as Role);
+  // 1. Check Module Permission first if defined
+  if (requiredPermission) {
+    const { module, action = 'view' } = requiredPermission;
+    if (!can(module, action)) {
+      return <ErrorPage status="403" />;
+    }
+  }
 
-  const hasAccess = allowedRoles.some((role) => userRoles.includes(role));
+  // 2. Fallback to Role-based check (for broad access)
+  const userRoles: string[] = [];
+  if (isSuperAdmin) userRoles.push('superadmin');
+  if (user?.isAdmin || user?.role?.name?.toLowerCase() === 'admin') userRoles.push('admin');
 
-  if (!hasAccess) {
+  const hasRoleAccess = allowedRoles.length === 0 || allowedRoles.some((role) => userRoles.includes(role));
+
+  if (!hasRoleAccess) {
     return <ErrorPage status="403" />;
   }
 

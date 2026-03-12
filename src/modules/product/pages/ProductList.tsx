@@ -11,6 +11,7 @@ import { CachedImage } from '@/components/common/CachedImage/CachedImage';
 import { formatCurrency } from '@/utils/format';
 import { getFullImageUrl } from '@/store/api/uploadApi';
 import { APP_ASSETS } from '@/config/assets';
+import { PermissionGate } from '@/components/common/PermissionGate/PermissionGate';
 import type { Product } from '../data/product.types';
 
 import '../styles/product.less';
@@ -188,12 +189,16 @@ const ProductList = () => {
         align: 'right' as const,
         render: (_: unknown, record: Product) => (
           <Space size="small">
-            <AppButton type="link" onClick={() => goToProductEdit(record._id)}>
-              {t('common.actions.edit', { ns: 'translation' })}
-            </AppButton>
-            <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
-              {t('common.actions.delete', { ns: 'translation' })}
-            </AppButton>
+            <PermissionGate module="product" action="update">
+              <AppButton type="link" onClick={() => goToProductEdit(record._id)}>
+                {t('common.actions.edit', { ns: 'translation' })}
+              </AppButton>
+            </PermissionGate>
+            <PermissionGate module="product" action="delete">
+              <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
+                {t('common.actions.delete', { ns: 'translation' })}
+              </AppButton>
+            </PermissionGate>
           </Space>
         ),
       },
@@ -288,21 +293,25 @@ const ProductList = () => {
                 >
                   {t('status.inactive')}
                 </AppButton>
-                <AppButton
-                  danger
-                  onClick={() => handleBatchDelete(selectedIds, () => setSelectedIds([]))}
-                  loading={isLoading}
-                >
-                  {t('common.actions.deleteSelected', {
-                    ns: 'translation',
-                    count: selectedIds.length,
-                  })}
-                </AppButton>
+                <PermissionGate module="product" action="delete">
+                  <AppButton
+                    danger
+                    onClick={() => handleBatchDelete(selectedIds, () => setSelectedIds([]))}
+                    loading={isLoading}
+                  >
+                    {t('common.actions.deleteSelected', {
+                      ns: 'translation',
+                      count: selectedIds.length,
+                    })}
+                  </AppButton>
+                </PermissionGate>
               </>
             )}
-            <AppButton type="primary" onClick={goToProductCreate}>
-              {t('addProduct')}
-            </AppButton>
+            <PermissionGate module="product" action="create">
+              <AppButton type="primary" onClick={goToProductCreate}>
+                {t('addProduct')}
+              </AppButton>
+            </PermissionGate>
           </Space>
         }
         className="product-card"

@@ -5,13 +5,11 @@ import { PrivateRoute } from './PrivateRoute';
 import AuthLayout from '@/layouts/AuthLayout';
 import { routesArray } from './routeConfig';
 import { PageLoader } from '@/components/common/PageLoader/PageLoader';
-import type { Role } from '@/types';
 import { ErrorPage } from '@/components/common/ErrorPage';
-
 
 const generateRoutes = (): RouteObject[] => {
   const routerRoutes: RouteObject[] = [];
-  const mainRoutesByRole = new Map<string, { roles: Role[], routes: RouteObject[] }>();
+  const mainRoutesByRole = new Map<string, { roles: string[], routes: RouteObject[], requiredPermission?: any }>();
 
   routesArray.forEach((route) => {
     if (route.layout === 'none' || !route.component) return;
@@ -31,14 +29,13 @@ const generateRoutes = (): RouteObject[] => {
       });
     } else if (route.layout === 'main') {
       const roles = route.allowedRoles || ['superadmin', 'admin'];
-      const key = roles.slice().sort().join(',');
+      const key = `${roles.slice().sort().join(',')}-${route.requiredPermission?.module || ''}-${route.requiredPermission?.action || ''}`;
 
       if (!mainRoutesByRole.has(key)) {
-        mainRoutesByRole.set(key, { roles, routes: [] });
+        mainRoutesByRole.set(key, { roles, routes: [], requiredPermission: route.requiredPermission });
       }
 
       mainRoutesByRole.get(key)!.routes.push({
-
         path: route.path.startsWith('/') ? route.path.substring(1) : route.path,
         element
       });
@@ -46,13 +43,13 @@ const generateRoutes = (): RouteObject[] => {
   });
 
 
-  mainRoutesByRole.forEach(({ roles, routes }) => {
+  mainRoutesByRole.forEach(({ roles, routes, requiredPermission }) => {
 
-    const isDefaultGroup = roles.includes('admin') && roles.includes('superadmin');
+    const isDefaultGroup = roles.includes('admin') && roles.includes('superadmin') && !requiredPermission;
 
     routerRoutes.push({
       path: '/',
-      element: <PrivateRoute allowedRoles={roles} />,
+      element: <PrivateRoute allowedRoles={roles} requiredPermission={requiredPermission} />,
       children: [
         ...(isDefaultGroup ? [{ path: '', element: <Navigate to="/dashboard" replace /> }] : []),
         ...routes

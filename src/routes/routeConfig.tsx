@@ -1,6 +1,5 @@
 import React, { lazy } from 'react';
 import * as Icon from '@ant-design/icons';
-import type { Role } from '@/types';
 
 /**
  * @file App route configuration system.
@@ -34,7 +33,11 @@ export interface RouteConfig {
   pather?(...args: Array<any>): string;
   component?: React.ComponentType<any>;
   layout?: 'main' | 'auth' | 'none';
-  allowedRoles?: Role[];
+  allowedRoles?: string[];
+  requiredPermission?: {
+    module: string;
+    action?: 'view' | 'create' | 'update' | 'delete';
+  };
 }
 
 export const routesArray: RouteConfig[] = [
@@ -61,6 +64,7 @@ export const routesArray: RouteConfig[] = [
     icon: <Icon.ShoppingOutlined />,
     layout: 'main',
     allowedRoles: ['superadmin', 'admin'],
+    requiredPermission: { module: 'product', action: 'view' },
     component: lazy(() => import('@/modules/product/pages/ProductList')),
   },
   {
@@ -70,6 +74,7 @@ export const routesArray: RouteConfig[] = [
     icon: <Icon.TagsOutlined />,
     layout: 'main',
     allowedRoles: ['superadmin', 'admin'],
+    requiredPermission: { module: 'category', action: 'view' },
     component: lazy(() => import('@/modules/category/pages/CategoryList')),
   },
   {
@@ -78,6 +83,7 @@ export const routesArray: RouteConfig[] = [
     path: '/categories/create',
     layout: 'main',
     allowedRoles: ['superadmin', 'admin'],
+    requiredPermission: { module: 'category', action: 'create' },
     component: lazy(() => import('@/modules/category/pages/CategoryUpsert')),
   },
   {
@@ -86,6 +92,7 @@ export const routesArray: RouteConfig[] = [
     path: '/categories/edit/:id',
     layout: 'main',
     allowedRoles: ['superadmin', 'admin'],
+    requiredPermission: { module: 'category', action: 'update' },
     component: lazy(() => import('@/modules/category/pages/CategoryUpsert')),
   },
   {
@@ -94,6 +101,7 @@ export const routesArray: RouteConfig[] = [
     path: '/products/create',
     layout: 'main',
     allowedRoles: ['superadmin', 'admin'],
+    requiredPermission: { module: 'product', action: 'create' },
     component: lazy(() => import('@/modules/product/pages/ProductUpsert')),
   },
   {
@@ -102,6 +110,7 @@ export const routesArray: RouteConfig[] = [
     path: '/products/edit/:id',
     layout: 'main',
     allowedRoles: ['superadmin', 'admin'],
+    requiredPermission: { module: 'product', action: 'update' },
     component: lazy(() => import('@/modules/product/pages/ProductUpsert')),
   },
   {
@@ -111,6 +120,7 @@ export const routesArray: RouteConfig[] = [
     icon: <Icon.OrderedListOutlined />,
     layout: 'main',
     allowedRoles: ['superadmin', 'admin'],
+    requiredPermission: { module: 'attribute', action: 'view' },
     component: lazy(() => import('@/modules/attribute/pages/AttributeList')),
   },
   {
