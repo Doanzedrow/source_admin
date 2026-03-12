@@ -264,6 +264,8 @@ const InventoryHistoryContent: React.FC<ProductInventoryHistoryProps> = ({ produ
 
   return (
     <AppCard
+      collapsible
+      defaultCollapsed={true}
       title={
         <Flex justify="space-between" align="center" style={{ width: '100%' }}>
           <Flex gap={8} align="center">
@@ -351,7 +353,7 @@ const InventoryHistoryContent: React.FC<ProductInventoryHistoryProps> = ({ produ
 
 export const ProductInventoryHistory: React.FC<ProductInventoryHistoryProps> = (props) => {
   return (
-    <LazyInView minHeight={400}>
+    <LazyInView >
       <InventoryHistoryContent {...props} />
     </LazyInView>
   );

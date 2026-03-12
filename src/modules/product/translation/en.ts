@@ -48,6 +48,7 @@ export default {
     inactive: "Inactive"
   },
   form: {
+    info: "Product Information",
     name: "Product Name",
     price: "Price",
     description: "Description",

@@ -8,11 +8,7 @@ import { AppMediaUpload } from '@/components/common/AppMediaUpload';
 import { AppTable } from '@/components/common/AppTable';
 import { useProductVariantSelector } from '../hooks/useProductVariantSelector';
 
-/**
- * ProductVariantSelector
- * Management of product specific variants, prices and thumbnails.
- * Enhanced with intelligent duplicate filtering and empty state handling.
- */
+
 export const ProductVariantSelector: React.FC = () => {
   const { 
     t, 
@@ -26,6 +22,8 @@ export const ProductVariantSelector: React.FC = () => {
   return (
     <AppCard 
       className="product-variant-selector-card"
+      collapsible
+      defaultCollapsed={true}
       title={
         <Flex gap={8} align="center">
           <TagsOutlined style={{ color: 'var(--primary-color)' }} />

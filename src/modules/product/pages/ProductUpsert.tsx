@@ -50,7 +50,11 @@ const ProductUpsertForm: React.FC<{
         className="product-upsert-main-container"
         style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
       >
-        <AppCard className="form-container">
+        <AppCard 
+          className="form-container" 
+          collapsible 
+          title={t('form.info', { ns: 'product' })}
+        >
           <ProductForm
             categories={categories}
             isCategoriesLoading={isCategoriesLoading}

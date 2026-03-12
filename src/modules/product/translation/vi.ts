@@ -48,6 +48,7 @@ export default {
     inactive: "Ngừng bán"
   },
   form: {
+    info: "Thông tin sản phẩm",
     name: "Tên sản phẩm",
     price: "Giá",
     description: "Mô tả",
