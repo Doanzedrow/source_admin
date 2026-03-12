@@ -16,8 +16,8 @@ interface AppMediaUploadProps {
   uploadAction?: (file: File) => Promise<any>;
   disabled?: boolean;
   initialValuePath?: string | string[];
+  className?: string;
 }
-
 export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
   value,
   onChange,
@@ -26,6 +26,7 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
   uploadAction,
   disabled = false,
   initialValuePath,
+  className,
 }) => {
   const { t } = useTranslation('translation');
   const [uploadMedia, { isLoading }] = useUploadMediaMutation();
@@ -160,7 +161,7 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
         onRemove={onRemove}
         disabled={disabled || isLoading}
         maxCount={maxCount}
-        className="app-media-upload"
+        className={`app-media-upload ${className || ''}`}
         accept="image/*"
         showUploadList={{
           showPreviewIcon: true,

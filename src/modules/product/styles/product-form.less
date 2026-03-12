@@ -41,6 +41,11 @@
         background-color: transparent;
         border: 1px dashed var(--border-color);
         transition: border-color 0.3s;
+
+        &::before {
+          width: 100% !important;
+          height: 100% !important;
+        }
         
         &:hover {
           border-color: @primary-color;
