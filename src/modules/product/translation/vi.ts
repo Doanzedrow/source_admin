@@ -33,11 +33,15 @@ export default {
   inventoryHistory: "Lịch sử tồn kho",
   shortMorning: "S",
   shortAfternoon: "C",
+  variantDetails: "Chi tiết theo Biến thể",
+  recordedAt: "Ghi nhận",
   filter: {
     keyword: "Tìm theo tên, mã sản phẩm",
     category: "Tất cả danh mục",
     status: "Tất cả trạng thái",
-    reset: "Đặt lại"
+    reset: "Đặt lại",
+    historyBranch: "Tìm theo chi nhánh...",
+    historyDate: "Khoảng ngày"
   },
   status: {
     active: "Đang bán",

@@ -33,11 +33,15 @@ export default {
   inventoryHistory: "Inventory History",
   shortMorning: "M",
   shortAfternoon: "A",
+  variantDetails: "Variant Details",
+  recordedAt: "Recorded",
   filter: {
     keyword: "Search by name, code",
     category: "All Categories",
     status: "All Status",
-    reset: "Reset"
+    reset: "Reset",
+    historyBranch: "Search branch...",
+    historyDate: "Date range"
   },
   status: {
     active: "Active",

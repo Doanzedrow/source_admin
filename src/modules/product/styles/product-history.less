@@ -1,0 +1,124 @@
+@import '@/styles/variables.less';
+
+.product-inventory-history-card {
+  border-radius: @border-radius-lg;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+
+  .ant-card-head {
+    border-bottom: 1px solid fade(@primary-color, 10%);
+    background: linear-gradient(to right, fade(@primary-color, 5%), transparent);
+  }
+
+  .inventory-table {
+    .ant-table {
+      background: transparent;
+    }
+
+    .ant-table-thead > tr > th {
+      background: transparent !important;
+      padding: @space-md @space-sm;
+      font-weight: 600;
+      color: @text-secondary;
+      border-bottom: 1px solid @light-border-color;
+
+      &::before {
+        display: none !important;
+      }
+    }
+
+    .ant-table-tbody > tr > td {
+      padding: @space-md @space-sm;
+      border-bottom: 1px solid @light-border-color;
+    }
+
+    .ant-table-row:hover > td {
+      background-color: fade(@primary-color, 3%) !important;
+    }
+
+    .nested-variant-container {
+      padding: @space-md @space-lg;
+      background: fade(@primary-color, 2%);
+      border-radius: @border-radius-lg;
+      border-left: 3px solid @primary-color;
+      margin: 0 @space-xs @space-md @space-xs;
+      box-shadow:
+        inset 0 2px 12px rgba(0, 0, 0, 0.02),
+        0 1px 3px rgba(0, 0, 0, 0.05);
+      border-top: 1px solid @light-border-color;
+      border-right: 1px solid @light-border-color;
+      border-bottom: 1px solid @light-border-color;
+
+      .nested-header {
+        margin-bottom: @space-md;
+        display: flex;
+        align-items: center;
+        gap: @space-xs;
+
+        .header-line {
+          flex: 1;
+          height: 1px;
+          background: linear-gradient(to right, fade(@text-secondary, 15%), transparent);
+        }
+      }
+
+      .nested-variant-table {
+        background: @light-body-bg;
+        border-radius: @border-radius-sm;
+        border: 1px solid @light-border-color;
+        overflow: hidden;
+
+        .ant-table-thead > tr > th {
+          background: fade(@primary-color, 3%) !important;
+          font-size: 11px;
+          padding: @space-xs @space-sm;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        .ant-table-tbody > tr > td {
+          padding: @space-xs @space-sm;
+          font-size: 13px;
+        }
+      }
+    }
+  }
+
+  .col-highlight {
+    color: @primary-color;
+    font-weight: 600;
+    font-family: var(--font-family-heading) !important;
+  }
+
+  .branch-text {
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  .qty-tag {
+    min-width: 50px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+[data-theme='dark'] {
+  .product-inventory-history-card {
+    .inventory-table {
+      .nested-variant-container {
+        background: fade(@dark-bg, 40%);
+        border-bottom: 1px solid @dark-border-color;
+      }
+    }
+  }
+}

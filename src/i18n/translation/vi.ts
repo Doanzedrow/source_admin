@@ -25,6 +25,7 @@ export default {
   common: {
     yes: "Có",
     no: "Không",
+    noData: "Không có dữ liệu",
     actions: {
       edit: "Sửa",
       delete: "Xóa",
@@ -39,7 +40,16 @@ export default {
       confirm: "Xác nhận",
       reset: "Thiết lập lại",
       upload: "Tải ảnh lên",
+      download: "Tải về",
+      view: "Xem",
+      copy: "Sao chép",
       deleteSelected: "Xóa {{count}} mục đã chọn"
+    },
+    placeholders: {
+      search: "Tìm kiếm...",
+      select: "Vui lòng chọn...",
+      date: "Chọn ngày",
+      dateRange: "Chọn khoảng ngày"
     },
     messages: {
       success: "Thành công",
@@ -48,6 +58,9 @@ export default {
       deleteWarning: "Hành động này không thể hoàn tác. Dữ liệu sẽ bị xóa vĩnh viễn khỏi hệ thống.",
       batchDeleteWarning: "Bạn đang chọn xóa {{count}} mục. Hành động này không thể hoàn tác.",
       noData: "Không có dữ liệu",
+      noResults: "Không tìm thấy kết quả phù hợp",
+      errorOccurred: "Đã xảy ra lỗi, vui lòng thử lại sau",
+      loading: "Đang tải..."
     },
     formats: {
       relativeTime: {
@@ -64,9 +77,13 @@ export default {
       image: "Hình ảnh",
       description: "Mô tả",
       status: "Trạng thái",
+      type: "Loại",
+      all: "Tất cả",
       index: "#",
       action: "Hành động",
-      note: "Ghi chú"
+      note: "Ghi chú",
+      createdAt: "Ngày tạo",
+      updatedAt: "Ngày cập nhật"
     }
   }
 };

@@ -25,6 +25,7 @@ export default {
   common: {
     yes: "Yes",
     no: "No",
+    noData: "No data available",
     actions: {
       edit: "Edit",
       delete: "Delete",
@@ -38,8 +39,17 @@ export default {
       backHome: "Back to Home",
       confirm: "Confirm",
       reset: "Reset",
-      upload: "Upload",
+      upload: "Upload image",
+      download: "Download",
+      view: "View",
+      copy: "Copy",
       deleteSelected: "Delete {{count}} selected"
+    },
+    placeholders: {
+      search: "Search...",
+      select: "Please select...",
+      date: "Select date",
+      dateRange: "Select date range"
     },
     messages: {
       success: "Success",
@@ -48,6 +58,9 @@ export default {
       deleteWarning: "This action cannot be undone. Data will be permanently removed from the system.",
       batchDeleteWarning: "You are about to delete {{count}} items. This action cannot be undone.",
       noData: "No data available",
+      noResults: "No matching results found",
+      errorOccurred: "An error occurred, please try again later",
+      loading: "Loading..."
     },
     formats: {
       relativeTime: {
@@ -61,7 +74,18 @@ export default {
       chart: {
         hourSuffix: "h",
         weekdays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-      }
+      },
+      price: "Price",
+      image: "Image",
+      description: "Description",
+      status: "Status",
+      type: "Type",
+      all: "All",
+      index: "#",
+      action: "Action",
+      note: "Note",
+      createdAt: "Created At",
+      updatedAt: "Updated At"
     }
   }
 };
