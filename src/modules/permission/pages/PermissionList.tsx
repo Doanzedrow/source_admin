@@ -1,5 +1,5 @@
 import React, { useMemo, memo } from 'react';
-import { Tag, Space, Flex, Typography, ConfigProvider } from 'antd';
+import { Tag, Space, Flex, Typography, ConfigProvider, Switch } from 'antd';
 import { SafetyCertificateOutlined } from '@ant-design/icons';
 import { AppCard } from '@/components/common/AppCard';
 import { AppTable } from '@/components/common/AppTable';
@@ -10,8 +10,16 @@ import type { Permission } from '../data/permission.types';
 const { Text } = Typography;
 
 const PermissionList: React.FC = () => {
-  const { permissions, total, isLoading, isFetching, t, goToPermissionCreate, goToPermissionEdit } =
-    usePermissionList();
+  const {
+    permissions,
+    total,
+    isLoading,
+    isFetching,
+    t,
+    handleSwitchStatus,
+    goToPermissionCreate,
+    goToPermissionEdit,
+  } = usePermissionList();
 
   const columns = useMemo(
     () => [
@@ -26,13 +34,29 @@ const PermissionList: React.FC = () => {
         title: t('columns.name'),
         dataIndex: 'name',
         key: 'name',
-        render: (name: string) => <Text strong>{name}</Text>,
+        render: (name: string, record: Permission) => (
+          <Text 
+            strong 
+            onClick={() => goToPermissionEdit(record._id)}
+            className="clickable-code"
+          >
+            {name}
+          </Text>
+        ),
       },
       {
         title: t('columns.module'),
         dataIndex: 'module',
         key: 'module',
-        render: (module: string) => <Tag color="blue">{module}</Tag>,
+        render: (module: string, record: Permission) => (
+          <Tag 
+            color="blue" 
+            style={{ cursor: 'pointer' }} 
+            onClick={() => goToPermissionEdit(record._id)}
+          >
+            {module}
+          </Tag>
+        ),
       },
       {
         title: t('columns.actions'),
@@ -59,16 +83,13 @@ const PermissionList: React.FC = () => {
         dataIndex: 'status',
         key: 'status',
         align: 'center' as const,
-        render: (status: number) => (
-          <Tag
-            color={status === 1 ? 'success' : 'error'}
-            variant="filled"
-            style={{ minWidth: 80, textAlign: 'center' }}
-          >
-            {status === 1
-              ? t('common.active', { ns: 'translation' })
-              : t('common.inactive', { ns: 'translation' })}
-          </Tag>
+        width: 100,
+        render: (status: number, record: Permission) => (
+          <Switch
+            checked={status === 1}
+            size="small"
+            onChange={() => handleSwitchStatus(record._id, status)}
+          />
         ),
       },
       {
@@ -85,7 +106,7 @@ const PermissionList: React.FC = () => {
         ),
       },
     ],
-    [t, goToPermissionEdit]
+    [t, goToPermissionEdit, handleSwitchStatus]
   );
 
   return (
@@ -111,7 +132,7 @@ const PermissionList: React.FC = () => {
         </Flex>
       }
       extra={
-        <AppButton type="primary"  onClick={goToPermissionCreate}>
+        <AppButton type="primary" onClick={goToPermissionCreate}>
           {t('addPermission')}
         </AppButton>
       }
@@ -141,6 +162,13 @@ const PermissionList: React.FC = () => {
               showSizeChanger: false,
               size: 'small',
             }}
+            onRow={(record: Permission) => ({
+              onClick: (e) => {
+                if ((e.target as HTMLElement).closest('.ant-switch, .ant-btn, .ant-checkbox-wrapper')) return;
+                goToPermissionEdit(record._id);
+              },
+              style: { cursor: 'pointer' },
+            })}
           />
         </ConfigProvider>
       </div>
