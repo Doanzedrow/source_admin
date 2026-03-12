@@ -43,6 +43,7 @@ export default {
       download: "Tải về",
       view: "Xem",
       copy: "Sao chép",
+      refresh: "Lấy lại dữ liệu",
       deleteSelected: "Xóa {{count}} mục đã chọn"
     },
     placeholders: {

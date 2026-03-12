@@ -68,7 +68,7 @@ export const useProductList = () => {
   const isCategoryReady =
     !filters.category || (filters.category && categories.some((c) => c.code === filters.category));
 
-  const { data, isLoading, isFetching } = useGetProductListQuery(apiParams, {
+  const { data, isLoading, isFetching, refetch } = useGetProductListQuery(apiParams, {
     skip: !!filters.category && (isCategoriesLoading || !isCategoryReady),
   });
 
@@ -222,6 +222,7 @@ export const useProductList = () => {
 
   return {
     data: rawData,
+    refetch,
     isLoading: isLoading || isDeleting || isBatchDeleting || isBatchUpdating || isCategoriesLoading,
     isFetching,
     isReady,

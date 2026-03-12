@@ -16,6 +16,7 @@ const { Text } = Typography;
 const AttributeList = () => {
   const {
     data,
+    refetch,
     isLoading,
     isFetching,
     isReady,
@@ -147,7 +148,11 @@ const AttributeList = () => {
       <SEO title={t('title')} />
 
       <div className="sticky-filter">
-        <AppFilter onReset={resetFilters} isLoading={isFetching && data.length > 0}>
+        <AppFilter 
+          onReset={resetFilters} 
+          onRefresh={refetch}
+          isLoading={isFetching && data.length > 0}
+        >
           <Col xs={24} md={12}>
             <AppSearchInput
               placeholder={t('filter.keyword')}

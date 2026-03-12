@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState, useEffect, useDeferredValue } from 'react';
+import { useMemo, useCallback, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppNotify } from '@/hooks/useAppNotify';
 import { useAppConfirm } from '@/hooks/useAppConfirm';
@@ -40,12 +40,11 @@ export const useAttributeList = () => {
     return params;
   }, [filters]);
 
-  const { data, isLoading, isFetching } = useGetAttributeListQuery(apiParams);
+  const { data, isLoading, isFetching, refetch } = useGetAttributeListQuery(apiParams);
   const [deleteAttribute, { isLoading: isDeleting }] = useDeleteAttributeMutation();
   const [batchDeleteAttributes, { isLoading: isBatchDeleting }] = useBatchDeleteAttributesMutation();
 
   const rawData = data?.result?.data || [];
-  const deferredData = useDeferredValue(rawData);
 
   const handlePageChange = useCallback(
     (page: number, pageSize?: number) => {
@@ -120,7 +119,8 @@ export const useAttributeList = () => {
   );
 
   return {
-    data: deferredData,
+    data: rawData,
+    refetch,
     isLoading: isLoading || isDeleting || isBatchDeleting,
     isFetching,
     isReady,

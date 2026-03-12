@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Space, Row, Col } from 'antd';
-import { FilterOutlined, ReloadOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
+import { FilterOutlined, ReloadOutlined, DownOutlined, UpOutlined, SyncOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { AppButton } from '../AppButton';
 import { AppCard } from '../AppCard';
@@ -13,12 +13,12 @@ interface AppFilterProps {
   isLoading?: boolean;
 }
 
-export const AppFilter: React.FC<AppFilterProps> = ({ 
-  children, 
-  extra, 
-  onReset, 
+export const AppFilter: React.FC<AppFilterProps> = ({
+  children,
+  extra,
+  onReset,
   onRefresh,
-  isLoading 
+  isLoading,
 }) => {
   const { t } = useTranslation('translation');
   const [isExpanded, setIsExpanded] = useState(false);
@@ -52,6 +52,15 @@ export const AppFilter: React.FC<AppFilterProps> = ({
                 >
                   <FilterOutlined /> {t('common.actions.filter')}
                 </AppButton>
+              )}
+
+              {onRefresh && (
+                <AppButton
+                  icon={<SyncOutlined />}
+                  onClick={onRefresh}
+                  loading={isLoading}
+                  title={t('common.actions.refresh')}
+                />
               )}
 
               <AppButton icon={<ReloadOutlined />} onClick={onReset} loading={isLoading}>

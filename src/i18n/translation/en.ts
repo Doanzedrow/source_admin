@@ -43,6 +43,7 @@ export default {
       download: "Download",
       view: "View",
       copy: "Copy",
+      refresh: "Refresh",
       deleteSelected: "Delete {{count}} selected"
     },
     placeholders: {

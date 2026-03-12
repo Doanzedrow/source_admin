@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect, useDeferredValue } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppNotify } from '@/hooks/useAppNotify';
 import { useAppConfirm } from '@/hooks/useAppConfirm';
@@ -34,7 +34,7 @@ export const useCategoryList = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const { data, isLoading, isFetching } = useGetCategoryListQuery(filters);
+  const { data, isLoading, isFetching, refetch } = useGetCategoryListQuery(filters);
   const [switchStatus] = useSwitchCategoryStatusMutation();
   const [deleteCategory, { isLoading: isDeleting }] = useDeleteCategoryMutation();
   const [batchDeleteCategories, { isLoading: isBatchDeleting }] = useBatchDeleteCategoriesMutation();
@@ -116,10 +116,10 @@ export const useCategoryList = () => {
   }), [selectedIds]);
 
   const rawData = data?.result?.data || [];
-  const deferredData = useDeferredValue(rawData);
 
   return {
-    data: deferredData,
+    data: rawData,
+    refetch,
     isLoading: isLoading || isDeleting || isBatchDeleting,
     isFetching,
     isReady,
