@@ -67,12 +67,34 @@ export interface Product {
   inventoryDetails: any[];
 }
 
+export interface InventoryHistoryVariantItem {
+  attributeId: string;
+  attributeName: string;
+  variantId: string;
+  variantName: string;
+}
+
+export interface InventoryHistoryVariant {
+  items: InventoryHistoryVariantItem[];
+  openingQty: number;
+  closingQty: number;
+  saleQty: number;
+  morningSaleQty: number;
+  afternoonSaleQty: number;
+  expectedQty: number;
+  produceQty: number;
+  cancelQty: number;
+  returnQty?: number;
+  importQty?: number;
+  exportQty?: number;
+}
+
 export interface InventoryHistory {
   code: string;
   name: string;
   date: string;
   branch: string;
-  variants: any[];
+  variants: InventoryHistoryVariant[];
   openingQty: number;
   closingQty: number;
   saleQty: number;

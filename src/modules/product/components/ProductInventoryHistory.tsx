@@ -49,7 +49,7 @@ export const ProductInventoryHistory: React.FC<ProductInventoryHistoryProps> = (
       align: 'center' as const,
       width: 100,
       render: (val: number) => (
-        <Tag color={val >= 0 ? 'blue' : 'error'} bordered={false}>
+        <Tag color={val >= 0 ? 'blue' : 'error'} variant="filled">
           {val}
         </Tag>
       ),
@@ -117,6 +117,109 @@ export const ProductInventoryHistory: React.FC<ProductInventoryHistoryProps> = (
     },
   ], [t]);
 
+  const variantColumns = useMemo(() => [
+    {
+      title: t('form.variant', { ns: 'attribute', defaultValue: 'Biến thể' }),
+      dataIndex: 'items',
+      key: 'variant',
+      render: (items: any[]) => (
+        <Flex gap={6} wrap="wrap" align="center">
+          {items.map((item, index) => (
+            <React.Fragment key={item.variantId}>
+              <Flex align="center" gap={4}>
+                <Text type="secondary" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  {item.attributeName}
+                </Text>
+                <Tag 
+                  color="blue" 
+                  variant="filled" 
+                  style={{ 
+                    borderRadius: '4px', 
+                    margin: 0, 
+                    backgroundColor: 'var(--primary-color-1)', 
+                    color: 'var(--primary-color)',
+                    fontSize: '12px',
+                    fontWeight: 500
+                  }}
+                >
+                  {item.variantName}
+                </Tag>
+              </Flex>
+              {index < items.length - 1 && <Text type="secondary" style={{ color: '#d9d9d9' }}>|</Text>}
+            </React.Fragment>
+          ))}
+        </Flex>
+      ),
+    },
+    {
+      title: t('columns.openingQty', { ns: 'product', defaultValue: 'Đầu kỳ' }),
+      dataIndex: 'openingQty',
+      key: 'openingQty',
+      align: 'center' as const,
+      width: 90,
+      render: (val: number) => (
+        <Text style={{ fontSize: '13px', color: val < 0 ? '#ff4d4f' : '#8c8c8c' }}>{val}</Text>
+      ),
+    },
+    {
+      title: t('columns.produceQty', { ns: 'product', defaultValue: 'Nhập' }),
+      dataIndex: 'produceQty',
+      key: 'produceQty',
+      align: 'center' as const,
+      width: 90,
+      render: (val: number) => (
+        <Text strong={val > 0} style={{ fontSize: '13px', color: val > 0 ? '#52c41a' : '#bfbfbf' }}>
+          {val > 0 ? `+${val}` : val}
+        </Text>
+      ),
+    },
+    {
+      title: t('columns.saleQty', { ns: 'product', defaultValue: 'Bán' }),
+      dataIndex: 'saleQty',
+      key: 'saleQty',
+      align: 'center' as const,
+      width: 130,
+      render: (val: number, record: any) => (
+        <Flex vertical align="center" gap={0}>
+          <Text strong type="danger" style={{ fontSize: '13px' }}>{val > 0 ? `-${val}` : val}</Text>
+          {(record.morningSaleQty > 0 || record.afternoonSaleQty > 0) && (
+            <Text type="secondary" style={{ fontSize: '10px', opacity: 0.7 }}>
+              {record.morningSaleQty}{t('shortMorning', { defaultValue: 'S' })} · {record.afternoonSaleQty}{t('shortAfternoon', { defaultValue: 'C' })}
+            </Text>
+          )}
+        </Flex>
+      ),
+    },
+    {
+      title: t('columns.cancelQty', { ns: 'product', defaultValue: 'Hủy' }),
+      dataIndex: 'cancelQty',
+      key: 'cancelQty',
+      align: 'center' as const,
+      width: 90,
+      render: (val: number) => (
+        <Text style={{ fontSize: '13px', color: val > 0 ? '#faad14' : '#bfbfbf' }}>
+          {val > 0 ? `-${val}` : val}
+        </Text>
+      ),
+    },
+    {
+      title: t('columns.closingQty', { ns: 'product', defaultValue: 'Cuối & Dự kiến' }),
+      key: 'closing_expected',
+      align: 'center' as const,
+      width: 120,
+      render: (_: any, record: any) => (
+        <Flex gap={8} align="center" justify="center">
+          <Text strong style={{ fontSize: '13px', color: record.closingQty < 0 ? '#ff4d4f' : '#141414' }}>
+            {record.closingQty}
+          </Text>
+          <Text type="secondary" style={{ fontSize: '11px' }}>
+            ({record.expectedQty})
+          </Text>
+        </Flex>
+      ),
+    },
+  ], [t]);
+
   if (isLoading) return <AppLoader />;
 
   return (
@@ -132,11 +235,40 @@ export const ProductInventoryHistory: React.FC<ProductInventoryHistoryProps> = (
     >
       <AppTable
         columns={columns}
-        dataSource={data?.result || []}
+        dataSource={data || []}
         rowKey={(record) => `${record.date}-${record.branch}`}
         pagination={false}
         hidePagination
         scroll={{ x: 1000 }}
+        expandable={{
+          expandedRowRender: (record) => (
+            <div style={{ 
+              padding: '16px 20px', 
+              backgroundColor: '#fafafa', 
+              borderRadius: '0 0 8px 8px',
+              borderLeft: '4px solid var(--primary-color)',
+              margin: '0 8px 8px 8px',
+              boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.03)'
+            }}>
+              <div style={{ marginBottom: '12px' }}>
+                <Text strong style={{ fontSize: '12px', color: '#8c8c8c', textTransform: 'uppercase' }}>
+                  Chi tiết theo Biến thể
+                </Text>
+              </div>
+              <AppTable
+                columns={variantColumns}
+                dataSource={record.variants || []}
+                rowKey={(v, index) => `${index}-${v.items.map(i => i.variantId).join('-')}`}
+                pagination={false}
+                hidePagination
+                size="small"
+                className="nested-variant-table"
+              />
+            </div>
+          ),
+          rowExpandable: (record) => record.variants && record.variants.length > 0,
+          columnWidth: 48
+        }}
       />
     </AppCard>
   );

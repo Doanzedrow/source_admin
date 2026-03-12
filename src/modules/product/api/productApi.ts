@@ -122,7 +122,7 @@ export const productApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: TAG_TYPES.PRODUCT, id: 'LIST' }],
     }),
-    getInventoryHistories: builder.query<ApiResponse<InventoryHistory[]>, string>({
+    getInventoryHistories: builder.query<InventoryHistory[], string>({
       query: (id) => ({
         url: generateEndpointVersionning(endpoints.inventoryHistories).replace(PARAMS_KEY, id),
         method: HTTP_METHOD.GET,

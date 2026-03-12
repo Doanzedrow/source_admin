@@ -74,7 +74,7 @@ const AttributeList = () => {
       render: (val: boolean, record: Attribute) =>
         val ? (
           <Flex vertical gap={2} align="center">
-            <Tag color="blue" style={{ width: 'fit-content' }}>
+            <Tag color="blue" variant="filled" style={{ width: 'fit-content' }}>
               {t('common.yes', { ns: 'translation' })}
             </Tag>
             {record.maxSelect > 0 && (
@@ -93,7 +93,7 @@ const AttributeList = () => {
       key: 'variants',
       align: 'center' as const,
       render: (variants: any[]) => (
-        <Tag color="purple" style={{ borderRadius: '12px' }}>
+        <Tag color="purple" variant="filled" style={{ borderRadius: '12px' }}>
           {(variants || []).length}
         </Tag>
       ),
@@ -105,7 +105,7 @@ const AttributeList = () => {
       align: 'center' as const,
       render: (val: boolean) =>
         val ? (
-          <Tag color="orange">{t('common.yes', { ns: 'translation' })}</Tag>
+          <Tag color="orange" variant="filled">{t('common.yes', { ns: 'translation' })}</Tag>
         ) : (
           <Text type="secondary">-</Text>
         ),
@@ -116,7 +116,7 @@ const AttributeList = () => {
       key: 'status',
       align: 'center' as const,
       render: (status: number) => (
-        <Tag color={status === 1 ? 'success' : 'default'} style={{ borderRadius: '12px' }}>
+        <Tag color={status === 1 ? 'success' : 'default'} variant="filled" style={{ borderRadius: '12px' }}>
           {status === 1 ? t('status.active') : t('status.inactive')}
         </Tag>
       ),

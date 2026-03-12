@@ -157,6 +157,7 @@ const ProductList = () => {
         render: (count: number) => (
           <Tag
             color={count > 10 ? 'success' : 'error'}
+            variant="filled"
             style={{
               margin: 0,
               borderRadius: '12px',

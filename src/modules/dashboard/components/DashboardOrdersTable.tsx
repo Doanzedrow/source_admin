@@ -99,10 +99,10 @@ export const DashboardOrdersTable: React.FC<DashboardOrdersTableProps> = ({
         if (status === undefined || status === null) return '--';
         
         const statusConfig = getOrderStatus(status as number);
-        if (!statusConfig) return <Tag color="blue">{status}</Tag>;
+        if (!statusConfig) return <Tag color="blue" variant="filled">{status}</Tag>;
         
         return (
-          <Tag color={statusConfig.backgroundColor} style={{ color: statusConfig.textColor }}>
+          <Tag color={statusConfig.backgroundColor} variant="filled" style={{ color: statusConfig.textColor }}>
             {t(`orders.status.${statusConfig.name}`)}
           </Tag>
         );
@@ -116,10 +116,10 @@ export const DashboardOrdersTable: React.FC<DashboardOrdersTableProps> = ({
         if (val === undefined || val === null) return '--';
 
         const paymentConfig = getPaymentStatus(val as number);
-        if (!paymentConfig) return <Tag color="cyan">{val}</Tag>;
+        if (!paymentConfig) return <Tag color="cyan" variant="filled">{val}</Tag>;
         
         return (
-          <Tag color={paymentConfig.backgroundColor} style={{ color: paymentConfig.textColor }}>
+          <Tag color={paymentConfig.backgroundColor} variant="filled" style={{ color: paymentConfig.textColor }}>
             {t(`orders.paymentStatus.${paymentConfig.name}`)}
           </Tag>
         );
