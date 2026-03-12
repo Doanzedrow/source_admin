@@ -12,8 +12,13 @@ export const usePermissionList = () => {
     return data?.result || [];
   }, [data]);
 
+  const total = useMemo(() => {
+    return permissions.length;
+  }, [permissions]);
+
   return {
     permissions,
+    total,
     isLoading,
     isFetching,
     refetch,
