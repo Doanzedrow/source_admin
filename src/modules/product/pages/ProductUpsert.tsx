@@ -9,6 +9,7 @@ import { AppButton } from '@/components/common/AppButton';
 import { rc, RouteKey } from '@/routes/routeConfig';
 import { ProductForm } from '../components/ProductForm';
 import { ProductVariantSelector } from '../components/ProductVariantSelector';
+import { ProductInventoryHistory } from '../components/ProductInventoryHistory';
 import { useProductUpsert } from '../hooks/useProductUpsert';
 import { useProductForm } from '../hooks/useProductForm';
 
@@ -59,6 +60,8 @@ const ProductUpsertForm: React.FC<{
         </AppCard>
 
         <ProductVariantSelector />
+
+        {id && <ProductInventoryHistory productId={id} />}
 
         <FormActions isSticky={true} style={{ margin: 0 }}>
           <AppButton onClick={goToProducts} size="large">

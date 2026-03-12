@@ -66,3 +66,19 @@ export interface Product {
   variants: any[];
   inventoryDetails: any[];
 }
+
+export interface InventoryHistory {
+  code: string;
+  name: string;
+  date: string;
+  branch: string;
+  variants: any[];
+  openingQty: number;
+  closingQty: number;
+  saleQty: number;
+  morningSaleQty: number;
+  afternoonSaleQty: number;
+  expectedQty: number;
+  produceQty: number;
+  cancelQty: number;
+}

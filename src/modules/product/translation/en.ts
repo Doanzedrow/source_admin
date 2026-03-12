@@ -20,8 +20,19 @@ export default {
     stock: "StockCount",
     index: "#",
     tax: "Tax (%)",
-    totalPrice: "Total Price (incl. tax)"
+    totalPrice: "Total Price (incl. tax)",
+    date: "Date",
+    branch: "Branch",
+    openingQty: "Opening",
+    produceQty: "Produce",
+    saleQty: "Sale",
+    cancelQty: "Cancel",
+    closingQty: "Closing",
+    expectedQty: "Expected"
   },
+  inventoryHistory: "Inventory History",
+  shortMorning: "M",
+  shortAfternoon: "A",
   filter: {
     keyword: "Search by name, code",
     category: "All Categories",

@@ -4,7 +4,7 @@ import type { ApiResponse, PaginatedResult } from '@/types/api';
 import type { Endpoint } from '@/utils/api';
 import { generateEndpointVersionning, PARAMS_KEY, providesList, cleanParams } from '@/utils/api';
 import { TAG_TYPES } from '@/store/tags';
-import type { Product } from '../data/product.types';
+import type { Product, InventoryHistory } from '../data/product.types';
 
 const MODULE_NAME = 'product';
 
@@ -16,7 +16,8 @@ const endpoints: Record<
   | 'getById'
   | 'delete'
   | 'batchDelete'
-  | 'editMultiple',
+  | 'editMultiple'
+  | 'inventoryHistories',
   Endpoint
 > = {
   listPagination: {
@@ -42,6 +43,9 @@ const endpoints: Record<
   },
   editMultiple: {
     endpoint: `/${MODULE_NAME}/multiple`,
+  },
+  inventoryHistories: {
+    endpoint: `/${MODULE_NAME}/inventory-histories/${PARAMS_KEY}`,
   },
 };
 
@@ -118,6 +122,12 @@ export const productApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: TAG_TYPES.PRODUCT, id: 'LIST' }],
     }),
+    getInventoryHistories: builder.query<ApiResponse<InventoryHistory[]>, string>({
+      query: (id) => ({
+        url: generateEndpointVersionning(endpoints.inventoryHistories).replace(PARAMS_KEY, id),
+        method: HTTP_METHOD.GET,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -131,4 +141,5 @@ export const {
   useDeleteProductMutation,
   useBatchDeleteProductsMutation,
   useBatchUpdateStatusMutation,
+  useGetInventoryHistoriesQuery,
 } = productApi;

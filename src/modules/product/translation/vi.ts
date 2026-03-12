@@ -20,8 +20,19 @@ export default {
     stock: "Số lượng",
     index: "#",
     tax: "Thuế (%)",
-    totalPrice: "Tổng tiền (sau thuế)"
+    totalPrice: "Tổng tiền (sau thuế)",
+    date: "Ngày",
+    branch: "Chi nhánh",
+    openingQty: "Đầu kỳ",
+    produceQty: "Nhập/Sản xuất",
+    saleQty: "Tổng bán",
+    cancelQty: "Hủy",
+    closingQty: "Cuối kỳ",
+    expectedQty: "Dự kiến"
   },
+  inventoryHistory: "Lịch sử tồn kho",
+  shortMorning: "S",
+  shortAfternoon: "C",
   filter: {
     keyword: "Tìm theo tên, mã sản phẩm",
     category: "Tất cả danh mục",
