@@ -1,3 +1,5 @@
+import type { Branch } from '@/modules/branch/data/branch.types';
+
 export interface PermissionAction {
   view: boolean;
   create: boolean;
@@ -11,12 +13,6 @@ export interface Permission {
   module: string;
   actions: PermissionAction;
   status: number;
-}
-
-export interface Branch {
-  _id: string;
-  code: string;
-  name: string;
 }
 
 export interface UserRole {

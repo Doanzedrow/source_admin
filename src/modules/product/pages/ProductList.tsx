@@ -13,6 +13,7 @@ import { getFullImageUrl } from '@/store/api/uploadApi';
 import { APP_ASSETS } from '@/config/assets';
 import { PermissionGate } from '@/components/common/PermissionGate/PermissionGate';
 import { usePermission } from '@/hooks/usePermission';
+import { BranchSelect } from '@/components/common/AppSelect/BranchSelect';
 import type { Product } from '../data/product.types';
 
 import '../styles/product.less';
@@ -36,6 +37,7 @@ const ProductList = () => {
     handleSearch,
     handleCategoryChange,
     handleStatusChange,
+    handleBranchChange,
     params,
     resetFilters,
     total,
@@ -48,6 +50,7 @@ const ProductList = () => {
     statusOptions,
     localCategory,
     localStatus,
+    localBranchId,
     goToProductCreate,
     goToProductEdit,
   } = useProductList();
@@ -250,7 +253,7 @@ const ProductList = () => {
           onRefresh={refetch}
           isLoading={isFetching}
         >
-          <Col xs={24} sm={12} md={10} lg={10}>
+          <Col xs={24} sm={12} md={8} lg={8}>
             <AppSearchInput
               placeholder={t('filter.keyword')}
               value={params.keyword}
@@ -258,7 +261,16 @@ const ProductList = () => {
               onSearch={handleSearch}
             />
           </Col>
-          <Col xs={12} sm={6} md={6} lg={6}>
+          {isSuperAdmin && (
+            <Col xs={12} sm={6} md={5} lg={5}>
+              <BranchSelect 
+                value={localBranchId}
+                onChange={handleBranchChange}
+                placeholder={t('filter.branch', { defaultValue: 'Tất cả chi nhánh' })}
+              />
+            </Col>
+          )}
+          <Col xs={12} sm={6} md={5} lg={5}>
             <Select
               style={{ width: '100%' }}
               placeholder={t('filter.category')}

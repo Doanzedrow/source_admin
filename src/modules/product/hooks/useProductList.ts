@@ -26,6 +26,7 @@ export const useProductList = () => {
     keyword: '',
     category: undefined as string | undefined,
     status: undefined as number | undefined,
+    branchId: undefined as string | undefined,
   });
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -107,7 +108,14 @@ export const useProductList = () => {
     },
     [setFilters]
   );
-
+  
+  const handleBranchChange = useCallback(
+    (val: string) => {
+      setFilters({ branchId: val, page: 1 });
+    },
+    [setFilters]
+  );
+  
   const handleDelete = useCallback(
     (id: string) => {
       confirmDelete({
@@ -236,6 +244,7 @@ export const useProductList = () => {
     handleSearch,
     handleCategoryChange,
     handleStatusChange,
+    handleBranchChange,
     params: filters,
     setFilters,
     resetFilters,
@@ -250,6 +259,7 @@ export const useProductList = () => {
     statusOptions,
     localCategory: filters.category,
     localStatus: filters.status,
+    localBranchId: filters.branchId,
     goToProductCreate,
     goToProductEdit,
   };

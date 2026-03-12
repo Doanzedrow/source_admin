@@ -10,6 +10,7 @@ import { AppFilter } from '@/components/common/AppFilter/AppFilter';
 import { AppSearchInput } from '@/components/common/AppInput/AppSearchInput';
 import { PermissionGate } from '@/components/common/PermissionGate/PermissionGate';
 import { usePermission } from '@/hooks/usePermission';
+import { BranchSelect } from '@/components/common/AppSelect/BranchSelect';
 
 import '../styles/category.less';
 
@@ -30,6 +31,7 @@ const CategoryList = () => {
     resetFilters,
     handlePageChange, 
     handleSearch,
+    handleBranchChange,
     total,
     t,
     rowSelection,
@@ -173,6 +175,15 @@ const CategoryList = () => {
               onSearch={handleSearch}
             />
           </Col>
+          {isSuperAdmin && (
+            <Col xs={24} sm={8} md={6} lg={6}>
+              <BranchSelect 
+                value={params.branchId}
+                onChange={handleBranchChange}
+                placeholder={t('filter.branch', { defaultValue: 'Tất cả chi nhánh' })}
+              />
+            </Col>
+          )}
         </AppFilter>
       </div>
 

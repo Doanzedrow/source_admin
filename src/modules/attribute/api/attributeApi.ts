@@ -45,7 +45,7 @@ export const attributeApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAttributeList: builder.query<
       ApiResponse<PaginatedResult<Attribute>>, 
-      { page?: number; page_size?: number; keyword?: string; status?: number }
+      { page?: number; page_size?: number; keyword?: string; status?: number; branchId?: string }
     >({
       query: (params) => ({
         url: generateEndpointVersionning(endpoints.listPagination),

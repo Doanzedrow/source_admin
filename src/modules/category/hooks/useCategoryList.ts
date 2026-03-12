@@ -23,6 +23,7 @@ export const useCategoryList = () => {
     page_size: DEFAULT_PAGE_SIZE,
     keyword: '',
     status: undefined as number | undefined,
+    branchId: undefined as string | undefined,
   });
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -48,6 +49,10 @@ export const useCategoryList = () => {
 
   const handleSearch = useCallback((val: string) => {
     setFilters({ keyword: val, page: 1 });
+  }, [setFilters]);
+
+  const handleBranchChange = useCallback((val: string) => {
+    setFilters({ branchId: val, page: 1 });
   }, [setFilters]);
 
   const handleSwitchStatus = useCallback(async (id: string, currentStatus: number) => {
@@ -128,6 +133,7 @@ export const useCategoryList = () => {
     handleBatchDelete,
     handleSwitchStatus,
     handleSearch,
+    handleBranchChange,
     params: filters,
     setFilters,
     resetFilters,

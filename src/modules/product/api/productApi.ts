@@ -53,7 +53,7 @@ export const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getProductList: builder.query<
       ApiResponse<PaginatedResult<Product>>, 
-      { page?: number; page_size?: number; keyword?: string; category?: string; status?: number }
+      { page?: number; page_size?: number; keyword?: string; category?: string; status?: number; branchId?: string }
     >({
       query: (params) => ({
         url: generateEndpointVersionning(endpoints.listPagination),

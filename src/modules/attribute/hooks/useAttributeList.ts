@@ -22,6 +22,7 @@ export const useAttributeList = () => {
     page_size: DEFAULT_PAGE_SIZE,
     keyword: '',
     status: undefined as number | undefined,
+    branchId: undefined as string | undefined,
   });
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -39,6 +40,10 @@ export const useAttributeList = () => {
     }
     return params;
   }, [filters]);
+
+  const handleBranchChange = useCallback((val: string) => {
+    setFilters({ branchId: val, page: 1 });
+  }, [setFilters]);
 
   const { data, isLoading, isFetching, refetch } = useGetAttributeListQuery(apiParams);
   const [deleteAttribute, { isLoading: isDeleting }] = useDeleteAttributeMutation();
@@ -131,6 +136,7 @@ export const useAttributeList = () => {
     resetFilters,
     handlePageChange,
     handleSearch,
+    handleBranchChange,
     total: data?.result?.pagination?.total || 0,
     t,
     rowSelection,

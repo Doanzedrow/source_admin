@@ -37,7 +37,7 @@ const endpoints: Record<'listPagination' | 'switchStatus' | 'create' | 'edit' | 
 
 export const categoryApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getCategoryList: builder.query<ApiResponse<PaginatedResult<Category>>, { page?: number; page_size?: number }>({
+    getCategoryList: builder.query<ApiResponse<PaginatedResult<Category>>, { page?: number; page_size?: number; keyword?: string; status?: number; branchId?: string }>({
       query: (params) => ({
         url: generateEndpointVersionning(endpoints.listPagination),
         method: HTTP_METHOD.GET,

@@ -9,6 +9,7 @@ import { AppFilter } from '@/components/common/AppFilter/AppFilter';
 import { AppSearchInput } from '@/components/common/AppInput/AppSearchInput';
 import { PermissionGate } from '@/components/common/PermissionGate/PermissionGate';
 import { usePermission } from '@/hooks/usePermission';
+import { BranchSelect } from '@/components/common/AppSelect/BranchSelect';
 import type { Attribute } from '../data/attribute.types';
 
 import '../styles/attribute.less';
@@ -27,6 +28,7 @@ const AttributeList = () => {
     params,
     handlePageChange,
     handleSearch,
+    handleBranchChange,
     resetFilters,
     total,
     t,
@@ -191,6 +193,15 @@ const AttributeList = () => {
               onSearch={handleSearch}
             />
           </Col>
+          {isSuperAdmin && (
+            <Col xs={24} md={6}>
+              <BranchSelect 
+                value={params.branchId}
+                onChange={handleBranchChange}
+                placeholder={t('filter.branch', { defaultValue: 'Tất cả chi nhánh' })}
+              />
+            </Col>
+          )}
         </AppFilter>
       </div>
 
