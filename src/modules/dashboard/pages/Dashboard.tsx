@@ -108,7 +108,7 @@ const Dashboard = () => {
       </Row>
 
       {isOrdersReady && (
-        <LazyInView minHeight={400} rootMargin="100px 0px">
+        <LazyInView rootMargin="100px 0px">
           <Suspense fallback={<OrdersFallback />}>
             <DashboardOrdersLazy />
           </Suspense>

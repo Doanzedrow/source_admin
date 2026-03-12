@@ -4,6 +4,7 @@ import { SafetyCertificateOutlined } from '@ant-design/icons';
 import { AppCard } from '@/components/common/AppCard';
 import { AppTable } from '@/components/common/AppTable';
 import { AppButton } from '@/components/common/AppButton';
+import { SEO } from '@/components/common/SEO/SEO';
 import { usePermissionList } from '../hooks/usePermissionList';
 import type { Permission } from '../data/permission.types';
 
@@ -110,69 +111,73 @@ const PermissionList: React.FC = () => {
   );
 
   return (
-    <AppCard
-      title={
-        <Flex align="center" gap={8}>
-          <SafetyCertificateOutlined style={{ color: 'var(--primary-color)' }} />
-          <span>{t('permissionList')}</span>
-          <Tag
-            color="blue"
-            style={{
-              margin: 0,
-              borderRadius: '12px',
-              padding: '0 8px',
-              backgroundColor: 'rgba(24, 144, 255, 0.1)',
-              color: '#1890ff',
-              border: 'none',
-              fontWeight: 600,
+    <div className="permission-list-page">
+      <SEO title={t('permissionList')} />
+      
+      <AppCard
+        title={
+          <Flex align="center" gap={8}>
+            <SafetyCertificateOutlined style={{ color: 'var(--primary-color)' }} />
+            <span>{t('permissionList')}</span>
+            <Tag
+              color="blue"
+              style={{
+                margin: 0,
+                borderRadius: '12px',
+                padding: '0 8px',
+                backgroundColor: 'rgba(24, 144, 255, 0.1)',
+                color: '#1890ff',
+                border: 'none',
+                fontWeight: 600,
+              }}
+            >
+              {total}
+            </Tag>
+          </Flex>
+        }
+        extra={
+          <AppButton type="primary" onClick={goToPermissionCreate}>
+            {t('addPermission')}
+          </AppButton>
+        }
+        className="permission-card"
+      >
+        <div style={{ position: 'relative', minHeight: '400px' }}>
+          <ConfigProvider
+            theme={{
+              components: {
+                Table: {
+                  headerBg: 'transparent',
+                  headerColor: 'var(--text-secondary)',
+                  headerBorderRadius: 8,
+                },
+              },
             }}
           >
-            {total}
-          </Tag>
-        </Flex>
-      }
-      extra={
-        <AppButton type="primary" onClick={goToPermissionCreate}>
-          {t('addPermission')}
-        </AppButton>
-      }
-      className="permission-card"
-    >
-      <div style={{ position: 'relative', minHeight: '400px' }}>
-        <ConfigProvider
-          theme={{
-            components: {
-              Table: {
-                headerBg: 'transparent',
-                headerColor: 'var(--text-secondary)',
-                headerBorderRadius: 8,
-              },
-            },
-          }}
-        >
-          <AppTable
-            className="permission-table"
-            columns={columns}
-            dataSource={permissions}
-            rowKey="_id"
-            loading={isLoading || isFetching}
-            showSkeleton={isLoading && permissions.length === 0}
-            pagination={{
-              pageSize: 20,
-              showSizeChanger: false,
-              size: 'small',
-            }}
-            onRow={(record: Permission) => ({
-              onClick: (e) => {
-                if ((e.target as HTMLElement).closest('.ant-switch, .ant-btn, .ant-checkbox-wrapper')) return;
-                goToPermissionEdit(record._id);
-              },
-              style: { cursor: 'pointer' },
-            })}
-          />
-        </ConfigProvider>
-      </div>
-    </AppCard>
+            <AppTable
+              className="permission-table"
+              columns={columns}
+              dataSource={permissions}
+              rowKey="_id"
+              loading={isLoading || isFetching}
+              showSkeleton={isLoading && permissions.length === 0}
+              pagination={{
+                pageSize: 20,
+                showSizeChanger: false,
+                size: 'small',
+              }}
+              onRow={(record: Permission) => ({
+                onClick: (e) => {
+                  if ((e.target as HTMLElement).closest('.ant-switch, .ant-btn, .ant-checkbox-wrapper')) return;
+                  goToPermissionEdit(record._id);
+                },
+                style: { cursor: 'pointer' },
+              })}
+            />
+          </ConfigProvider>
+        </div>
+      </AppCard>
+    </div>
   );
 };
 

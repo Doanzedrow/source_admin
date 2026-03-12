@@ -31,7 +31,7 @@
   flex-shrink: 0;
   line-height: normal;
   box-sizing: border-box;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03); 
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   border-bottom: 1px solid var(--border-color);
   z-index: 1000;
   padding: 0 var(--space-xl) !important;
@@ -54,23 +54,34 @@
 
 .layout-content-wrapper {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   background-color: var(--bg-color);
   display: flex;
   flex-direction: column;
   padding: 0;
   position: relative;
+  box-sizing: border-box;
 }
 
 .layout-content {
   width: 100%;
-  max-width: 1400px; 
+  max-width: 1400px;
   margin: 0 auto;
-  padding: var(--space-lg); 
-  min-height: 100%;
+  padding: var(--space-lg);
+  flex: 1 0 auto;
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
+  box-sizing: border-box;
+  position: relative;
+
+  > div {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
 }
 
 .app-suspense-fallback {

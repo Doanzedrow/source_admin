@@ -93,10 +93,14 @@ p {
 }
 
 .page-content {
+  width: 100%;
+  max-width: 100%;
   padding: var(--space-lg);
   background-color: var(--body-bg);
   border-radius: @border-radius-lg;
   box-shadow: @box-shadow-base;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .app-card {

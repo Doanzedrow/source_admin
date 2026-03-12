@@ -71,7 +71,8 @@ export const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }
         width: isSmallScreen ? '100%' : `calc(100% - ${collapsed ? 80 : 250}px)`,
         height: '100vh',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        overflow: 'hidden' // Ensure no overflow pushes the whole layout
       }}>
         <LayoutHeader
           collapsed={collapsed}
