@@ -19,6 +19,13 @@ export const useMainLayout = () => {
     document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
 
+  useEffect(() => {
+    const contentElement = document.querySelector('.layout-content-wrapper');
+    if (contentElement) {
+      contentElement.scrollTop = 0;
+    }
+  }, [location.pathname]);
+
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
   const toggleLanguage = () => i18n.changeLanguage(i18n.language === 'en' ? 'vi' : 'en');
 

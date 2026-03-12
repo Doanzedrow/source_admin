@@ -23,9 +23,7 @@ export const AppFilter: React.FC<AppFilterProps> = ({ children, extra, onReset, 
         position: 'sticky',
         top: 0,
         zIndex: 100,
-        paddingBottom: 16,
         marginTop: -8,
-        backgroundColor: 'var(--body-background)',
       }}
     >
       <AppCard className="filter-card" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
