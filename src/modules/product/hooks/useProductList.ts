@@ -241,6 +241,7 @@ export const useProductList = () => {
     resetFilters,
     categories,
     total: data?.result?.pagination?.total || 0,
+    totalProducts: data?.result?.metaData?.totalProducts || 0,
     t,
     rowSelection,
     selectedIds,

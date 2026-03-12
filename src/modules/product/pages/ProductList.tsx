@@ -37,6 +37,7 @@ const ProductList = () => {
     params,
     resetFilters,
     total,
+    totalProducts,
     t,
     rowSelection,
     selectedIds,
@@ -252,7 +253,25 @@ const ProductList = () => {
       </div>
 
       <AppCard
-        title={t('title')}
+        title={
+          <Flex align="center" gap={8}>
+            <span>{t('title')}</span>
+            <Tag 
+              color="blue" 
+              style={{ 
+                margin: 0, 
+                borderRadius: '12px', 
+                padding: '0 8px',
+                backgroundColor: 'rgba(24, 144, 255, 0.1)',
+                color: '#1890ff',
+                border: 'none',
+                fontWeight: 600
+              }}
+            >
+              {totalProducts}
+            </Tag>
+          </Flex>
+        }
         extra={
           <Space>
             {selectedIds.length > 0 && (

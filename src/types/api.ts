@@ -33,4 +33,7 @@ export interface PaginatedResult<T> {
     total_page: number;
   };
   total?: number;
+  metaData?: {
+    totalProducts?: number;
+  };
 }
