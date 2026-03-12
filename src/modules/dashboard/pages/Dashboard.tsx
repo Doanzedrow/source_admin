@@ -9,6 +9,7 @@ import {
   HorizontalBarChartSkeleton, 
   RecentActivitiesSkeleton 
 } from '../components/skeletons';
+import { TableSkeleton } from '@/components/common/AppTable/TableSkeleton';
 import { useStaggeredRender } from '@/hooks/useStaggeredRender';
 import { LazyInView } from '@/components/common/LazyInView';
 import '../styles/dashboard.less';
@@ -45,7 +46,7 @@ const ActivitiesFallback = () => (
 
 const OrdersFallback = () => (
   <AppCard className="dashboard-orders-card" title={<Skeleton.Input active size="small" style={{ width: 150 }} />} style={{ marginTop: 24 }}>
-    <Skeleton active paragraph={{ rows: 6 }} />
+    <TableSkeleton rows={5} columns={6} />
   </AppCard>
 );
 

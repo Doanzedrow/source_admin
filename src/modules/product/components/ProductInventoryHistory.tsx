@@ -1,5 +1,5 @@
 import React, { useMemo, memo, useState } from 'react';
-import { Typography, Flex, Tag, Skeleton, ConfigProvider, Badge, Table } from 'antd';
+import { Typography, Flex, Tag, ConfigProvider, Badge, Table } from 'antd';
 import {
   HistoryOutlined,
   EnvironmentOutlined,
@@ -279,11 +279,7 @@ const InventoryHistoryContent: React.FC<ProductInventoryHistoryProps> = ({ produ
       }
       className="product-inventory-history-card"
     >
-      {!isReady || isLoading ? (
-        <Flex vertical gap={16} style={{ padding: '24px' }}>
-          <Skeleton active paragraph={{ rows: 6 }} />
-        </Flex>
-      ) : isEmpty ? (
+      {isEmpty && isReady && !isLoading ? (
         <Flex vertical align="center" justify="center" style={{ padding: '60px 0' }} gap={12}>
           <InfoCircleOutlined style={{ fontSize: '32px', color: '#d9d9d9' }} />
           <Text type="secondary">{t('common.noData', { ns: 'translation' })}</Text>
@@ -305,6 +301,8 @@ const InventoryHistoryContent: React.FC<ProductInventoryHistoryProps> = ({ produ
             columns={columns}
             dataSource={deferredData}
             rowKey={(record) => `${record.date}-${record.branch}`}
+            showSkeleton={!isReady || isLoading}
+            skeletonRows={6}
             pagination={{
               current: currentPage,
               pageSize: pageSize,

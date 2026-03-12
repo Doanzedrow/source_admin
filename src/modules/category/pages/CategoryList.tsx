@@ -8,7 +8,6 @@ import { useCategoryList } from '../hooks/useCategoryList';
 import type { Category } from '../data/category.types';
 import { AppFilter } from '@/components/common/AppFilter/AppFilter';
 import { AppSearchInput } from '@/components/common/AppInput/AppSearchInput';
-import { AppLoader } from '@/components/common/AppLoader/AppLoader';
 
 import '../styles/category.less';
 
@@ -162,27 +161,21 @@ const CategoryList = () => {
         }
       >
         <div style={{ position: 'relative', minHeight: '400px' }}>
-          {isReady && (
-            <AppTable
-              className="category-table"
-              columns={columns}
-              dataSource={data}
-              rowKey="_id"
-              loading={isFetching && data.length > 0}
-              pagination={{
-                total,
-                current: params.page,
-                pageSize: params.page_size,
-                onChange: handlePageChange,
-              }}
-              rowSelection={rowSelection}
-            />
-          )}
-          
-          <AppLoader 
-            isLoading={!isReady || (isLoading && data.length === 0)} 
-            overlay 
-            description={t('loading', { ns: 'translation' })}
+          <AppTable
+            className="category-table"
+            columns={columns}
+            dataSource={data}
+            rowKey="_id"
+            showSkeleton={!isReady || (isLoading && data.length === 0)}
+            skeletonRows={8}
+            loading={isFetching && data.length > 0}
+            pagination={{
+              total,
+              current: params.page,
+              pageSize: params.page_size,
+              onChange: handlePageChange,
+            }}
+            rowSelection={rowSelection}
           />
         </div>
       </AppCard>

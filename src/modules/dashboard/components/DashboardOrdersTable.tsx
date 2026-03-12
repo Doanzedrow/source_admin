@@ -134,7 +134,8 @@ export const DashboardOrdersTable: React.FC<DashboardOrdersTableProps> = ({
         dataSource={data} 
         rowKey="_id"
         pagination={pagination}
-        loading={isLoading}
+        showSkeleton={isLoading}
+        skeletonRows={5}
         summary={() => {
           if (!data || data.length === 0) return null;
           return (

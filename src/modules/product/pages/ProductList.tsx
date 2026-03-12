@@ -6,7 +6,6 @@ import { SEO } from '@/components/common/SEO/SEO';
 import { useProductList } from '@/modules/product/hooks/useProductList';
 import { AppFilter } from '@/components/common/AppFilter/AppFilter';
 import { AppSearchInput } from '@/components/common/AppInput/AppSearchInput';
-import { AppLoader } from '@/components/common/AppLoader/AppLoader';
 import { AppButton } from '@/components/common/AppButton';
 import { CachedImage } from '@/components/common/CachedImage/CachedImage';
 import { formatCurrency } from '@/utils/format';
@@ -289,27 +288,21 @@ const ProductList = () => {
         className="product-card"
       >
         <div style={{ position: 'relative', minHeight: '400px' }}>
-          {isReady && (
-            <AppTable
-              className="product-table"
-              columns={columns}
-              dataSource={data}
-              rowKey="_id"
-              loading={isFetching && data.length > 0}
-              pagination={{
-                total,
-                current: params.page,
-                pageSize: params.page_size,
-                onChange: handlePageChange,
-              }}
-              rowSelection={rowSelection}
-            />
-          )}
-
-          <AppLoader
-            isLoading={!isReady || (isLoading && data.length === 0)}
-            overlay
-            description={t('loading', { ns: 'translation' })}
+          <AppTable
+            className="product-table"
+            columns={columns}
+            dataSource={data}
+            rowKey="_id"
+            showSkeleton={!isReady || (isLoading && data.length === 0)}
+            skeletonRows={8}
+            loading={isFetching && data.length > 0}
+            pagination={{
+              total,
+              current: params.page,
+              pageSize: params.page_size,
+              onChange: handlePageChange,
+            }}
+            rowSelection={rowSelection}
           />
         </div>
       </AppCard>

@@ -7,7 +7,6 @@ import { SEO } from '@/components/common/SEO/SEO';
 import { useAttributeList } from '../hooks/useAttributeList';
 import { AppFilter } from '@/components/common/AppFilter/AppFilter';
 import { AppSearchInput } from '@/components/common/AppInput/AppSearchInput';
-import { AppLoader } from '@/components/common/AppLoader/AppLoader';
 import type { Attribute } from '../data/attribute.types';
 
 import '../styles/attribute.less';
@@ -173,26 +172,20 @@ const AttributeList = () => {
         }
       >
         <div style={{ position: 'relative', minHeight: '400px' }}>
-          {isReady && (
-            <AppTable
-              columns={columns}
-              dataSource={data}
-              rowKey="_id"
-              loading={isFetching && data.length > 0}
-              pagination={{
-                total,
-                current: params.page,
-                pageSize: params.page_size,
-                onChange: handlePageChange,
-              }}
-              rowSelection={rowSelection}
-            />
-          )}
-
-          <AppLoader
-            isLoading={!isReady || (isLoading && data.length === 0)}
-            overlay
-            description={t('loading', { ns: 'translation' })}
+          <AppTable
+            columns={columns}
+            dataSource={data}
+            rowKey="_id"
+            showSkeleton={!isReady || (isLoading && data.length === 0)}
+            skeletonRows={8}
+            loading={isFetching && data.length > 0}
+            pagination={{
+              total,
+              current: params.page,
+              pageSize: params.page_size,
+              onChange: handlePageChange,
+            }}
+            rowSelection={rowSelection}
           />
         </div>
       </AppCard>
