@@ -30,7 +30,7 @@ const ProductUpsertForm: React.FC<{
     onValuesChange,
     categories,
     isCategoriesLoading,
-    initialThumbnailPath,
+    initialMediaPaths,
   } = useProductForm({
     initialValues: currentProduct,
     onSave: handleSave,
@@ -58,7 +58,7 @@ const ProductUpsertForm: React.FC<{
           <ProductForm
             categories={categories}
             isCategoriesLoading={isCategoriesLoading}
-            initialThumbnailPath={initialThumbnailPath}
+            initialMediaPaths={initialMediaPaths}
             t={t}
           />
         </AppCard>

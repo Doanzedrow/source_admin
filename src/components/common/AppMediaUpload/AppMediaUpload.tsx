@@ -17,6 +17,7 @@ interface AppMediaUploadProps {
   uploadAction?: (file: File) => Promise<any>;
   disabled?: boolean;
   initialValuePath?: string | string[];
+  initialOriginalPath?: string | string[];
   className?: string;
   style?: React.CSSProperties;
 }
@@ -28,6 +29,7 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
   uploadAction,
   disabled = false,
   initialValuePath,
+  initialOriginalPath,
   className,
   style,
 }) => {
@@ -36,40 +38,44 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
   const [uploadMedia, { isLoading }] = useUploadMediaMutation();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
-  const [uploadedMap, setUploadedMap] = useState<Record<string, string>>({});
+  const [uploadedMap, setUploadedMap] = useState<Record<string, { thumb: string; origin: string }>>({});
 
   const getFileList = (): UploadFile[] => {
-    const displayValues = (val: string | string[], paths?: string | string[]) => {
+    const displayValues = (val: string | string[], paths?: string | string[], origins?: string | string[]) => {
       const items = Array.isArray(val) ? val : [val];
       const initialPaths = Array.isArray(paths) ? paths : [paths];
+      const initialOrigins = Array.isArray(origins) ? origins : [origins];
 
       return items
         .map((item, index) => {
-          const path =
+          const mapData = uploadedMap[item as string];
+          const thumbPath =
             item && (item as string).includes('/') 
               ? (item as string) 
-              : (uploadedMap[item as string] || initialPaths[index] || '');
+              : (mapData?.thumb || initialPaths[index] || '');
               
+          const originPath = mapData?.origin || initialOrigins[index] || thumbPath;
+
           return {
             uid: (item && !(item as string).includes('/')) ? (item as string) : `-${index}`,
             name: `image-${index}.png`,
             status: 'done' as const,
-            url: path ? getFullImageUrl(path) : '',
-            response: { path, id: item },
+            url: thumbPath ? getFullImageUrl(thumbPath) : '',
+            response: { path: thumbPath, originalPath: originPath, id: item },
           } as UploadFile;
         })
         .filter((f) => f.url);
     };
 
     if (!value) return [];
-    return displayValues(value, initialValuePath);
+    return displayValues(value, initialValuePath, initialOriginalPath);
   };
 
   const [fileList, setFileList] = useState<UploadFile[]>(getFileList());
 
   React.useEffect(() => {
     setFileList(getFileList());
-  }, [value, initialValuePath]);
+  }, [value, initialValuePath, initialOriginalPath]);
 
   const customRequest: UploadProps['customRequest'] = async ({ file, onSuccess, onError }) => {
     try {
@@ -77,20 +83,24 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
       formData.append('thumbnail', file as File);
 
       let responsePath = '';
+      let originalPath = '';
       let responseId = '';
 
       if (uploadAction) {
         const res = await uploadAction(file as File);
         responsePath = res.path || res.url;
+        originalPath = res.originalPath || responsePath;
         responseId = res.id || responsePath;
       } else {
         const res = await uploadMedia(formData).unwrap();
         responseId = (res.result as any)._id;
+        originalPath = res.result.thumbnail.path;
+        
         if (type === 'product') {
           responsePath =
-            res.result.thumbnail.sizes.product_square?.path || res.result.thumbnail.path;
+            res.result.thumbnail.sizes.product_square?.path || originalPath;
         } else {
-          responsePath = res.result.thumbnail.path;
+          responsePath = originalPath;
         }
       }
 
@@ -101,14 +111,17 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
         name: (file as File).name,
         status: 'done',
         url: getFullImageUrl(responsePath),
-        response: { path: responsePath, id: responseId },
+        response: { path: responsePath, originalPath: originalPath, id: responseId },
       };
 
       const newFileList = maxCount === 1 ? [newFile] : [...fileList, newFile];
       setFileList(newFileList);
 
       // Lưu lại bản đồ ID -> Path để hiển thị ngay lập tức
-      setUploadedMap(prev => ({ ...prev, [responseId]: responsePath }));
+      setUploadedMap(prev => ({ 
+        ...prev, 
+        [responseId]: { thumb: responsePath, origin: originalPath } 
+      }));
 
       if (maxCount === 1) {
         onChange?.(responseId);
@@ -135,14 +148,19 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
   };
 
   const handlePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
+    let previewUrl = file.url;
+    
+    if (file.response?.originalPath) {
+      previewUrl = getFullImageUrl(file.response.originalPath);
+    } else if (!file.url && !file.preview) {
       file.preview = await new Promise((resolve) => {
         const reader = new FileReader();
         reader.readAsDataURL(file.originFileObj as File);
         reader.onload = () => resolve(reader.result as string);
       });
     }
-    setPreviewImage(file.url || (file.preview as string));
+    
+    setPreviewImage(previewUrl || (file.preview as string));
     setPreviewOpen(true);
   };
 

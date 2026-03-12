@@ -13,14 +13,14 @@ const VAT_OPTIONS = [0, 5, 8, 10];
 interface ProductFormProps {
   categories: any[];
   isCategoriesLoading: boolean;
-  initialThumbnailPath: string;
+  initialMediaPaths: { thumb: string; origin: string };
   t: any;
 }
 
 export const ProductForm: React.FC<ProductFormProps> = ({
   categories,
   isCategoriesLoading,
-  initialThumbnailPath,
+  initialMediaPaths,
   t,
 }) => {
   return (
@@ -150,7 +150,12 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         <Col xs={24} lg={8}>
           <div className="media-panel">
             <Form.Item name="thumbnail" label={t('form.image')} style={{ marginBottom: 12 }}>
-              <AppMediaUpload type="product" maxCount={1} initialValuePath={initialThumbnailPath} />
+              <AppMediaUpload 
+                type="product" 
+                maxCount={1} 
+                initialValuePath={initialMediaPaths.thumb}
+                initialOriginalPath={initialMediaPaths.origin}
+              />
             </Form.Item>
             <Typography.Text type="secondary" className="upload-hint">
               {t('form.uploadHint')}

@@ -39,27 +39,35 @@ export const useProductForm = ({ initialValues, onSave }: UseProductFormProps) =
             attribute: typeof v.attribute === 'object' ? v.attribute?._id : v.attribute,
             variant: typeof v.variant === 'object' ? v.variant?._id : v.variant,
             thumbnail: v.thumbnail?._id || v.thumbnail || '',
-            thumbnailPath: v.thumbnail?.thumbnail?.path || v.thumbnail?.thumbnail?.sizes?.product_square?.path || '',
+            thumbnailPath:
+              v.thumbnail?.thumbnail?.sizes?.product_square?.path ||
+              v.thumbnail?.thumbnail?.path ||
+              '',
+            originalPath: v.thumbnail?.thumbnail?.path || '',
             priceWithTax: Math.round(vPrice * (1 + vTax / 100)),
           };
         }),
       });
     } else {
       form.resetFields();
-      form.setFieldsValue({ 
-        status: true, 
-        taxPercentage: 0, 
-        priceSale: 0, 
+      form.setFieldsValue({
+        status: true,
+        taxPercentage: 0,
+        priceSale: 0,
         priceSaleWithTax: 0,
-        variants: []
+        variants: [],
       });
     }
   }, [initialValues, form]);
 
-  const initialThumbnailPath = useMemo(() => {
-    return initialValues?.thumbnail?.thumbnail?.path || 
-           initialValues?.thumbnail?.thumbnail?.sizes?.product_square?.path || 
-           '';
+  const initialMediaPaths = useMemo(() => {
+    return {
+      thumb:
+        initialValues?.thumbnail?.thumbnail?.sizes?.product_square?.path ||
+        initialValues?.thumbnail?.thumbnail?.path ||
+        '',
+      origin: initialValues?.thumbnail?.thumbnail?.path || '',
+    };
   }, [initialValues]);
 
   const onValuesChange = (changed: any, all: any) => {
@@ -75,7 +83,10 @@ export const useProductForm = ({ initialValues, onSave }: UseProductFormProps) =
         const variants = all.variants || [];
         variants.forEach((v: any, index: number) => {
           const vPrice = safeParseNumber(v.price);
-          form.setFieldValue(['variants', index, 'priceWithTax'], Math.round(vPrice * (1 + taxPercentage / 100)));
+          form.setFieldValue(
+            ['variants', index, 'priceWithTax'],
+            Math.round(vPrice * (1 + taxPercentage / 100))
+          );
         });
       }
     } else if ('priceSaleWithTax' in changed) {
@@ -86,20 +97,22 @@ export const useProductForm = ({ initialValues, onSave }: UseProductFormProps) =
 
     // Handle variant price changes - use targeted setFieldValue to avoid re-mounting components
     if (changed.variants) {
-      const changedIndex = changed.variants.findIndex((v: any) => v && ('price' in v || 'priceWithTax' in v));
+      const changedIndex = changed.variants.findIndex(
+        (v: any) => v && ('price' in v || 'priceWithTax' in v)
+      );
       if (changedIndex !== -1) {
         const changedVariant = changed.variants[changedIndex];
-        
+
         if ('price' in changedVariant) {
           const vPrice = safeParseNumber(changedVariant.price);
           form.setFieldValue(
-            ['variants', changedIndex, 'priceWithTax'], 
+            ['variants', changedIndex, 'priceWithTax'],
             Math.round(vPrice * (1 + taxPercentage / 100))
           );
         } else if ('priceWithTax' in changedVariant) {
           const vPriceWithTax = safeParseNumber(changedVariant.priceWithTax);
           form.setFieldValue(
-            ['variants', changedIndex, 'price'], 
+            ['variants', changedIndex, 'price'],
             Math.round(vPriceWithTax / (1 + taxPercentage / 100))
           );
         }
@@ -117,7 +130,7 @@ export const useProductForm = ({ initialValues, onSave }: UseProductFormProps) =
     const processedVariants = (values.variants || []).map((v: any) => {
       const vPrice = safeParseNumber(v.price);
       const vPriceWithTax = safeParseNumber(v.priceWithTax);
-      
+
       // Cleanup UI-only fields
       const { thumbnailPath, ...rest } = v;
 
@@ -149,7 +162,9 @@ export const useProductForm = ({ initialValues, onSave }: UseProductFormProps) =
     onSave(payload);
   };
 
-  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery({ type: 1 });
+  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery({
+    type: 1,
+  });
 
   const categories = useMemo(() => {
     return categoriesData?.result || [];
@@ -161,6 +176,6 @@ export const useProductForm = ({ initialValues, onSave }: UseProductFormProps) =
     handleSubmit,
     categories,
     isCategoriesLoading,
-    initialThumbnailPath,
+    initialMediaPaths,
   };
 };

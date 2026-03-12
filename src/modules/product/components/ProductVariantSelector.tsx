@@ -211,6 +211,7 @@ export const ProductVariantSelector: React.FC = () => {
                       maxCount={1}
                       type="product"
                       initialValuePath={variantData?.thumbnailPath}
+                      initialOriginalPath={variantData?.originalPath}
                       style={{ width: 64, height: 64 }}
                     />
                   </Form.Item>
