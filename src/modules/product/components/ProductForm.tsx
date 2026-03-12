@@ -17,11 +17,11 @@ interface ProductFormProps {
   t: any;
 }
 
-export const ProductForm: React.FC<ProductFormProps> = ({ 
-  categories, 
-  isCategoriesLoading, 
+export const ProductForm: React.FC<ProductFormProps> = ({
+  categories,
+  isCategoriesLoading,
   initialThumbnailPath,
-  t 
+  t,
 }) => {
   return (
     <div className="product-form-container">
@@ -113,10 +113,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               />
             </Col>
             <Col xs={24} md={8}>
-              <Form.Item
-                name="taxPercentage"
-                label={t('form.taxPercentage')}
-              >
+              <Form.Item name="taxPercentage" label={t('form.taxPercentage')}>
                 <Select size="large">
                   {VAT_OPTIONS.map((v) => (
                     <Select.Option key={v} value={v}>

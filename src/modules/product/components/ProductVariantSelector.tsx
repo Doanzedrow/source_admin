@@ -8,19 +8,14 @@ import { AppMediaUpload } from '@/components/common/AppMediaUpload';
 import { AppTable } from '@/components/common/AppTable';
 import { useProductVariantSelector } from '../hooks/useProductVariantSelector';
 
-
 export const ProductVariantSelector: React.FC = () => {
-  const { 
-    t, 
-    attributeOptions, 
-    getVariantsByAttributeId, 
-    isAttributesLoading 
-  } = useProductVariantSelector();
+  const { t, attributeOptions, getVariantsByAttributeId, isAttributesLoading } =
+    useProductVariantSelector();
 
   const form = Form.useFormInstance();
 
   return (
-    <AppCard 
+    <AppCard
       className="product-variant-selector-card"
       collapsible
       defaultCollapsed={true}
@@ -51,13 +46,16 @@ export const ProductVariantSelector: React.FC = () => {
                   <Form.Item shouldUpdate noStyle key={key}>
                     {({ getFieldValue }) => {
                       const allVariants = getFieldValue('variants') || [];
-                      
-                      const filteredAttributeOptions = attributeOptions.filter(attr => {
+
+                      const filteredAttributeOptions = attributeOptions.filter((attr) => {
                         const availableVariants = getVariantsByAttributeId(attr.value);
                         if (availableVariants.length === 0) return false;
 
                         const selectedVariantsForThisAttr = allVariants
-                          .filter((v: any, idx: number) => v.attribute === attr.value && idx !== field.name)
+                          .filter(
+                            (v: any, idx: number) =>
+                              v.attribute === attr.value && idx !== field.name
+                          )
                           .map((v: any) => v.variant);
 
                         return selectedVariantsForThisAttr.length < availableVariants.length;
@@ -77,6 +75,12 @@ export const ProductVariantSelector: React.FC = () => {
                             loading={isAttributesLoading}
                             size="large"
                             style={{ width: '100%' }}
+                            filterOption={(input, option) =>
+                              (option?.label ?? '')
+                                .toString()
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
+                            }
                             onChange={() => {
                               form.setFieldValue(['variants', field.name, 'variant'], undefined);
                             }}
@@ -99,8 +103,12 @@ export const ProductVariantSelector: React.FC = () => {
                   <Form.Item shouldUpdate noStyle key={key}>
                     {({ getFieldValue }) => {
                       const allVariants = getFieldValue('variants') || [];
-                      const currentAttributeId = getFieldValue(['variants', field.name, 'attribute']);
-                      
+                      const currentAttributeId = getFieldValue([
+                        'variants',
+                        field.name,
+                        'attribute',
+                      ]);
+
                       if (!currentAttributeId) {
                         return (
                           <Select
@@ -113,12 +121,15 @@ export const ProductVariantSelector: React.FC = () => {
                       }
 
                       const selectedVariantIds = allVariants
-                        .filter((v: any, idx: number) => v.attribute === currentAttributeId && idx !== field.name && v.variant)
+                        .filter(
+                          (v: any, idx: number) =>
+                            v.attribute === currentAttributeId && idx !== field.name && v.variant
+                        )
                         .map((v: any) => v.variant);
 
                       const variantOptions = getVariantsByAttributeId(currentAttributeId)
-                        .filter(v => !selectedVariantIds.includes(v._id))
-                        .map(v => ({
+                        .filter((v) => !selectedVariantIds.includes(v._id))
+                        .map((v) => ({
                           label: v.name,
                           value: v._id,
                         }));
@@ -136,6 +147,12 @@ export const ProductVariantSelector: React.FC = () => {
                             options={variantOptions}
                             size="large"
                             style={{ width: '100%' }}
+                            filterOption={(input, option) =>
+                              (option?.label ?? '')
+                                .toString()
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
+                            }
                           />
                         </Form.Item>
                       );
@@ -189,16 +206,12 @@ export const ProductVariantSelector: React.FC = () => {
                 const variantData = form.getFieldValue(['variants', field.name]);
                 const { key, ...restField } = field;
                 return (
-                  <Form.Item
-                    key={key}
-                    {...restField}
-                    name={[field.name, 'thumbnail']}
-                    noStyle
-                  >
-                    <AppMediaUpload 
-                      maxCount={1} 
+                  <Form.Item key={key} {...restField} name={[field.name, 'thumbnail']} noStyle>
+                    <AppMediaUpload
+                      maxCount={1}
                       type="product"
                       initialValuePath={variantData?.thumbnailPath}
+                      style={{ width: 64, height: 64 }}
                     />
                   </Form.Item>
                 );
@@ -229,14 +242,15 @@ export const ProductVariantSelector: React.FC = () => {
                 pagination={false}
                 hidePagination
               />
-              <AppButton 
-                type="dashed" 
-                onClick={() => add({ price: 0, priceWithTax: 0 })} 
-                block 
+              <AppButton
+                type="dashed"
+                onClick={() => add({ price: 0, priceWithTax: 0 })}
+                block
                 icon={<PlusOutlined />}
                 size="large"
               >
-                {t('common.actions.create', { ns: 'translation' })} {t('form.variant', { ns: 'attribute' })}
+                {t('common.actions.create', { ns: 'translation' })}{' '}
+                {t('form.variant', { ns: 'attribute' })}
               </AppButton>
             </Flex>
           );

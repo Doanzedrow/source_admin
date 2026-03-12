@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Upload, Typography, message, Modal } from 'antd';
+import { Upload, Typography, Modal } from 'antd';
 import { PlusOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+import { useAppNotify } from '@/hooks/useAppNotify';
 import { useUploadMediaMutation, getFullImageUrl } from '@/store/api/uploadApi';
 import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
 import './AppMediaUpload.less';
@@ -17,6 +18,7 @@ interface AppMediaUploadProps {
   disabled?: boolean;
   initialValuePath?: string | string[];
   className?: string;
+  style?: React.CSSProperties;
 }
 export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
   value,
@@ -27,8 +29,10 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
   disabled = false,
   initialValuePath,
   className,
+  style,
 }) => {
   const { t } = useTranslation('translation');
+  const { message: msg } = useAppNotify();
   const [uploadMedia, { isLoading }] = useUploadMediaMutation();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
@@ -90,7 +94,7 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
         }
       }
 
-      message.success(t('common.messages.success'));
+      msg.success(t('common.messages.success'));
 
       const newFile: UploadFile = {
         uid: (file as any).uid,
@@ -114,7 +118,7 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
 
       onSuccess?.(newFile);
     } catch (err: any) {
-      message.error(t('common.messages.error'));
+      msg.error(t('common.messages.error'));
       onError?.(err);
     }
   };
@@ -169,6 +173,7 @@ export const AppMediaUpload: React.FC<AppMediaUploadProps> = ({
           previewIcon: <EyeOutlined />,
           removeIcon: <DeleteOutlined />,
         }}
+        style={style}
       >
         {fileList.length >= maxCount ? null : uploadButton}
       </Upload>

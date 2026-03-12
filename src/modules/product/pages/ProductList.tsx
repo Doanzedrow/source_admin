@@ -66,11 +66,7 @@ const ProductList = () => {
         key: 'code',
         width: 160,
         render: (code: string, record: Product) => (
-          <Text
-            strong
-            onClick={() => goToProductEdit(record._id)}
-            className="clickable-code"
-          >
+          <Text strong onClick={() => goToProductEdit(record._id)} className="clickable-code">
             {code}
           </Text>
         ),
