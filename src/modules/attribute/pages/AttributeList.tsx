@@ -151,7 +151,7 @@ const AttributeList = () => {
         <AppFilter 
           onReset={resetFilters} 
           onRefresh={refetch}
-          isLoading={isFetching && data.length > 0}
+          isLoading={isFetching}
         >
           <Col xs={24} md={12}>
             <AppSearchInput
@@ -193,7 +193,7 @@ const AttributeList = () => {
             rowKey="_id"
             showSkeleton={!isReady || (isLoading && data.length === 0)}
             skeletonRows={8}
-            loading={isFetching && data.length > 0}
+            loading={isFetching}
             pagination={{
               total,
               current: params.page,

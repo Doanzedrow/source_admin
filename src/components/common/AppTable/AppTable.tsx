@@ -53,7 +53,7 @@ export const AppTable: AppTableComponent = Object.assign(
     };
 
     return (
-      <div className={`app-table-wrapper ${className || ''}`}>
+      <div className={`app-table-wrapper ${className || ''} ${props.loading ? 'loading-active' : ''}`}>
         <Table<RecordType>
           size="middle"
           scroll={{ x: 'max-content' }}

@@ -22,6 +22,22 @@ export const AppFilter: React.FC<AppFilterProps> = ({
 }) => {
   const { t } = useTranslation('translation');
   const [isExpanded, setIsExpanded] = useState(false);
+  const [localRefreshing, setLocalRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    if (!onRefresh) return;
+    setLocalRefreshing(true);
+    const start = Date.now();
+    try {
+      await onRefresh();
+    } finally {
+      const elapsed = Date.now() - start;
+      const remaining = Math.max(0, 500 - elapsed);
+      setTimeout(() => setLocalRefreshing(false), remaining);
+    }
+  };
+
+  const isFilterLoading = isLoading || localRefreshing;
 
   return (
     <div
@@ -56,9 +72,9 @@ export const AppFilter: React.FC<AppFilterProps> = ({
 
               {onRefresh && (
                 <AppButton
-                  icon={<SyncOutlined />}
-                  onClick={onRefresh}
-                  loading={isLoading}
+                  icon={<SyncOutlined spin={localRefreshing} />}
+                  onClick={handleRefresh}
+                  loading={isFilterLoading && !localRefreshing}
                   title={t('common.actions.refresh')}
                 />
               )}

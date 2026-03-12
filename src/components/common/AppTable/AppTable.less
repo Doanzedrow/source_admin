@@ -3,6 +3,12 @@
 .app-table-wrapper {
   overflow: hidden;
   border-radius: var(--border-radius-base);
+  transition: opacity 0.3s ease;
+
+  &:has(.ant-table-spin-holder), 
+  &.loading-active {
+    opacity: 0.6;
+  }
 
   .ant-table-wrapper {
     background: transparent;
