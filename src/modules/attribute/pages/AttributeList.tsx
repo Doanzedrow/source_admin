@@ -1,4 +1,4 @@
-import React, { useMemo, memo } from 'react';
+import { useMemo, memo } from 'react';
 import { Space, Tag, Typography, Col } from 'antd';
 import { AppButton } from '@/components/common/AppButton';
 import { AppCard } from '@/components/common/AppCard';
@@ -55,7 +55,7 @@ const AttributeList = () => {
         <Text
           strong
           onClick={() => goToAttributeEdit(record._id)}
-          style={{ cursor: 'pointer', color: 'var(--primary-color)' }}
+          className="clickable-code"
         >
           {code}
         </Text>
@@ -71,12 +71,31 @@ const AttributeList = () => {
       dataIndex: 'isMultiple',
       key: 'isMultiple',
       align: 'center' as const,
-      render: (val: boolean) =>
+      render: (val: boolean, record: Attribute) =>
         val ? (
-          <Tag color="blue">{t('common.yes', { ns: 'translation' })}</Tag>
+          <Space direction="vertical" size={0}>
+            <Tag color="blue">{t('common.yes', { ns: 'translation' })}</Tag>
+            {record.maxSelect > 0 && (
+              <Text type="secondary" style={{ fontSize: '11px' }}>
+                {t('columns.maxSelect')}: {record.maxSelect}
+              </Text>
+            )}
+          </Space>
         ) : (
           <Text type="secondary">-</Text>
+
         ),
+    },
+    {
+      title: t('columns.variants'),
+      dataIndex: 'variants',
+      key: 'variants',
+      align: 'center' as const,
+      render: (variants: any[]) => (
+        <Tag color="purple" style={{ borderRadius: '12px' }}>
+          {(variants || []).length}
+        </Tag>
+      ),
     },
     {
       title: t('columns.overridePrice'),

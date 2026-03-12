@@ -4,7 +4,7 @@ export default {
   catalog: "Product Info",
   products: "Products",
   categories: "Categories",
-  attributes: "Product Attributes",
+  attributes: "Variants",
   users: "Users",
   settings: "Settings",
   login: "Login",
@@ -45,6 +45,7 @@ export default {
       confirmDelete: "Are you sure you want to delete?",
       deleteWarning: "This action cannot be undone. Data will be permanently removed from the system.",
       batchDeleteWarning: "You are about to delete {{count}} items. This action cannot be undone.",
+      noData: "No data available",
     },
     formats: {
       relativeTime: {

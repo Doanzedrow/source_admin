@@ -2,13 +2,14 @@ import React from 'react';
 import { Input, Form } from 'antd';
 import type { InputProps } from 'antd';
 
-interface AppInputProps extends InputProps {
+interface AppInputProps extends Omit<InputProps, 'name'> {
   label?: string;
-  name?: string;
+  name?: string | (string | number)[];
   rules?: any[];
   regex?: RegExp;
   regexMessage?: string;
   layout?: 'horizontal' | 'vertical' | 'inline';
+  noFormItem?: boolean;
 }
 
 export const AppInput: React.FC<AppInputProps> = ({
@@ -17,6 +18,7 @@ export const AppInput: React.FC<AppInputProps> = ({
   rules = [],
   regex,
   regexMessage,
+  noFormItem = false,
   ...props
 }) => {
   const combinedRules = [{ whitespace: true }, ...rules];
@@ -28,7 +30,13 @@ export const AppInput: React.FC<AppInputProps> = ({
     });
   }
 
-  const inputId = props.id || name;
+  const inputId = props.id || (Array.isArray(name) ? name.join('-') : name);
+
+  const inputNode = <Input id={inputId} size="large" {...(props as any)} />;
+
+  if (noFormItem) {
+    return inputNode;
+  }
 
   return (
     <Form.Item
@@ -36,9 +44,9 @@ export const AppInput: React.FC<AppInputProps> = ({
       name={name}
       rules={combinedRules}
       htmlFor={inputId}
-      normalize={(value: string) => value?.trimStart().replace(/\s{2,}/g, ' ')}
+      normalize={(value: string) => (typeof value === 'string' ? value.trimStart().replace(/\s{2,}/g, ' ') : value)}
     >
-      <Input id={inputId} size="large" {...props} />
+      {inputNode}
     </Form.Item>
   );
 };

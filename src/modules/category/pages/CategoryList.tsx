@@ -57,12 +57,7 @@ const CategoryList = () => {
         <Text 
           strong 
           onClick={() => goToCategoryEdit(record._id)}
-          style={{ 
-            cursor: 'pointer',
-            transition: 'color 0.2s'
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--primary-color)')}
-          onMouseLeave={(e) => (e.currentTarget.style.color = 'inherit')}
+          className="clickable-code"
         >
           {code}
         </Text>

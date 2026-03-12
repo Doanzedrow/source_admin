@@ -2,10 +2,37 @@
 
 .attribute-list-wrapper {
   .ant-table-thead > tr > th {
-    background: var(--body-bg);
+    background: var(--body-bg) !important;
   }
 }
 
 .attribute-form-container {
-  padding: 8px 4px;
+  padding: 12px 0;
+
+  .form-section {
+    margin-bottom: 32px;
+    
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      &::before {
+        content: "";
+        display: block;
+        width: 4px;
+        height: 18px;
+        background: var(--primary-color);
+        border-radius: 2px;
+      }
+    }
+  }
+
+  .ant-form-item-label > label {
+    font-weight: 500;
+  }
 }

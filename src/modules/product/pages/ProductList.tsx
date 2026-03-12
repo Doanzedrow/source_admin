@@ -1,4 +1,4 @@
-import React, { useMemo, memo } from 'react';
+import { useMemo, memo } from 'react';
 import { Space, Flex, Tag, Switch, Select, Typography, Col } from 'antd';
 import { AppCard } from '@/components/common/AppCard';
 import { AppTable } from '@/components/common/AppTable';
@@ -70,13 +70,7 @@ const ProductList = () => {
           <Text
             strong
             onClick={() => goToProductEdit(record._id)}
-            style={{
-              cursor: 'pointer',
-              color: 'inherit',
-              transition: 'color 0.2s',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--primary-color)')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = 'inherit')}
+            className="clickable-code"
           >
             {code}
           </Text>

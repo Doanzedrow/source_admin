@@ -14,29 +14,37 @@ export const useAttributeForm = ({ initialValues, onSave }: UseAttributeFormProp
     if (initialValues) {
       form.setFieldsValue({
         ...initialValues,
-        status: initialValues.status === 1,
       });
     } else {
       form.resetFields();
       form.setFieldsValue({ 
-        status: true,
+        status: 1,
         isMultiple: false,
+        maxSelect: 1,
         overridePrice: false,
+        variants: [],
       });
     }
   }, [initialValues, form]);
 
   const handleSubmit = (values: any) => {
-    const trimmed = Object.fromEntries(
-      Object.entries(values).map(([k, v]) => [k, typeof v === 'string' ? v.trim() : v])
-    );
-
-    const payload: any = {
-      ...trimmed,
-      status: trimmed.status ? 1 : 0,
+    const trimmed = {
+      ...values,
+      code: values.code?.trim(),
+      name: values.name?.trim(),
     };
 
-    onSave(payload);
+    // Ensure variants are cleaned up if necessary
+    if (trimmed.variants) {
+      trimmed.variants = trimmed.variants.map((v: any) => ({
+        ...v,
+        name: v.name?.trim(),
+        code: v.code?.trim(),
+        status: v.status ?? 1,
+      }));
+    }
+
+    onSave(trimmed);
   };
 
   return {

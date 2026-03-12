@@ -4,7 +4,7 @@ export default {
   catalog: "Thông tin sản phẩm",
   products: "Sản phẩm",
   categories: "Loại sản phẩm",
-  attributes: "Thông số biến thể",
+  attributes: "Biến thể",
   users: "Người dùng",
   settings: "Cài đặt",
   login: "Đăng nhập",
@@ -45,6 +45,7 @@ export default {
       confirmDelete: "Bạn có chắc chắn muốn xóa không?",
       deleteWarning: "Hành động này không thể hoàn tác. Dữ liệu sẽ bị xóa vĩnh viễn khỏi hệ thống.",
       batchDeleteWarning: "Bạn đang chọn xóa {{count}} mục. Hành động này không thể hoàn tác.",
+      noData: "Không có dữ liệu",
     },
     formats: {
       relativeTime: {
