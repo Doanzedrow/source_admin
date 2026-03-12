@@ -33,6 +33,15 @@ const VariantDetailList = memo(({
   const variantColumns = useMemo(
     () => [
       {
+        title: '#',
+        key: 'index',
+        width: 50,
+        align: 'center' as const,
+        render: (_: any, __: any, index: number) => (
+          <Text type="secondary" style={{ fontSize: '11px' }}>{index + 1}</Text>
+        ),
+      },
+      {
         title: t('form.variant', { ns: 'attribute', defaultValue: 'Biến thể' }),
         dataIndex: 'items',
         key: 'variant',
@@ -131,6 +140,16 @@ const InventoryHistoryContent: React.FC<ProductInventoryHistoryProps> = ({ produ
 
   const columns = useMemo(
     () => [
+      {
+        title: '#',
+        key: 'index',
+        width: 60,
+        align: 'center' as const,
+        render: (_: any, __: any, index: number) => {
+          const rowNumber = (currentPage - 1) * pageSize + index + 1;
+          return <Text type="secondary">{rowNumber}</Text>;
+        },
+      },
       {
         title: t('columns.date', { ns: 'product' }),
         dataIndex: 'date',
@@ -323,26 +342,29 @@ const InventoryHistoryContent: React.FC<ProductInventoryHistoryProps> = ({ produ
               rowExpandable: (record) => record.variants && record.variants.length > 0,
               expandRowByClick: true,
               columnWidth: 48,
-              expandIcon: ({ expanded, onExpand, record }) => (
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onExpand(record, e);
-                  }}
-                  style={{
-                    cursor: 'pointer',
-                    transition: 'transform 0.15s ease',
-                    transform: expanded ? 'rotate(90deg)' : 'none',
-                    color: 'var(--primary-color)',
-                    fontSize: '11px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <RightOutlined />
-                </div>
-              ),
+              expandIcon: ({ expanded, onExpand, record, expandable }) => {
+                if (!expandable) return null;
+                return (
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onExpand(record, e);
+                    }}
+                    style={{
+                      cursor: 'pointer',
+                      transition: 'transform 0.15s ease',
+                      transform: expanded ? 'rotate(90deg)' : 'none',
+                      color: 'var(--primary-color)',
+                      fontSize: '11px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <RightOutlined />
+                  </div>
+                );
+              },
             }}
           />
         </ConfigProvider>
