@@ -7,6 +7,7 @@ interface FormActionsProps {
   justify?: 'start' | 'end' | 'center' | 'space-between' | 'space-around';
   className?: string;
   isSticky?: boolean;
+  style?: React.CSSProperties;
 }
 
 export const FormActions: React.FC<FormActionsProps> = ({
@@ -14,9 +15,10 @@ export const FormActions: React.FC<FormActionsProps> = ({
   justify = 'end',
   className = '',
   isSticky = true,
+  style,
 }) => {
   return (
-    <div className={`form-actions-wrapper ${isSticky ? 'is-sticky' : ''} ${className}`}>
+    <div className={`form-actions-wrapper ${isSticky ? 'is-sticky' : ''} ${className}`} style={style}>
       <Flex justify={justify} gap={12} className="form-actions-content">
         {children}
       </Flex>

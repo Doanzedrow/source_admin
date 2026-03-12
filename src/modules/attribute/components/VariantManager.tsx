@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Space, Typography, Tag, Modal, Form } from 'antd';
 import { PlusOutlined, DeleteOutlined, EditOutlined, TagsOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { AppButton } from '@/components/common/AppButton';
 import { AppInput } from '@/components/common/AppInput';
+import { AppTable } from '@/components/common/AppTable';
+import { AppCard } from '@/components/common/AppCard';
 import { useAppNotify } from '@/hooks/useAppNotify';
 import { useAppConfirm } from '@/hooks/useAppConfirm';
 import { useCreateVariantMutation, useUpdateVariantMutation, useDeleteVariantMutation } from '../api/variantApi';
@@ -14,7 +16,6 @@ const { Text } = Typography;
 interface VariantManagerProps {
   attributeId: string;
   variants: AttributeVariant[];
-  onRefresh?: () => void;
 }
 
 export const VariantManager: React.FC<VariantManagerProps> = ({ attributeId, variants = [] }) => {
@@ -76,50 +77,79 @@ export const VariantManager: React.FC<VariantManagerProps> = ({ attributeId, var
     });
   };
 
+  const columns = useMemo(() => [
+    {
+      title: '#',
+      key: 'index',
+      width: 60,
+      align: 'center' as const,
+      render: (_: any, __: any, index: number) => index + 1,
+    },
+    {
+      title: t('form.variantName'),
+      dataIndex: 'name',
+      key: 'name',
+      render: (name: string) => <Text strong>{name}</Text>,
+    },
+    {
+      title: t('form.variantCode'),
+      dataIndex: 'code',
+      key: 'code',
+      render: (code: string) => <Tag>{code}</Tag>,
+    },
+    {
+      title: t('columns.action'),
+      key: 'action',
+      align: 'right' as const,
+      width: 120,
+      render: (_: any, record: AttributeVariant) => (
+        <Space size="small">
+          <AppButton 
+            type="text" 
+            icon={<EditOutlined />} 
+            onClick={() => handleOpenModal(record)} 
+          />
+          <AppButton 
+            danger 
+            type="text" 
+            icon={<DeleteOutlined />} 
+            onClick={() => handleDelete(record._id)} 
+            loading={isDeleting} 
+          />
+        </Space>
+      ),
+    },
+  ], [t, isDeleting]);
+
   return (
-    <div className="variant-manager">
-      <div className="form-section">
-        <div className="section-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div className="variant-manager-section">
+      <AppCard
+        title={
           <Space>
-            <TagsOutlined /> {t('form.variants')}
+            <TagsOutlined />
+            <span>{t('form.variants')}</span>
           </Space>
-          <AppButton type="primary" size="small" icon={<PlusOutlined />} onClick={() => handleOpenModal()}>
+        }
+        extra={
+          <AppButton 
+            type="primary" 
+            icon={<PlusOutlined />} 
+            onClick={() => handleOpenModal()}
+          >
             {t('form.addVariant')}
           </AppButton>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '10px' }}>
-          {variants.length === 0 ? (
-            <div style={{ padding: '20px', textAlign: 'center', background: 'var(--body-bg)', borderRadius: '8px', border: '1px dashed var(--border-color-split)' }}>
-              <Text type="secondary">{t('common.messages.noData', { ns: 'translation' })}</Text>
-            </div>
-          ) : (
-            variants.map((v) => (
-              <div 
-                key={v._id} 
-                style={{ 
-                  padding: '12px 16px', 
-                  background: 'var(--body-bg)', 
-                  borderRadius: '8px', 
-                  border: '1px solid var(--border-color-split)',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}
-              >
-                <div>
-                  <Text strong>{v.name}</Text>
-                  <Tag style={{ marginLeft: '10px' }}>{v.code}</Tag>
-                </div>
-                <Space>
-                  <AppButton type="text" icon={<EditOutlined />} onClick={() => handleOpenModal(v)} />
-                  <AppButton danger type="text" icon={<DeleteOutlined />} onClick={() => handleDelete(v._id)} loading={isDeleting} />
-                </Space>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
+        }
+        className="variant-manager-card"
+        style={{ border: '1px solid var(--border-color-split)' }}
+      >
+        <AppTable
+          columns={columns}
+          dataSource={variants}
+          rowKey="_id"
+          pagination={false}
+          size="small"
+        />
+      </AppCard>
 
       <Modal
         title={editingVariant ? t('titleEdit') : t('form.addVariant')}
@@ -129,7 +159,7 @@ export const VariantManager: React.FC<VariantManagerProps> = ({ attributeId, var
         confirmLoading={isCreating || isUpdating}
         okText={t('common.actions.save', { ns: 'translation' })}
         cancelText={t('common.actions.cancel', { ns: 'translation' })}
-        destroyOnClose
+        destroyOnHidden
       >
         <Form form={form} layout="vertical" style={{ marginTop: '20px' }}>
           <AppInput
