@@ -1,6 +1,5 @@
 import React, { useEffect, memo } from 'react';
-import { Form, Checkbox, Switch, Row, Col, Divider, Typography, Space } from 'antd';
-import { SafetyCertificateOutlined } from '@ant-design/icons';
+import { Form, Checkbox, Switch, Row, Col, Divider, Typography } from 'antd';
 
 import { SEO } from '@/components/common/SEO/SEO';
 import { AppLoader } from '@/components/common/AppLoader/AppLoader';
@@ -69,15 +68,13 @@ const PermissionUpsert: React.FC = () => {
           },
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div 
+          className="permission-upsert-main-container"
+          style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
+        >
           <AppCard
             className="form-container"
-            title={
-              <Space>
-                <SafetyCertificateOutlined style={{ color: 'var(--primary-color)' }} />
-                <span>{t('sections.info', { defaultValue: 'Thông tin phân quyền' })}</span>
-              </Space>
-            }
+            title={t('sections.info', { defaultValue: 'Thông tin phân quyền' })}
           >
             <Row gutter={24}>
               <Col xs={24} md={8}>
@@ -112,8 +109,8 @@ const PermissionUpsert: React.FC = () => {
               </Col>
             </Row>
 
-            <Divider orientation="left" style={{ margin: '12px 0 24px' }}>
-              <Text type="secondary" style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.05em' }}>
+            <Divider orientation="left" style={{ marginTop: 0 }}>
+              <Text type="secondary" style={{ fontSize: '12px', fontWeight: 600 }}>
                 {t('sections.actions').toUpperCase()}
               </Text>
             </Divider>
@@ -138,7 +135,7 @@ const PermissionUpsert: React.FC = () => {
             </div>
           </AppCard>
 
-          <FormActions isSticky={true}>
+          <FormActions isSticky={true} style={{ margin: 0 }}>
             <AppButton onClick={goToPermissionList} size="large">
               {t('common.actions.cancel', { ns: 'translation' })}
             </AppButton>

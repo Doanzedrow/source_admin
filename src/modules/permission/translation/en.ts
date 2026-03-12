@@ -18,6 +18,15 @@ export default {
     module: "E.g: product"
   },
   sections: {
-    actions: "Allowed Actions"
+    actions: "Allowed Actions",
+    info: "Permission Information"
+  },
+  messages: {
+    createSuccess: "Permission created successfully",
+    updateSuccess: "Permission updated successfully",
+    error: "An error occurred, please try again later"
+  },
+  validation: {
+    required: "{{field}} is required"
   }
 };

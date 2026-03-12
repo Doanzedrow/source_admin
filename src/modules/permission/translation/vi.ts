@@ -18,6 +18,15 @@ export default {
     module: "Ví dụ: product"
   },
   sections: {
-    actions: "Hành động được phép"
+    actions: "Hành động được phép",
+    info: "Thông tin phân quyền"
+  },
+  messages: {
+    createSuccess: "Thêm phân quyền thành công",
+    updateSuccess: "Cập nhật phân quyền thành công",
+    error: "Có lỗi xảy ra, vui lòng thử lại sau"
+  },
+  validation: {
+    required: "{{field}} là bắt buộc"
   }
 };

@@ -1,6 +1,6 @@
 import React, { useMemo, memo } from 'react';
-import { Tag, Space, Flex, Typography, ConfigProvider, Button } from 'antd';
-import { PlusOutlined, EditOutlined, SafetyCertificateOutlined } from '@ant-design/icons';
+import { Tag, Space, Flex, Typography, ConfigProvider } from 'antd';
+import { SafetyCertificateOutlined } from '@ant-design/icons';
 import { AppCard } from '@/components/common/AppCard';
 import { AppTable } from '@/components/common/AppTable';
 import { AppButton } from '@/components/common/AppButton';
@@ -72,16 +72,16 @@ const PermissionList: React.FC = () => {
         ),
       },
       {
-        title: '',
-        key: 'actions',
-        width: 80,
-        align: 'center' as const,
+        title: t('columns.action'),
+        key: 'action',
+        align: 'right' as const,
+        width: 120,
         render: (_: any, record: Permission) => (
-          <Button
-            type="text"
-            icon={<EditOutlined />}
-            onClick={() => goToPermissionEdit(record._id)}
-          />
+          <Space size="small">
+            <AppButton type="link" onClick={() => goToPermissionEdit(record._id)}>
+              {t('common.actions.edit', { ns: 'translation' })}
+            </AppButton>
+          </Space>
         ),
       },
     ],
@@ -111,8 +111,8 @@ const PermissionList: React.FC = () => {
         </Flex>
       }
       extra={
-        <AppButton type="primary" icon={<PlusOutlined />} onClick={goToPermissionCreate}>
-          {t('common.actions.create', { ns: 'translation' })}
+        <AppButton type="primary"  onClick={goToPermissionCreate}>
+          {t('addPermission')}
         </AppButton>
       }
       className="permission-card"
