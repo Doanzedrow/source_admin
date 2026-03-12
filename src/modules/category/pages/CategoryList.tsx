@@ -8,6 +8,7 @@ import { useCategoryList } from '../hooks/useCategoryList';
 import type { Category } from '../data/category.types';
 import { AppFilter } from '@/components/common/AppFilter/AppFilter';
 import { AppSearchInput } from '@/components/common/AppInput/AppSearchInput';
+import { PermissionGate } from '@/components/common/PermissionGate/PermissionGate';
 
 import '../styles/category.less';
 
@@ -114,12 +115,16 @@ const CategoryList = () => {
       width: 150,
       render: (_: unknown, record: Category) => (
         <Space size="small">
-          <AppButton type="link" onClick={() => goToCategoryEdit(record._id)}>
-            {t('common.actions.edit', { ns: 'translation' })}
-          </AppButton>
-          <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
-            {t('common.actions.delete', { ns: 'translation' })}
-          </AppButton>
+          <PermissionGate module="category" action="update">
+            <AppButton type="link" onClick={() => goToCategoryEdit(record._id)}>
+              {t('common.actions.edit', { ns: 'translation' })}
+            </AppButton>
+          </PermissionGate>
+          <PermissionGate module="category" action="delete">
+            <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
+              {t('common.actions.delete', { ns: 'translation' })}
+            </AppButton>
+          </PermissionGate>
         </Space>
       ),
     },
@@ -151,17 +156,21 @@ const CategoryList = () => {
         extra={
           <Space>
             {selectedIds.length > 0 && (
-              <AppButton
-                danger
-                onClick={() => handleBatchDelete(selectedIds, () => setSelectedIds([]))}
-                loading={isLoading}
-              >
-                {t('common.actions.deleteSelected', { ns: 'translation', count: selectedIds.length })}
-              </AppButton>
+              <PermissionGate module="category" action="delete">
+                <AppButton
+                  danger
+                  onClick={() => handleBatchDelete(selectedIds, () => setSelectedIds([]))}
+                  loading={isLoading}
+                >
+                  {t('common.actions.deleteSelected', { ns: 'translation', count: selectedIds.length })}
+                </AppButton>
+              </PermissionGate>
             )}
-            <AppButton type="primary" onClick={goToCategoryCreate}>
-              {t('addCategory')}
-            </AppButton>
+            <PermissionGate module="category" action="create">
+              <AppButton type="primary" onClick={goToCategoryCreate}>
+                {t('addCategory')}
+              </AppButton>
+            </PermissionGate>
           </Space>
         }
       >

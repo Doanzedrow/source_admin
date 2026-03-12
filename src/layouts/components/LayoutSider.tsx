@@ -1,8 +1,8 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
 import { UserOutlined, ShopOutlined, TransactionOutlined } from '@ant-design/icons';
-import { rc, RouteKey } from '@/routes/routeConfig';
-
+import { rc, RouteKey, routesArray } from '@/routes/routeConfig';
+import { usePermission } from '@/hooks/usePermission';
 import { APP_ASSETS } from '@/config/assets';
 import CachedImage from '@/components/common/CachedImage/CachedImage';
 
@@ -23,7 +23,30 @@ export const LayoutSider: React.FC<LayoutSiderProps> = ({
   location,
   onMenuClick,
 }) => {
-  const menuItems = [
+  const { can } = usePermission();
+
+  const filterMenuItems = (items: any[]) => {
+    return items
+      .map((item) => {
+        if (item.children) {
+          const children = filterMenuItems(item.children);
+          return children.length > 0 ? { ...item, children } : null;
+        }
+
+        // Check if item has a corresponding route config with permissions
+        const route = routesArray.find((r) => r.path === item.key);
+        if (route?.requiredPermission) {
+          return can(route.requiredPermission.module, route.requiredPermission.action || 'view')
+            ? item
+            : null;
+        }
+
+        return item;
+      })
+      .filter(Boolean);
+  };
+
+  const rawMenuItems = [
     { 
       key: rc(RouteKey.Dashboard).path, 
       icon: rc(RouteKey.Dashboard).icon, 
@@ -68,6 +91,8 @@ export const LayoutSider: React.FC<LayoutSiderProps> = ({
       label: t('settings') 
     },
   ];
+
+  const menuItems = filterMenuItems(rawMenuItems);
 
   return (
     <Sider

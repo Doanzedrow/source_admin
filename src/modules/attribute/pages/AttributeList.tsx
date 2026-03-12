@@ -7,6 +7,7 @@ import { SEO } from '@/components/common/SEO/SEO';
 import { useAttributeList } from '../hooks/useAttributeList';
 import { AppFilter } from '@/components/common/AppFilter/AppFilter';
 import { AppSearchInput } from '@/components/common/AppInput/AppSearchInput';
+import { PermissionGate } from '@/components/common/PermissionGate/PermissionGate';
 import type { Attribute } from '../data/attribute.types';
 
 import '../styles/attribute.less';
@@ -130,12 +131,16 @@ const AttributeList = () => {
         align: 'right' as const,
         render: (_: unknown, record: Attribute) => (
           <Space size="small">
-            <AppButton type="link" onClick={() => goToAttributeEdit(record._id)}>
-              {t('common.actions.edit', { ns: 'translation' })}
-            </AppButton>
-            <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
-              {t('common.actions.delete', { ns: 'translation' })}
-            </AppButton>
+            <PermissionGate module="attribute" action="update">
+              <AppButton type="link" onClick={() => goToAttributeEdit(record._id)}>
+                {t('common.actions.edit', { ns: 'translation' })}
+              </AppButton>
+            </PermissionGate>
+            <PermissionGate module="attribute" action="delete">
+              <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
+                {t('common.actions.delete', { ns: 'translation' })}
+              </AppButton>
+            </PermissionGate>
           </Space>
         ),
       },
@@ -169,20 +174,24 @@ const AttributeList = () => {
         extra={
           <Space>
             {selectedIds.length > 0 && (
-              <AppButton
-                danger
-                onClick={() => handleBatchDelete(selectedIds, () => setSelectedIds([]))}
-                loading={isLoading}
-              >
-                {t('common.actions.deleteSelected', {
-                  ns: 'translation',
-                  count: selectedIds.length,
-                })}
-              </AppButton>
+              <PermissionGate module="attribute" action="delete">
+                <AppButton
+                  danger
+                  onClick={() => handleBatchDelete(selectedIds, () => setSelectedIds([]))}
+                  loading={isLoading}
+                >
+                  {t('common.actions.deleteSelected', {
+                    ns: 'translation',
+                    count: selectedIds.length,
+                  })}
+                </AppButton>
+              </PermissionGate>
             )}
-            <AppButton type="primary" onClick={goToAttributeCreate}>
-              {t('titleCreate')}
-            </AppButton>
+            <PermissionGate module="attribute" action="create">
+              <AppButton type="primary" onClick={goToAttributeCreate}>
+                {t('titleCreate')}
+              </AppButton>
+            </PermissionGate>
           </Space>
         }
       >
