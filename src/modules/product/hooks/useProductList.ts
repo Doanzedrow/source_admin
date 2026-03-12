@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect, useDeferredValue, useTransition } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppNotify } from '@/hooks/useAppNotify';
 import { useAppConfirm } from '@/hooks/useAppConfirm';
@@ -32,22 +32,10 @@ export const useProductList = () => {
   const [switchingId, setSwitchingId] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(false);
 
-  const [localCategory, setLocalCategory] = useState<string | undefined>(filters.category);
-  const [localStatus, setLocalStatus] = useState<number | undefined>(
-    filters.status !== undefined ? Number(filters.status) : undefined
-  );
-  const [isPending, startTransition] = useTransition();
-
   useEffect(() => {
     const timer = setTimeout(() => setIsReady(true), 10);
     return () => clearTimeout(timer);
   }, []);
-
-  useEffect(() => {
-    if (filters.category !== localCategory) setLocalCategory(filters.category);
-    const apiStatus = filters.status !== undefined ? Number(filters.status) : undefined;
-    if (apiStatus !== localStatus) setLocalStatus(apiStatus);
-  }, [filters.category, filters.status]);
 
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery({
     type: 1,
@@ -108,24 +96,14 @@ export const useProductList = () => {
 
   const handleCategoryChange = useCallback(
     (val: string) => {
-      setLocalCategory(val);
-      setTimeout(() => {
-        startTransition(() => {
-          setFilters({ category: val, page: 1 });
-        });
-      }, 0);
+      setFilters({ category: val, page: 1 });
     },
     [setFilters]
   );
 
   const handleStatusChange = useCallback(
     (val: any) => {
-      setLocalStatus(val);
-      setTimeout(() => {
-        startTransition(() => {
-          setFilters({ status: val, page: 1 });
-        });
-      }, 0);
+      setFilters({ status: val, page: 1 });
     },
     [setFilters]
   );
@@ -241,14 +219,13 @@ export const useProductList = () => {
   );
 
   const rawData = data?.result?.data || [];
-  const deferredData = useDeferredValue(rawData);
 
   return {
-    data: deferredData,
+    data: rawData,
     isLoading: isLoading || isDeleting || isBatchDeleting || isBatchUpdating || isCategoriesLoading,
     isFetching,
     isReady,
-    isPending,
+    isPending: false,
     switchingId,
     handleDelete,
     handleBatchDelete,
@@ -269,8 +246,8 @@ export const useProductList = () => {
     setSelectedIds,
     categoryOptions,
     statusOptions,
-    localCategory,
-    localStatus,
+    localCategory: filters.category,
+    localStatus: filters.status,
     goToProductCreate,
     goToProductEdit,
   };

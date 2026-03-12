@@ -9,10 +9,17 @@ interface AppFilterProps {
   children: React.ReactNode;
   extra?: React.ReactNode;
   onReset?: () => void;
+  onRefresh?: () => void;
   isLoading?: boolean;
 }
 
-export const AppFilter: React.FC<AppFilterProps> = ({ children, extra, onReset, isLoading }) => {
+export const AppFilter: React.FC<AppFilterProps> = ({ 
+  children, 
+  extra, 
+  onReset, 
+  onRefresh,
+  isLoading 
+}) => {
   const { t } = useTranslation('translation');
   const [isExpanded, setIsExpanded] = useState(false);
 
