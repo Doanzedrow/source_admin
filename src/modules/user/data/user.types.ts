@@ -41,5 +41,4 @@ export interface UserListParams {
   keyword?: string;
   status?: number;
   branchId?: string;
-  roleId?: string;
 }

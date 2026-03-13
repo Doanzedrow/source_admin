@@ -17,7 +17,6 @@ export default {
   filter: {
     keyword: "Search by name, email, phone...",
     status: "All Status",
-    role: "All Roles",
     branch: "All Branches",
   },
   status: {

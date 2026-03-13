@@ -24,7 +24,6 @@ export const useUserList = () => {
     keyword: '',
     status: undefined as number | undefined,
     branchId: undefined as string | undefined,
-    roleId: undefined as string | undefined,
   });
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -99,10 +98,6 @@ export const useUserList = () => {
     setFilters({ ...filters, branchId, page: 1 });
   };
 
-  const handleRoleChange = (roleId?: string) => {
-    setFilters({ ...filters, roleId, page: 1 });
-  };
-
   return {
     data: data?.result?.data || [],
     total: data?.result?.pagination?.total || data?.result?.total || 0,
@@ -123,7 +118,6 @@ export const useUserList = () => {
     handleSearch,
     handleStatusChange,
     handleBranchChange,
-    handleRoleChange,
     goToUserCreate,
     goToUserEdit,
     t,

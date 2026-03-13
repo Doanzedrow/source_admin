@@ -10,7 +10,6 @@ import { AppButton } from '@/components/common/AppButton';
 import { PermissionGate } from '@/components/common/PermissionGate/PermissionGate';
 import { usePermission } from '@/hooks/usePermission';
 import { BranchSelect } from '@/components/common/AppSelect/BranchSelect';
-import { RoleSelect } from '@/components/common/AppSelect/RoleSelect';
 import type { User } from '../data/user.types';
 
 const { Text } = Typography;
@@ -26,7 +25,6 @@ const UserList = () => {
     handleSearch,
     handleStatusChange,
     handleBranchChange,
-    handleRoleChange,
     handleDelete,
     handleBatchDelete,
     refetch,
@@ -175,14 +173,6 @@ const UserList = () => {
               options={statusOptions}
               value={filters.status}
               onChange={handleStatusChange}
-            />
-          </Col>
-
-          <Col xs={12} sm={6} md={4}>
-            <RoleSelect 
-                value={filters.roleId}
-                onChange={handleRoleChange}
-                placeholder={t('filter.role')}
             />
           </Col>
 

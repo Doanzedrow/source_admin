@@ -17,7 +17,6 @@ export default {
   filter: {
     keyword: "Tìm theo tên, email, sđt...",
     status: "Tất cả trạng thái",
-    role: "Tất cả vai trò",
     branch: "Tất cả chi nhánh",
   },
   status: {
