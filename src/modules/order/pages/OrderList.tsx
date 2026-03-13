@@ -11,6 +11,8 @@ import { AppButton } from '@/components/common/AppButton';
 import { PermissionGate } from '@/components/common/PermissionGate/PermissionGate';
 import { usePermission } from '@/hooks/usePermission';
 import { BranchSelect } from '@/components/common/AppSelect/BranchSelect';
+import { EmployeeSelect } from '@/components/common/AppSelect/EmployeeSelect';
+import { ShiftSelect } from '@/components/common/AppSelect/ShiftSelect';
 import { OrderDateFilter } from '../components/OrderDateFilter';
 import { OrderTable } from '../components/OrderTable';
 import { OrderStatus, PaymentStatus } from '../constants/order';
@@ -30,6 +32,8 @@ const OrderList = () => {
     handlePaymentStatusChange,
     handleDateChange,
     handleBranchChange,
+    handleUserChange,
+    handleShiftChange,
     handleExport,
     handleImport,
     refetch,
@@ -62,52 +66,71 @@ const OrderList = () => {
           onReset={resetFilters}
           onRefresh={refetch}
           isLoading={isFetching}
+          extra={
+            <>
+              <Col xs={12} sm={6} md={4}>
+                <Select
+                  allowClear
+                  style={{ width: '100%' }}
+                  placeholder={t('dashboard:orders.table.orderStatus')}
+                  options={statusOptions}
+                  value={filters.status}
+                  onChange={handleStatusChange}
+                />
+              </Col>
+
+              <Col xs={12} sm={6} md={4}>
+                <Select
+                  allowClear
+                  style={{ width: '100%' }}
+                  placeholder={t('dashboard:orders.table.paymentStatus')}
+                  options={paymentStatusOptions}
+                  value={filters.paymentStatus}
+                  onChange={handlePaymentStatusChange}
+                />
+              </Col>
+
+              <Col xs={12} sm={6} md={4}>
+                <ShiftSelect 
+                  placeholder={t('filter.shift', { ns: 'shift', defaultValue: 'Chọn ca làm việc' })}
+                  value={filters.shiftId}
+                  onChange={handleShiftChange}
+                />
+              </Col>
+
+              <Col xs={12} sm={6} md={4}>
+                <EmployeeSelect 
+                  placeholder={t('filter.employee', { ns: 'user', defaultValue: 'Chọn nhân viên' })}
+                  value={filters.userId}
+                  onChange={handleUserChange}
+                />
+              </Col>
+
+              {isSuperAdmin && (
+                <Col xs={12} sm={6} md={4}>
+                  <BranchSelect 
+                    placeholder={t('dashboard:columns.branch')} 
+                    value={filters.branchId} 
+                    onChange={handleBranchChange} 
+                  />
+                </Col>
+              )}
+            </>
+          }
         >
-          <Col span={24}>
+          <Col xs={24} md={16}>
             <OrderDateFilter 
               onChange={handleDateChange}
             />
           </Col>
 
-          <Col span={6}>
+          <Col xs={24} md={8}>
             <AppSearchInput 
               placeholder={t('filter.searchPlaceholder')} 
               onSearch={handleSearch} 
               defaultValue={filters.keyword}
             />
           </Col>
-
-          <Col span={6}>
-            <Select
-              allowClear
-              style={{ width: '100%' }}
-              placeholder={t('dashboard:orders.table.orderStatus')}
-              options={statusOptions}
-              value={filters.status}
-              onChange={handleStatusChange}
-            />
-          </Col>
-
-          <Col span={6}>
-            <Select
-              allowClear
-              style={{ width: '100%' }}
-              placeholder={t('dashboard:orders.table.paymentStatus')}
-              options={paymentStatusOptions}
-              value={filters.paymentStatus}
-              onChange={handlePaymentStatusChange}
-            />
-          </Col>
-
-          {isSuperAdmin && (
-            <Col span={6}>
-              <BranchSelect 
-                placeholder={t('dashboard:columns.branch')} 
-                value={filters.branchId} 
-                onChange={handleBranchChange} 
-              />
-            </Col>
-          )}
         </AppFilter>
       </div>
 

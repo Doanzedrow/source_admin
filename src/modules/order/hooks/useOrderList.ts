@@ -32,6 +32,8 @@ export const useOrderList = () => {
     startHour: '05:00',
     endHour: '22:00',
     type: 0 as number | undefined, // 0: All, 1: Deposit, etc.
+    userId: undefined as string | undefined,
+    shiftId: undefined as string | undefined,
   });
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -161,6 +163,14 @@ export const useOrderList = () => {
     setFilters({ ...filters, branchId, page: 1 });
   };
 
+  const handleUserChange = (userId?: string) => {
+    setFilters({ ...filters, userId, page: 1 });
+  };
+
+  const handleShiftChange = (shiftId?: string) => {
+    setFilters({ ...filters, shiftId, page: 1 });
+  };
+
   return {
     data: data?.result?.data || [],
     total: data?.result?.pagination?.total || data?.result?.total || 0,
@@ -179,6 +189,8 @@ export const useOrderList = () => {
     handlePaymentStatusChange,
     handleDateChange,
     handleBranchChange,
+    handleUserChange,
+    handleShiftChange,
     handleExport,
     handleImport,
     refetch,

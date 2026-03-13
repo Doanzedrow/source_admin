@@ -22,6 +22,7 @@ export default {
   filter: {
     keyword: "Tìm theo tên ca...",
     status: "Tất cả trạng thái",
+    shift: "Chọn ca làm việc",
   },
   status: {
     active: "Hoạt động",

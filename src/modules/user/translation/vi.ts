@@ -18,6 +18,7 @@ export default {
     keyword: "Tìm theo tên, email, sđt...",
     status: "Tất cả trạng thái",
     branch: "Tất cả chi nhánh",
+    employee: "Chọn nhân viên",
   },
   status: {
     active: "Hoạt động",
