@@ -9,9 +9,12 @@ import type { User, PaginatedUserResult, UserListParams } from '../data/user.typ
 const MODULE_NAME = 'user';
 
 const endpoints: Record<
-  'listPagination' | 'getById' | 'add' | 'edit' | 'delete' | 'batchDelete',
+  'list' | 'listPagination' | 'getById' | 'add' | 'edit' | 'delete' | 'batchDelete',
   Endpoint
 > = {
+  list: {
+    endpoint: `/${MODULE_NAME}/list`,
+  },
   listPagination: {
     endpoint: `/${MODULE_NAME}/list-pagination`,
   },
@@ -39,6 +42,13 @@ export const userApi = baseApi.injectEndpoints({
         url: generateEndpointVersionning(endpoints.listPagination),
         method: HTTP_METHOD.GET,
         params: cleanParams(params),
+      }),
+      providesTags: (result) => providesList(result, TAG_TYPES.USER),
+    }),
+    getUserListAll: builder.query<ApiResponse<User[]>, void>({
+      query: () => ({
+        url: generateEndpointVersionning(endpoints.list),
+        method: HTTP_METHOD.GET,
       }),
       providesTags: (result) => providesList(result, TAG_TYPES.USER),
     }),
@@ -89,6 +99,7 @@ export const userApi = baseApi.injectEndpoints({
 
 export const {
   useGetUserListQuery,
+  useGetUserListAllQuery,
   useGetUserByIdQuery,
   useAddUserMutation,
   useEditUserMutation,

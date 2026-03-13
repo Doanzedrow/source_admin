@@ -4,6 +4,7 @@ import { generateEndpointVersionning, PARAMS_KEY, providesList } from '@/utils/a
 import { TAG_TYPES } from '@/store/tags';
 import type { Shift, ShiftListResponse, ShiftResponse, ShiftListParams } from '../data/shift.types';
 import type { Endpoint } from '@/utils/api';
+import type { ApiResponse } from '@/types/api';
 
 const MODULE_NAME = 'shift';
 
@@ -44,6 +45,13 @@ export const shiftApi = baseApi.injectEndpoints({
         url: generateEndpointVersionning(endpoints.index),
         method: HTTP_METHOD.GET,
         params,
+      }),
+      providesTags: (result) => providesList(result, TAG_TYPES.SHIFT),
+    }),
+    getShiftListAll: builder.query<ApiResponse<Shift[]>, void>({
+      query: () => ({
+        url: generateEndpointVersionning(endpoints.list),
+        method: HTTP_METHOD.GET,
       }),
       providesTags: (result) => providesList(result, TAG_TYPES.SHIFT),
     }),
@@ -105,6 +113,7 @@ export const shiftApi = baseApi.injectEndpoints({
 
 export const {
   useGetShiftListQuery,
+  useGetShiftListAllQuery,
   useGetShiftByIdQuery,
   useAddShiftMutation,
   useEditShiftMutation,

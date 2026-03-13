@@ -2,8 +2,7 @@ import React, { useMemo } from 'react';
 import { Select } from 'antd';
 import type { SelectProps } from 'antd';
 import { useTranslation } from 'react-i18next';
-import { useGetUserListQuery } from '@/modules/user/api/userApi';
-import { DEFAULT_PAGE_SIZE } from '@/config/constants';
+import { useGetUserListAllQuery } from '@/modules/user/api/userApi';
 
 interface EmployeeSelectProps extends Omit<SelectProps, 'options' | 'loading'> {
   // Any additional props if needed
@@ -18,11 +17,11 @@ export const EmployeeSelect: React.FC<EmployeeSelectProps> = ({
   ...props 
 }) => {
   const { t } = useTranslation(['translation', 'user']);
-  // Fetching users with default page size
-  const { data, isLoading } = useGetUserListQuery({ page: 1, page_size: DEFAULT_PAGE_SIZE });
+  // Fetching users with non-paginated list API
+  const { data, isLoading } = useGetUserListAllQuery();
 
   const options = useMemo(() => {
-    const users = data?.result?.data || [];
+    const users = data?.result || [];
     
     return users.map((user: any) => ({
       label: user.fullname || user.userName,

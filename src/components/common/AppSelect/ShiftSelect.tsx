@@ -2,8 +2,7 @@ import React, { useMemo } from 'react';
 import { Select } from 'antd';
 import type { SelectProps } from 'antd';
 import { useTranslation } from 'react-i18next';
-import { useGetShiftListQuery } from '@/modules/shift/api/shiftApi';
-import { DEFAULT_PAGE_SIZE } from '@/config/constants';
+import { useGetShiftListAllQuery } from '@/modules/shift/api/shiftApi';
 
 interface ShiftSelectProps extends Omit<SelectProps, 'options' | 'loading'> {
   // Any additional props if needed
@@ -18,10 +17,11 @@ export const ShiftSelect: React.FC<ShiftSelectProps> = ({
   ...props 
 }) => {
   const { t } = useTranslation(['translation', 'shift']);
-  const { data, isLoading } = useGetShiftListQuery({ page: 1, page_size: DEFAULT_PAGE_SIZE });
+  // Fetching shifts with non-paginated list API
+  const { data, isLoading } = useGetShiftListAllQuery();
 
   const options = useMemo(() => {
-    const shifts = data?.result?.data || [];
+    const shifts = data?.result || [];
     
     return shifts.map((shift: any) => ({
       label: `${shift.name} (${shift.startTime} - ${shift.endTime})`,
