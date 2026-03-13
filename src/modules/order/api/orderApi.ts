@@ -81,6 +81,9 @@ export const orderApi = baseApi.injectEndpoints({
           url: generateEndpointVersionning(endpoints.import),
           method: HTTP_METHOD.POST,
           data: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         };
       },
       invalidatesTags: [{ type: TAG_TYPES.ORDER, id: 'LIST' }],
