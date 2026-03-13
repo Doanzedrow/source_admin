@@ -22,5 +22,6 @@ export default {
     custom: "Tùy chỉnh",
     startTime: "Giờ bắt đầu",
     endTime: "Giờ kết thúc",
+    searchPlaceholder: "Tìm theo mã đơn, tên, sđt khách hàng...",
   }
 };

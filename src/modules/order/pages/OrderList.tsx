@@ -71,7 +71,7 @@ const OrderList = () => {
 
           <Col span={6}>
             <AppSearchInput 
-              placeholder={t('dashboard:orders.table.orderCode')} 
+              placeholder={t('filter.searchPlaceholder')} 
               onSearch={handleSearch} 
               defaultValue={filters.keyword}
             />

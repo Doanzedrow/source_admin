@@ -196,7 +196,8 @@ export const routesArray: RouteConfig[] = [
     path: '/permission/list',
     icon: <Icon.SafetyCertificateOutlined />,
     layout: 'main',
-    allowedRoles: ['superadmin'],
+    allowedRoles: ['superadmin', 'admin'],
+    requiredPermission: { module: 'permission', action: 'view' },
     component: lazy(() => import('@/modules/permission/pages/PermissionList')),
   },
   {
@@ -204,7 +205,8 @@ export const routesArray: RouteConfig[] = [
     name: 'Create Permission',
     path: '/permission/add',
     layout: 'main',
-    allowedRoles: ['superadmin'],
+    allowedRoles: ['superadmin', 'admin'],
+    requiredPermission: { module: 'permission', action: 'create' },
     component: lazy(() => import('@/modules/permission/pages/PermissionUpsert')),
   },
   {
@@ -212,7 +214,8 @@ export const routesArray: RouteConfig[] = [
     name: 'Edit Permission',
     path: '/permission/edit/:id',
     layout: 'main',
-    allowedRoles: ['superadmin'],
+    allowedRoles: ['superadmin', 'admin'],
+    requiredPermission: { module: 'permission', action: 'update' },
     component: lazy(() => import('@/modules/permission/pages/PermissionUpsert')),
   },
   {
@@ -221,7 +224,8 @@ export const routesArray: RouteConfig[] = [
     path: '/role/list',
     icon: <Icon.TeamOutlined />,
     layout: 'main',
-    allowedRoles: ['superadmin'],
+    allowedRoles: ['superadmin', 'admin'],
+    requiredPermission: { module: 'role', action: 'view' },
     component: lazy(() => import('@/modules/role/pages/RoleList')),
   },
   {
@@ -229,7 +233,8 @@ export const routesArray: RouteConfig[] = [
     name: 'Create Role',
     path: '/role/add',
     layout: 'main',
-    allowedRoles: ['superadmin'],
+    allowedRoles: ['superadmin', 'admin'],
+    requiredPermission: { module: 'role', action: 'create' },
     component: lazy(() => import('@/modules/role/pages/RoleUpsert')),
   },
   {
@@ -237,7 +242,8 @@ export const routesArray: RouteConfig[] = [
     name: 'Edit Role',
     path: '/role/edit/:id',
     layout: 'main',
-    allowedRoles: ['superadmin'],
+    allowedRoles: ['superadmin', 'admin'],
+    requiredPermission: { module: 'role', action: 'update' },
     component: lazy(() => import('@/modules/role/pages/RoleUpsert')),
   },
   {
@@ -274,7 +280,7 @@ export const routesArray: RouteConfig[] = [
     path: '/system/settings',
     icon: <Icon.SettingOutlined />,
     layout: 'main',
-    allowedRoles: ['superadmin'],
+    allowedRoles: ['superadmin', 'admin'],
     component: lazy(() => Promise.resolve({
       default: () => <div className="page-content">System Settings / Hệ thống Cài đặt chuyên môn</div>
     })),

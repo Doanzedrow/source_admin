@@ -22,5 +22,6 @@ export default {
     custom: "Custom",
     startTime: "Start Time",
     endTime: "End Time",
+    searchPlaceholder: "Search by code, customer name, phone...",
   }
 };
