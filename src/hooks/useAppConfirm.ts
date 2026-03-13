@@ -1,4 +1,4 @@
-import { Modal } from 'antd';
+import { App } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import React from 'react';
@@ -14,6 +14,7 @@ interface ConfirmProps {
 
 export const useAppConfirm = () => {
   const { t } = useTranslation();
+  const { modal } = App.useApp();
 
   const confirmDelete = ({ 
     title = t('common.messages.confirmDelete'), 
@@ -23,7 +24,7 @@ export const useAppConfirm = () => {
     cancelText = t('common.actions.cancel'),
     okType = 'danger'
   }: ConfirmProps) => {
-    Modal.confirm({
+    modal.confirm({
       title,
       content,
       icon: React.createElement(ExclamationCircleFilled, { style: { color: '#ff4d4f' } }),
@@ -31,7 +32,9 @@ export const useAppConfirm = () => {
       cancelText,
       okType: okType as any,
       centered: true,
-      maskClosable: true,
+      mask: {
+        closable: true,
+      },
       className: 'app-confirm-modal',
       onOk,
     });

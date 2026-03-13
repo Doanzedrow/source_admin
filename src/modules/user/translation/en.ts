@@ -48,7 +48,6 @@ export default {
     birthday: "Birthday",
   },
   gender: {
-    none: "Other",
     male: "Male",
     female: "Female",
   }

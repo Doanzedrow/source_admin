@@ -48,7 +48,6 @@ export default {
     birthday: "Ngày sinh",
   },
   gender: {
-    none: "Khác",
     male: "Nam",
     female: "Nữ",
   }
