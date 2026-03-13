@@ -60,6 +60,8 @@ export interface OrderListParams {
   paymentStatus?: number;
   startDate?: string;
   endDate?: string;
+  startHour?: string;
+  endHour?: string;
   branchId?: string;
   type?: number;
 }

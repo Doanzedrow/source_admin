@@ -32,6 +32,7 @@ const OrderList = () => {
     handleBranchChange,
     handleExport,
     handleImport,
+    refetch,
     resetFilters,
   } = useOrderList();
   const { isSuperAdmin } = usePermission();
@@ -59,6 +60,8 @@ const OrderList = () => {
       <div className="sticky-filter">
         <AppFilter 
           onReset={resetFilters}
+          onRefresh={refetch}
+          isLoading={isFetching}
         >
           <Col span={24}>
             <OrderDateFilter 

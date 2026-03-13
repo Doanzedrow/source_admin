@@ -20,5 +20,7 @@ export default {
   },
   filter: {
     custom: "Tùy chỉnh",
+    startTime: "Giờ bắt đầu",
+    endTime: "Giờ kết thúc",
   }
 };

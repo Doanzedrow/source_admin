@@ -29,6 +29,8 @@ export const useOrderList = () => {
     branchId: undefined as string | undefined,
     startDate: dayjs().format('YYYY-MM-DD'),
     endDate: dayjs().format('YYYY-MM-DD'),
+    startHour: '05:00',
+    endHour: '22:00',
     type: 0 as number | undefined, // 0: All, 1: Deposit, etc.
   });
 
@@ -151,8 +153,8 @@ export const useOrderList = () => {
     setFilters({ ...filters, paymentStatus, page: 1 });
   };
 
-  const handleDateChange = (startDate?: string, endDate?: string) => {
-    setFilters({ ...filters, startDate, endDate, page: 1 });
+  const handleDateChange = (startDate?: string, endDate?: string, startHour?: string, endHour?: string) => {
+    setFilters({ ...filters, startDate, endDate, startHour, endHour, page: 1 });
   };
 
   const handleBranchChange = (branchId?: string) => {

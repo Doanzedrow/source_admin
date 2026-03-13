@@ -20,5 +20,7 @@ export default {
   },
   filter: {
     custom: "Custom",
+    startTime: "Start Time",
+    endTime: "End Time",
   }
 };
