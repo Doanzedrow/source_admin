@@ -67,7 +67,9 @@ export default {
       error: "Lỗi",
       unpaid: "Chưa thanh toán",
       paid: "Đã thanh toán",
-      deposit: "Đặt cọc"
+      deposit: "Đặt cọc",
+      sale: "Thanh toán đầy đủ",
+      exchange: "Đổi trả"
     }
   }
 };

@@ -102,6 +102,7 @@ export const OrderTable: React.FC<OrderTableProps> = ({
         render: (val: number) => <strong>{formatCurrency(val || 0)}</strong>
       }
     ] : []),
+    /* 
     {
       title: t('dashboard:orders.table.expectedDeliveryDate'),
       dataIndex: 'deadline',
@@ -111,6 +112,7 @@ export const OrderTable: React.FC<OrderTableProps> = ({
         return dateStr ? formatDateTime(dateStr) : '--';
       }
     },
+    */
     {
       title: t('dashboard:orders.table.orderStatus'),
       dataIndex: 'orderStatus',

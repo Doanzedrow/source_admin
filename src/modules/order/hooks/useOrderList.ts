@@ -171,6 +171,10 @@ export const useOrderList = () => {
     setFilters({ ...filters, shiftId, page: 1 });
   };
 
+  const handleTypeChange = (type?: number) => {
+    setFilters({ ...filters, type: type ?? 0, page: 1 });
+  };
+
   return {
     data: data?.result?.data || [],
     total: data?.result?.pagination?.total || data?.result?.total || 0,
@@ -187,6 +191,7 @@ export const useOrderList = () => {
     handleSearch,
     handleStatusChange,
     handlePaymentStatusChange,
+    handleTypeChange,
     handleDateChange,
     handleBranchChange,
     handleUserChange,

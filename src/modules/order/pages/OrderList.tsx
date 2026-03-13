@@ -15,7 +15,7 @@ import { EmployeeSelect } from '@/components/common/AppSelect/EmployeeSelect';
 import { ShiftSelect } from '@/components/common/AppSelect/ShiftSelect';
 import { OrderDateFilter } from '../components/OrderDateFilter';
 import { OrderTable } from '../components/OrderTable';
-import { OrderStatus, PaymentStatus } from '../constants/order';
+import { OrderStatuses, OrderTypeOptions } from '../constants/order';
 
 const OrderList = () => {
   const { t } = useTranslation(['order', 'dashboard', 'translation']);
@@ -29,7 +29,7 @@ const OrderList = () => {
     handlePageChange,
     handleSearch,
     handleStatusChange,
-    handlePaymentStatusChange,
+    handleTypeChange,
     handleDateChange,
     handleBranchChange,
     handleUserChange,
@@ -41,21 +41,15 @@ const OrderList = () => {
   } = useOrderList();
   const { isSuperAdmin } = usePermission();
 
-  const statusOptions = useMemo(() => [
-    { label: t('dashboard:orders.status.draft'), value: OrderStatus.Draft },
-    { label: t('dashboard:orders.status.inProduction'), value: OrderStatus.InProduction },
-    { label: t('dashboard:orders.status.produced'), value: OrderStatus.Produced },
-    { label: t('dashboard:orders.status.delivered'), value: OrderStatus.Delivered },
-    { label: t('dashboard:orders.status.refunded'), value: OrderStatus.Refunded },
-    { label: t('dashboard:orders.status.canceled'), value: OrderStatus.Canceled },
-  ], [t]);
+  const statusOptions = useMemo(() => OrderStatuses.map(item => ({
+    label: t(`dashboard:orders.status.${item.name}`, { defaultValue: item.label }),
+    value: item.id
+  })), [t]);
 
-  const paymentStatusOptions = useMemo(() => [
-    { label: t('dashboard:orders.paymentStatus.unpaid'), value: PaymentStatus.Unpaid },
-    { label: t('dashboard:orders.paymentStatus.paid'), value: PaymentStatus.Paid },
-    { label: t('dashboard:orders.paymentStatus.deposit'), value: PaymentStatus.Deposit },
-    { label: t('dashboard:orders.paymentStatus.error'), value: PaymentStatus.Error },
-  ], [t]);
+  const typeOptions = useMemo(() => OrderTypeOptions.map(item => ({
+    label: t(`dashboard:orders.paymentStatus.${item.name}`, { defaultValue: item.label }),
+    value: item.id
+  })), [t]);
 
   return (
     <div className="order-list-wrapper">
@@ -84,9 +78,9 @@ const OrderList = () => {
                   allowClear
                   style={{ width: '100%' }}
                   placeholder={t('dashboard:orders.table.paymentStatus')}
-                  options={paymentStatusOptions}
-                  value={filters.paymentStatus}
-                  onChange={handlePaymentStatusChange}
+                  options={typeOptions}
+                  value={filters.type}
+                  onChange={handleTypeChange}
                 />
               </Col>
 
