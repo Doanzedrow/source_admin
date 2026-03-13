@@ -62,6 +62,11 @@ export const LayoutSider: React.FC<LayoutSiderProps> = ({
           label: t('products') 
         },
         { 
+          key: rc(RouteKey.Service).path, 
+          icon: rc(RouteKey.Service).icon, 
+          label: t('services') 
+        },
+        { 
           key: rc(RouteKey.Category).path, 
           icon: rc(RouteKey.Category).icon, 
           label: t('categories') 

@@ -1,0 +1,74 @@
+export default {
+  title: "Danh sách Dịch vụ",
+  titleCreate: "Thêm dịch vụ mới",
+  titleEdit: "Chỉnh sửa dịch vụ",
+  infoBasic: "Thông tin cơ bản",
+  infoPricing: "Giá cả",
+  infoMedia: "Hình ảnh",
+  infoDescription: "Mô tả chi tiết",
+  seoTitle: "Dịch vụ",
+  seoDescription: "Quản lý danh sách dịch vụ tại SPA Thanh Xuân.",
+  addService: "Thêm dịch vụ",
+  columns: {
+    name: "Tên dịch vụ",
+    category: "Danh mục",
+    price: "Giá bán",
+    action: "Hành động",
+    image: "Ảnh",
+    code: "Mã dịch vụ",
+    status: "Trạng thái",
+    index: "#",
+    tax: "Thuế (%)",
+    totalPrice: "Tổng tiền (sau thuế)",
+  },
+  filter: {
+    keyword: "Tìm theo tên, mã dịch vụ",
+    category: "Tất cả danh mục",
+    status: "Tất cả trạng thái",
+    reset: "Đặt lại",
+  },
+  status: {
+    active: "Đang cung cấp",
+    inactive: "Tạm ngưng"
+  },
+  form: {
+    info: "Thông tin dịch vụ",
+    name: "Tên dịch vụ",
+    price: "Giá",
+    description: "Mô tả",
+    code: "Mã dịch vụ",
+    category: "Loại dịch vụ",
+    priceSale: "Giá bán (chưa thuế)",
+    priceAfterTax: "Giá sau thuế",
+    taxPercentage: "Thuế VAT",
+    status: "Trạng thái",
+    note: "Chú thích",
+    image: "Ảnh dịch vụ",
+    uploadHint: "JPG, PNG. Kích thước chuẩn 1280x1280 px, tỉ lệ 1:1"
+  },
+  placeholder: {
+    name: "Nhập tên dịch vụ",
+    code: "Nhập mã dịch vụ",
+    price: "Nhập giá gốc",
+    description: "Nhập mô tả dịch vụ...",
+    category: "Chọn loại dịch vụ",
+  },
+  validation: {
+    required: "{{field}} là bắt buộc",
+    number: "{{field}} phải là số",
+    invalidCode: "Mã dịch vụ chỉ cho phép chữ, số và các ký tự _ - ( ) , . (2–30 ký tự)",
+    invalidName: "Tên dịch vụ 2–200 ký tự, không chứa ký tự đặc biệt"
+  },
+  messages: {
+    updateStatusSuccess: "Cập nhật trạng thái thành công",
+    updateStatusError: "Cập nhật trạng thái thất bại",
+    createSuccess: "Thêm dịch vụ thành công",
+    createError: "Thêm dịch vụ thất bại",
+    updateSuccess: "Cập nhật dịch vụ thành công",
+    updateError: "Cập nhật dịch vụ thất bại",
+    deleteSuccess: "Xóa dịch vụ thành công",
+    deleteError: "Xóa dịch vụ thất bại",
+    deleteConfirm: "Bạn có chắc chắn muốn xóa dịch vụ này?",
+    batchDeleteConfirm: "Bạn có chắc chắn muốn xóa {{count}} dịch vụ đã chọn?"
+  }
+};

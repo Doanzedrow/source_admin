@@ -1,0 +1,74 @@
+export default {
+  title: "Service List",
+  titleCreate: "Add New Service",
+  titleEdit: "Edit Service",
+  infoBasic: "Basic Information",
+  infoPricing: "Pricing",
+  infoMedia: "Media",
+  infoDescription: "Detailed Description",
+  seoTitle: "Services",
+  seoDescription: "Manage services at SPA Thanh Xuân.",
+  addService: "Add Service",
+  columns: {
+    name: "Service Name",
+    category: "Category",
+    price: "Price",
+    action: "Actions",
+    image: "Image",
+    code: "Service Code",
+    status: "Status",
+    index: "#",
+    tax: "VAT (%)",
+    totalPrice: "Final Price (Inc. VAT)",
+  },
+  filter: {
+    keyword: "Search by name, code",
+    category: "All Categories",
+    status: "All Statuses",
+    reset: "Reset",
+  },
+  status: {
+    active: "Available",
+    inactive: "Unavailable"
+  },
+  form: {
+    info: "Service Information",
+    name: "Service Name",
+    price: "Price",
+    description: "Description",
+    code: "Service Code",
+    category: "Service Type",
+    priceSale: "Base Price",
+    priceAfterTax: "Price Incl. VAT",
+    taxPercentage: "VAT",
+    status: "Status",
+    note: "Note",
+    image: "Service Image",
+    uploadHint: "JPG, PNG. Standard size 1280x1280 px, 1:1 ratio"
+  },
+  placeholder: {
+    name: "Enter service name",
+    code: "Enter service code",
+    price: "Enter base price",
+    description: "Enter service description...",
+    category: "Select service type",
+  },
+  validation: {
+    required: "{{field}} is required",
+    number: "{{field}} must be a number",
+    invalidCode: "Service code only allows letters, numbers and _ - ( ) , . (2–30 chars)",
+    invalidName: "Service name 2–200 chars, no special characters"
+  },
+  messages: {
+    updateStatusSuccess: "Status updated successfully",
+    updateStatusError: "Failed to update status",
+    createSuccess: "Service created successfully",
+    createError: "Failed to create service",
+    updateSuccess: "Service updated successfully",
+    updateError: "Failed to update service",
+    deleteSuccess: "Service deleted successfully",
+    deleteError: "Failed to delete service",
+    deleteConfirm: "Are you sure you want to delete this service?",
+    batchDeleteConfirm: "Are you sure you want to delete {{count}} selected services?"
+  }
+};

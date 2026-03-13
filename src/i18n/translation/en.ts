@@ -4,6 +4,7 @@ export default {
   catalog: "Product Info",
   products: "Products",
   categories: "Categories",
+  services: "Services",
   attributes: "Variants",
   users: "Users",
   settings: "Settings",

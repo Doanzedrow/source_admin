@@ -10,6 +10,10 @@ export const useAppNavigate = () => {
   const goToProductCreate = () => navigate(rc(RouteKey.ProductCreate).path);
   const goToProductEdit = (id: string) => navigate(rc(RouteKey.ProductEdit).path.replace(':id', id));
   
+  const goToServiceList = () => navigate(rc(RouteKey.Service).path);
+  const goToServiceCreate = () => navigate(rc(RouteKey.ServiceCreate).path);
+  const goToServiceEdit = (id: string) => navigate(rc(RouteKey.ServiceEdit).path.replace(':id', id));
+
   const goToCategories = () => navigate(rc(RouteKey.Category).path);
   const goToCategoryCreate = () => navigate(rc(RouteKey.CategoryCreate).path);
   const goToCategoryEdit = (id: string) => navigate(rc(RouteKey.CategoryEdit).path.replace(':id', id));
@@ -34,6 +38,9 @@ export const useAppNavigate = () => {
     goToProducts,
     goToProductCreate,
     goToProductEdit,
+    goToServiceList,
+    goToServiceCreate,
+    goToServiceEdit,
     goToCategories,
     goToCategoryCreate,
     goToCategoryEdit,

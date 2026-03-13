@@ -4,6 +4,7 @@ export default {
   catalog: "Thông tin sản phẩm",
   products: "Sản phẩm",
   categories: "Loại sản phẩm",
+  services: "Dịch vụ",
   attributes: "Biến thể",
   users: "Người dùng",
   settings: "Cài đặt",

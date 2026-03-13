@@ -9,4 +9,5 @@ export const TAG_TYPES = {
   BRANCH: 'Branch',
   PERMISSION: 'Permission',
   ROLE: 'Role',
+  SERVICE: 'Service',
 } as const;
