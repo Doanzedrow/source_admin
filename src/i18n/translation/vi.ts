@@ -14,6 +14,7 @@ export default {
   orders: "Đơn hàng",
   appointments: "Lịch hẹn",
   permissions: "Phân quyền",
+  roles: "Vai trò",
   system: "Hệ thống",
   profile: "Hồ sơ",
   darkMode: "Chế độ Tối",

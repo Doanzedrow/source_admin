@@ -14,6 +14,7 @@ export default {
   orders: "Orders",
   appointments: "Appointments",
   permissions: "Permissions",
+  roles: "Roles",
   system: "System",
   profile: "Profile",
   darkMode: "Dark Mode",

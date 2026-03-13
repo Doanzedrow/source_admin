@@ -10,6 +10,8 @@ interface AppInputProps extends Omit<InputProps, 'name'> {
   regexMessage?: string;
   layout?: 'horizontal' | 'vertical' | 'inline';
   noFormItem?: boolean;
+  isTextArea?: boolean;
+  rows?: number;
 }
 
 export const AppInput: React.FC<AppInputProps> = ({
@@ -19,8 +21,10 @@ export const AppInput: React.FC<AppInputProps> = ({
   regex,
   regexMessage,
   noFormItem = false,
+  isTextArea = false,
+  rows,
   ...props
-}) => {
+}: AppInputProps) => {
   const combinedRules = [{ whitespace: true }, ...rules];
 
   if (regex) {
@@ -32,7 +36,11 @@ export const AppInput: React.FC<AppInputProps> = ({
 
   const inputId = props.id || (Array.isArray(name) ? name.join('-') : name);
 
-  const inputNode = <Input id={inputId} size="large" {...(props as any)} />;
+  const inputNode = isTextArea ? (
+    <Input.TextArea id={inputId} rows={rows || 4} {...(props as any)} />
+  ) : (
+    <Input id={inputId} size="large" {...(props as any)} />
+  );
 
   if (noFormItem) {
     return inputNode;

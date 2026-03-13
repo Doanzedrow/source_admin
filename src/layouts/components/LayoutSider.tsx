@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import { UserOutlined, ShopOutlined, TransactionOutlined, SafetyCertificateOutlined, SettingOutlined } from '@ant-design/icons';
+import { UserOutlined, ShopOutlined, TransactionOutlined, SafetyCertificateOutlined, SettingOutlined, TeamOutlined } from '@ant-design/icons';
 import { rc, RouteKey, routesArray } from '@/routes/routeConfig';
 import { usePermission } from '@/hooks/usePermission';
 import { APP_ASSETS } from '@/config/assets';
@@ -33,7 +33,6 @@ export const LayoutSider: React.FC<LayoutSiderProps> = ({
           return children.length > 0 ? { ...item, children } : null;
         }
 
-        // Check if item has a corresponding route config with permissions
         const route = routesArray.find((r) => r.path === item.key);
         if (route?.requiredPermission) {
           return can(route.requiredPermission.module, route.requiredPermission.action || 'view')
@@ -94,6 +93,11 @@ export const LayoutSider: React.FC<LayoutSiderProps> = ({
           key: rc(RouteKey.Permission).path, 
           icon: <SafetyCertificateOutlined />, 
           label: t('permissions') 
+        },
+        { 
+          key: rc(RouteKey.Role).path, 
+          icon: <TeamOutlined />, 
+          label: t('roles') 
         },
         { 
           key: rc(RouteKey.Settings).path, 
