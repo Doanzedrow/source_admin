@@ -53,9 +53,8 @@ const endpoints: Record<
   },
 };
 
-export const generateServiceExportUrl = (params: any) => {
-  const query = new URLSearchParams(cleanParams({ ...params, type: 2 })).toString();
-  return `${generateEndpointVersionning(endpoints.export)}${query ? `?${query}` : ''}`;
+export const generateServiceExportUrl = () => {
+  return generateEndpointVersionning(endpoints.export);
 };
 
 export const serviceApi = baseApi.injectEndpoints({

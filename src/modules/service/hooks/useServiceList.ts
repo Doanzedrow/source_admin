@@ -16,6 +16,7 @@ import { useUrlFilters } from '@/hooks/useUrlFilters';
 import { useGetAllCategoriesQuery } from '@/modules/category/api/categoryApi';
 import { useAppNavigate } from '@/hooks/useAppNavigate';
 import axiosInstance from '@/utils/axiosInstance';
+import { cleanParams } from '@/utils/api';
 
 export const useServiceList = () => {
   const { t } = useTranslation(['service', 'translation']);
@@ -86,8 +87,8 @@ export const useServiceList = () => {
   const handleExport = useCallback(async () => {
     try {
       setIsExporting(true);
-      const url = generateServiceExportUrl(apiParams);
-      const response = await axiosInstance.get(url, {
+      const url = generateServiceExportUrl();
+      const response = await axiosInstance.post(url, cleanParams({ ...apiParams, type: 2 }), {
         responseType: 'blob',
       }) as any;
       

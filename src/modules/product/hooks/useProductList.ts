@@ -16,6 +16,7 @@ import { useUrlFilters } from '@/hooks/useUrlFilters';
 import { useGetAllCategoriesQuery } from '@/modules/category/api/categoryApi';
 import { useAppNavigate } from '@/hooks/useAppNavigate';
 import axiosInstance from '@/utils/axiosInstance';
+import { cleanParams } from '@/utils/api';
 
 export const useProductList = () => {
   const { t } = useTranslation(['product', 'translation']);
@@ -86,8 +87,8 @@ export const useProductList = () => {
   const handleExport = useCallback(async () => {
     try {
       setIsExporting(true);
-      const url = generateProductExportUrl(apiParams);
-      const response = await axiosInstance.get(url, {
+      const url = generateProductExportUrl();
+      const response = await axiosInstance.post(url, cleanParams(apiParams), {
         responseType: 'blob',
       }) as any;
       

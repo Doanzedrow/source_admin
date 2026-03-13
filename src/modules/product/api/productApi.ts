@@ -57,9 +57,8 @@ const endpoints: Record<
   },
 };
 
-export const generateProductExportUrl = (params: any) => {
-  const query = new URLSearchParams(cleanParams(params)).toString();
-  return `${generateEndpointVersionning(endpoints.export)}${query ? `?${query}` : ''}`;
+export const generateProductExportUrl = () => {
+  return generateEndpointVersionning(endpoints.export);
 };
 
 export const productApi = baseApi.injectEndpoints({
