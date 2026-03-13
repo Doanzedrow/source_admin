@@ -8,11 +8,14 @@ import {
   useDeleteServiceMutation,
   useBatchDeleteServicesMutation,
   useBatchUpdateServiceStatusMutation,
+  generateServiceExportUrl,
+  useImportServiceMutation,
 } from '../api/serviceApi';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants';
 import { useUrlFilters } from '@/hooks/useUrlFilters';
 import { useGetAllCategoriesQuery } from '@/modules/category/api/categoryApi';
 import { useAppNavigate } from '@/hooks/useAppNavigate';
+import axiosInstance from '@/utils/axiosInstance';
 
 export const useServiceList = () => {
   const { t } = useTranslation(['service', 'translation']);
@@ -31,6 +34,7 @@ export const useServiceList = () => {
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [switchingId, setSwitchingId] = useState<string | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -77,6 +81,52 @@ export const useServiceList = () => {
   const [deleteService, { isLoading: isDeleting }] = useDeleteServiceMutation();
   const [batchDeleteServices, { isLoading: isBatchDeleting }] = useBatchDeleteServicesMutation();
   const [batchUpdateStatus, { isLoading: isBatchUpdating }] = useBatchUpdateServiceStatusMutation();
+  const [importService, { isLoading: isImporting }] = useImportServiceMutation();
+
+  const handleExport = useCallback(async () => {
+    try {
+      setIsExporting(true);
+      const url = generateServiceExportUrl(apiParams);
+      const response = await axiosInstance.get(url, {
+        responseType: 'blob',
+      }) as any;
+      
+      const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', `services_${new Date().getTime()}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(downloadUrl);
+    } catch (error: any) {
+      notification.error({
+        title: t('common.messages.error', { ns: 'translation' }),
+        description: error?.message || 'Export failed',
+      });
+    } finally {
+      setIsExporting(false);
+    }
+  }, [apiParams, notification, t]);
+
+  const handleImport = useCallback(async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+      await importService(formData).unwrap();
+      notification.success({
+        title: t('common.messages.success', { ns: 'translation' }),
+        description: t('messages.importSuccess', { defaultValue: 'Nhập dữ liệu thành công' }),
+      });
+      refetch();
+    } catch (error: any) {
+      notification.error({
+        title: t('common.messages.error', { ns: 'translation' }),
+        description: error?.data?.message || t('messages.importError', { defaultValue: 'Nhập dữ liệu thất bại' }),
+      });
+    }
+  }, [importService, notification, t, refetch]);
 
   const handlePageChange = useCallback(
     (page: number, pageSize?: number) => {
@@ -231,10 +281,10 @@ export const useServiceList = () => {
   return {
     data: rawData,
     refetch,
-    isLoading: isLoading || isDeleting || isBatchDeleting || isBatchUpdating || isCategoriesLoading,
+    isLoading: isLoading || isDeleting || isBatchDeleting || isBatchUpdating || isCategoriesLoading || isImporting || isExporting,
     isFetching,
     isReady,
-    isPending: false,
+    isPending: isCategoriesLoading,
     switchingId,
     handleDelete,
     handleBatchDelete,
@@ -245,6 +295,8 @@ export const useServiceList = () => {
     handleCategoryChange,
     handleStatusChange,
     handleBranchChange,
+    handleExport,
+    handleImport,
     params: filters,
     setFilters,
     resetFilters,

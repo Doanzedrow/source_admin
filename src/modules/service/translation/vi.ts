@@ -69,6 +69,8 @@ export default {
     deleteSuccess: "Xóa dịch vụ thành công",
     deleteError: "Xóa dịch vụ thất bại",
     deleteConfirm: "Bạn có chắc chắn muốn xóa dịch vụ này?",
-    batchDeleteConfirm: "Bạn có chắc chắn muốn xóa {{count}} dịch vụ đã chọn?"
+    batchDeleteConfirm: "Bạn có chắc chắn muốn xóa {{count}} dịch vụ đã chọn?",
+    importSuccess: "Nhập dữ liệu dịch vụ thành công",
+    importError: "Nhập dữ liệu dịch vụ thất bại"
   }
 };

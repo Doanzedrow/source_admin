@@ -1,5 +1,6 @@
 import { useMemo, memo } from 'react';
-import { Space, Flex, Tag, Switch, Select, Typography, Col } from 'antd';
+import { Space, Flex, Tag, Switch, Select, Typography, Col, Upload } from 'antd';
+import { DownloadOutlined, UploadOutlined } from '@ant-design/icons';
 import { AppCard } from '@/components/common/AppCard';
 import { AppTable } from '@/components/common/AppTable';
 import { SEO } from '@/components/common/SEO/SEO';
@@ -38,6 +39,8 @@ const ProductList = () => {
     handleCategoryChange,
     handleStatusChange,
     handleBranchChange,
+    handleExport,
+    handleImport,
     params,
     resetFilters,
     total,
@@ -323,9 +326,26 @@ const ProductList = () => {
               </>
             )}
             <PermissionGate module="product" action="create">
-              <AppButton type="primary" onClick={goToProductCreate}>
-                {t('addProduct')}
-              </AppButton>
+              <Space>
+                <Upload
+                  accept=".xlsx, .xls"
+                  showUploadList={false}
+                  beforeUpload={(file) => {
+                    handleImport(file);
+                    return false;
+                  }}
+                >
+                  <AppButton icon={<UploadOutlined />}>
+                    {t('common.actions.import', { ns: 'translation' })}
+                  </AppButton>
+                </Upload>
+                <AppButton icon={<DownloadOutlined />} onClick={handleExport} loading={isLoading}>
+                  {t('common.actions.export', { ns: 'translation' })}
+                </AppButton>
+                <AppButton type="primary" onClick={goToProductCreate}>
+                  {t('addProduct')}
+                </AppButton>
+              </Space>
             </PermissionGate>
           </Space>
         }

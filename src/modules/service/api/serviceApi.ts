@@ -16,7 +16,9 @@ const endpoints: Record<
   | 'getById'
   | 'delete'
   | 'batchDelete'
-  | 'editMultiple',
+  | 'editMultiple'
+  | 'import'
+  | 'export',
   Endpoint
 > = {
   listPagination: {
@@ -43,6 +45,17 @@ const endpoints: Record<
   editMultiple: {
     endpoint: `/${MODULE_NAME}/multiple`,
   },
+  import: {
+    endpoint: `/${MODULE_NAME}/import`,
+  },
+  export: {
+    endpoint: `/${MODULE_NAME}/export`,
+  },
+};
+
+export const generateServiceExportUrl = (params: any) => {
+  const query = new URLSearchParams(cleanParams({ ...params, type: 2 })).toString();
+  return `${generateEndpointVersionning(endpoints.export)}${query ? `?${query}` : ''}`;
 };
 
 export const serviceApi = baseApi.injectEndpoints({
@@ -118,6 +131,17 @@ export const serviceApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: TAG_TYPES.SERVICE, id: 'LIST' }],
     }),
+    importService: builder.mutation<ApiResponse<any>, FormData>({
+      query: (formData) => ({
+        url: generateEndpointVersionning(endpoints.import),
+        method: HTTP_METHOD.POST,
+        data: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }),
+      invalidatesTags: [{ type: TAG_TYPES.SERVICE, id: 'LIST' }],
+    }),
   }),
   overrideExisting: false,
 });
@@ -131,4 +155,5 @@ export const {
   useDeleteServiceMutation,
   useBatchDeleteServicesMutation,
   useBatchUpdateServiceStatusMutation,
+  useImportServiceMutation,
 } = serviceApi;

@@ -50,7 +50,9 @@ export default {
       view: "View",
       copy: "Copy",
       refresh: "Refresh",
-      deleteSelected: "Delete {{count}} selected"
+      deleteSelected: "Delete {{count}} selected",
+      import: "Import",
+      export: "Export"
     },
     placeholders: {
       search: "Search...",

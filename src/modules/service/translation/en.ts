@@ -69,6 +69,8 @@ export default {
     deleteSuccess: "Service deleted successfully",
     deleteError: "Failed to delete service",
     deleteConfirm: "Are you sure you want to delete this service?",
-    batchDeleteConfirm: "Are you sure you want to delete {{count}} selected services?"
+    batchDeleteConfirm: "Are you sure you want to delete {{count}} selected services?",
+    importSuccess: "Service data imported successfully",
+    importError: "Failed to import service data"
   }
 };

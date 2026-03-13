@@ -94,6 +94,8 @@ export default {
     deleteSuccess: "Xóa sản phẩm thành công",
     deleteError: "Xóa sản phẩm thất bại",
     deleteConfirm: "Bạn có chắc chắn muốn xóa sản phẩm này?",
-    batchDeleteConfirm: "Bạn có chắc chắn muốn xóa {{count}} sản phẩm đã chọn?"
+    batchDeleteConfirm: "Bạn có chắc chắn muốn xóa {{count}} sản phẩm đã chọn?",
+    importSuccess: "Nhập dữ liệu sản phẩm thành công",
+    importError: "Nhập dữ liệu sản phẩm thất bại"
   }
 };

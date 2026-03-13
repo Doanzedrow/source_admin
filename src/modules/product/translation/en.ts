@@ -91,6 +91,8 @@ export default {
     deleteSuccess: "Product deleted successfully",
     deleteError: "Failed to delete product",
     deleteConfirm: "Are you sure you want to delete this product?",
-    batchDeleteConfirm: "Are you sure you want to delete {{count}} selected products?"
+    batchDeleteConfirm: "Are you sure you want to delete {{count}} selected products?",
+    importSuccess: "Product data imported successfully",
+    importError: "Failed to import product data"
   }
 };

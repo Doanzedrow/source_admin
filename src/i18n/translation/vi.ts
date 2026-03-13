@@ -50,7 +50,9 @@ export default {
       view: "Xem",
       copy: "Sao chép",
       refresh: "Lấy lại dữ liệu",
-      deleteSelected: "Xóa {{count}} mục đã chọn"
+      deleteSelected: "Xóa {{count}} mục đã chọn",
+      import: "Nhập file",
+      export: "Xuất file"
     },
     placeholders: {
       search: "Tìm kiếm...",

@@ -17,7 +17,9 @@ const endpoints: Record<
   | 'delete'
   | 'batchDelete'
   | 'editMultiple'
-  | 'inventoryHistories',
+  | 'inventoryHistories'
+  | 'import'
+  | 'export',
   Endpoint
 > = {
   listPagination: {
@@ -47,6 +49,17 @@ const endpoints: Record<
   inventoryHistories: {
     endpoint: `/${MODULE_NAME}/inventory-histories/${PARAMS_KEY}`,
   },
+  import: {
+    endpoint: `/${MODULE_NAME}/import`,
+  },
+  export: {
+    endpoint: `/${MODULE_NAME}/export`,
+  },
+};
+
+export const generateProductExportUrl = (params: any) => {
+  const query = new URLSearchParams(cleanParams(params)).toString();
+  return `${generateEndpointVersionning(endpoints.export)}${query ? `?${query}` : ''}`;
 };
 
 export const productApi = baseApi.injectEndpoints({
@@ -128,6 +141,17 @@ export const productApi = baseApi.injectEndpoints({
         method: HTTP_METHOD.GET,
       }),
     }),
+    importProduct: builder.mutation<ApiResponse<any>, FormData>({
+      query: (formData) => ({
+        url: generateEndpointVersionning(endpoints.import),
+        method: HTTP_METHOD.POST,
+        data: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }),
+      invalidatesTags: [{ type: TAG_TYPES.PRODUCT, id: 'LIST' }],
+    }),
   }),
   overrideExisting: false,
 });
@@ -142,4 +166,5 @@ export const {
   useBatchDeleteProductsMutation,
   useBatchUpdateStatusMutation,
   useGetInventoryHistoriesQuery,
+  useImportProductMutation,
 } = productApi;

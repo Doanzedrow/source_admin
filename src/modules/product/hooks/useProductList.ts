@@ -8,11 +8,14 @@ import {
   useDeleteProductMutation,
   useBatchDeleteProductsMutation,
   useBatchUpdateStatusMutation,
+  generateProductExportUrl,
+  useImportProductMutation,
 } from '../api/productApi';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants';
 import { useUrlFilters } from '@/hooks/useUrlFilters';
 import { useGetAllCategoriesQuery } from '@/modules/category/api/categoryApi';
 import { useAppNavigate } from '@/hooks/useAppNavigate';
+import axiosInstance from '@/utils/axiosInstance';
 
 export const useProductList = () => {
   const { t } = useTranslation(['product', 'translation']);
@@ -31,6 +34,7 @@ export const useProductList = () => {
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [switchingId, setSwitchingId] = useState<string | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -77,6 +81,52 @@ export const useProductList = () => {
   const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
   const [batchDeleteProducts, { isLoading: isBatchDeleting }] = useBatchDeleteProductsMutation();
   const [batchUpdateStatus, { isLoading: isBatchUpdating }] = useBatchUpdateStatusMutation();
+  const [importProduct, { isLoading: isImporting }] = useImportProductMutation();
+
+  const handleExport = useCallback(async () => {
+    try {
+      setIsExporting(true);
+      const url = generateProductExportUrl(apiParams);
+      const response = await axiosInstance.get(url, {
+        responseType: 'blob',
+      }) as any;
+      
+      const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', `products_${new Date().getTime()}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(downloadUrl);
+    } catch (error: any) {
+      notification.error({
+        title: t('common.messages.error', { ns: 'translation' }),
+        description: error?.message || 'Export failed',
+      });
+    } finally {
+      setIsExporting(false);
+    }
+  }, [apiParams, notification, t]);
+
+  const handleImport = useCallback(async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+      await importProduct(formData).unwrap();
+      notification.success({
+        title: t('common.messages.success', { ns: 'translation' }),
+        description: t('messages.importSuccess', { defaultValue: 'Nhập dữ liệu thành công' }),
+      });
+      refetch();
+    } catch (error: any) {
+      notification.error({
+        title: t('common.messages.error', { ns: 'translation' }),
+        description: error?.data?.message || t('messages.importError', { defaultValue: 'Nhập dữ liệu thất bại' }),
+      });
+    }
+  }, [importProduct, notification, t, refetch]);
 
   const handlePageChange = useCallback(
     (page: number, pageSize?: number) => {
@@ -231,10 +281,10 @@ export const useProductList = () => {
   return {
     data: rawData,
     refetch,
-    isLoading: isLoading || isDeleting || isBatchDeleting || isBatchUpdating || isCategoriesLoading,
+    isLoading: isLoading || isDeleting || isBatchDeleting || isBatchUpdating || isCategoriesLoading || isImporting || isExporting,
     isFetching,
     isReady,
-    isPending: false,
+    isPending: isCategoriesLoading,
     switchingId,
     handleDelete,
     handleBatchDelete,
@@ -245,6 +295,8 @@ export const useProductList = () => {
     handleCategoryChange,
     handleStatusChange,
     handleBranchChange,
+    handleExport,
+    handleImport,
     params: filters,
     setFilters,
     resetFilters,
