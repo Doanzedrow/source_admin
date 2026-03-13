@@ -37,6 +37,7 @@ export function useUrlFilters<T extends Record<string, any>>(initialValues: T) {
     parseSearchParams(searchParams, initialValuesRef.current)
   );
 
+  // Sync state when URL changes (e.g. browser back button)
   useEffect(() => {
     const parsed = parseSearchParams(searchParams, initialValuesRef.current);
 
@@ -49,32 +50,38 @@ export function useUrlFilters<T extends Record<string, any>>(initialValues: T) {
     }
   }, [searchParams]);
 
+  const updateUrl = useCallback((newFilters: T) => {
+    const urlParams = new URLSearchParams();
+    Object.entries(newFilters).forEach(([key, val]) => {
+      const defaultVal = initialValuesRef.current[key];
+      if (
+        val !== undefined &&
+        val !== null &&
+        val !== '' &&
+        String(val) !== String(defaultVal)
+      ) {
+        urlParams.set(key, String(val));
+      }
+    });
+
+    if (urlParams.toString() !== searchParams.toString()) {
+      // Use setTimeOut or ensure this is called in an event/effect
+      // to avoid "Cannot update a component while rendering"
+      setSearchParams(urlParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
+
   const setFilters = useCallback(
-    (newFilters: Partial<T>) => {
+    (newPartialFilters: Partial<T>) => {
       setFiltersState((prev) => {
-        const merged = { ...prev, ...newFilters };
-
-        const urlParams = new URLSearchParams();
-        Object.entries(merged).forEach(([key, val]) => {
-          const defaultVal = initialValuesRef.current[key];
-          if (
-            val !== undefined &&
-            val !== null &&
-            val !== '' &&
-            String(val) !== String(defaultVal)
-          ) {
-            urlParams.set(key, String(val));
-          }
-        });
-
-        if (urlParams.toString() !== searchParams.toString()) {
-          setSearchParams(urlParams, { replace: true });
-        }
-
-        return merged as T;
+        const next = { ...prev, ...newPartialFilters };
+        // We defer the URL update to avoid React warnings about 
+        // updating RouterProvider during render
+        setTimeout(() => updateUrl(next), 0);
+        return next;
       });
     },
-    [searchParams, setSearchParams]
+    [updateUrl]
   );
 
   const resetFilters = useCallback(() => {
