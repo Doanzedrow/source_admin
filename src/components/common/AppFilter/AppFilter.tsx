@@ -40,15 +40,7 @@ export const AppFilter: React.FC<AppFilterProps> = ({
   const isFilterLoading = isLoading || localRefreshing;
 
   return (
-    <div
-      className="app-filter-sticky-wrapper"
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-        marginTop: -8,
-      }}
-    >
+    <div className="app-filter-sticky-wrapper">
       <AppCard className="filter-card" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
         <Row gutter={[16, 16]} align="middle" justify="space-between">
           <Col flex="1">

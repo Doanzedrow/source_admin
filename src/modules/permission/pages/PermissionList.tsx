@@ -57,7 +57,7 @@ const PermissionList: React.FC = () => {
         width: 150,
         render: (module: string, record: Permission) => (
           <Tag 
-            color="blue" 
+            className="card-title-tag tag-blue"
             style={{ cursor: 'pointer' }} 
             onClick={() => goToPermissionEdit(record._id)}
           >
@@ -133,17 +133,7 @@ const PermissionList: React.FC = () => {
           <Flex align="center" gap={8}>
             <SafetyCertificateOutlined style={{ color: 'var(--primary-color)' }} />
             <span>{t('permissionList')}</span>
-            <Tag
-              style={{
-                margin: 0,
-                borderRadius: '12px',
-                padding: '0 8px',
-                backgroundColor: 'rgba(211, 146, 154, 0.1)', // Primary color with alpha
-                color: 'var(--primary-color)',
-                border: 'none',
-                fontWeight: 600,
-              }}
-            >
+            <Tag className="card-title-tag">
               {total}
             </Tag>
           </Flex>

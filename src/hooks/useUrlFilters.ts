@@ -37,7 +37,6 @@ export function useUrlFilters<T extends Record<string, any>>(initialValues: T) {
     parseSearchParams(searchParams, initialValuesRef.current)
   );
 
-  // Sync state when URL changes (e.g. browser back button)
   useEffect(() => {
     const parsed = parseSearchParams(searchParams, initialValuesRef.current);
 

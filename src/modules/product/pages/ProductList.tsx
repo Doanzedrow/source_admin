@@ -90,26 +90,13 @@ const ProductList = () => {
 
             return (
               <Flex gap={12} align="center">
-                <div
-                  style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: '8px',
-                    backgroundColor: 'rgba(0, 0, 0, 0.02)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    overflow: 'hidden',
-                    border: '1px solid var(--border-color-split)',
-                    flexShrink: 0,
-                  }}
-                >
+                <div className="table-image-wrapper">
                   <CachedImage
                     src={imageUrl}
                     alt={record.name}
                     width={48}
                     height={48}
-                    style={{ objectFit: 'scale-down' }}
+                    className="table-image"
                     isApiImage={false}
                   />
                 </div>
@@ -139,7 +126,7 @@ const ProductList = () => {
           render: (name: string, record: Product) => (
             <Flex vertical>
               <Text strong>{name}</Text>
-              <Text type="secondary" style={{ fontSize: '12px' }}>{record.branch?.code}</Text>
+              <Text type="secondary" className="text-xs">{record.branch?.code}</Text>
             </Flex>
           )
         });
@@ -180,6 +167,7 @@ const ProductList = () => {
             <Tag
               color={count > 10 ? 'success' : 'error'}
               variant="filled"
+              className="table-tag-stock"
               style={{
                 margin: 0,
                 borderRadius: '12px',
@@ -299,18 +287,7 @@ const ProductList = () => {
         title={
           <Flex align="center" gap={8}>
             <span>{t('title')}</span>
-            <Tag 
-              color="blue" 
-              style={{ 
-                margin: 0, 
-                borderRadius: '12px', 
-                padding: '0 8px',
-                backgroundColor: 'rgba(24, 144, 255, 0.1)',
-                color: '#1890ff',
-                border: 'none',
-                fontWeight: 600
-              }}
-            >
+            <Tag className="card-title-tag tag-blue">
               {totalProducts}
             </Tag>
           </Flex>

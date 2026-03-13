@@ -61,7 +61,7 @@ const RoleList: React.FC = () => {
         title: t('columns.description'),
         dataIndex: 'description',
         key: 'description',
-        render: (desc: string) => <Text type="secondary" style={{ fontSize: '13px' }}>{desc || '-'}</Text>,
+        render: (desc: string) => <Text type="secondary" className="text-sm">{desc || '-'}</Text>,
       },
       {
         title: t('fields.permissions'),
@@ -71,7 +71,7 @@ const RoleList: React.FC = () => {
         render: (_: any, record: Role) => (
           <Tag 
             color="blue" 
-            style={{ borderRadius: '12px', padding: '0 10px', fontWeight: 600 }}
+            className="card-title-tag tag-blue"
           >
             {record.permissions?.length || 0} {t('permissions', { ns: 'translation' })}
           </Tag>
@@ -130,17 +130,7 @@ const RoleList: React.FC = () => {
           <Flex align="center" gap={8}>
             <TeamOutlined style={{ color: 'var(--primary-color)' }} />
             <span>{t('roleList')}</span>
-            <Tag
-              style={{
-                margin: 0,
-                borderRadius: '12px',
-                padding: '0 8px',
-                backgroundColor: 'rgba(211, 146, 154, 0.1)',
-                color: 'var(--primary-color)',
-                border: 'none',
-                fontWeight: 600,
-              }}
-            >
+            <Tag className="card-title-tag">
               {total}
             </Tag>
           </Flex>

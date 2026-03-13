@@ -99,7 +99,7 @@ const CategoryList = () => {
         render: (name: string, record: Category) => (
           <Flex vertical gap={0}>
             <Text strong>{name}</Text>
-            <Text type="secondary" style={{ fontSize: '12px' }}>{record.branch?.code}</Text>
+            <Text type="secondary" className="text-xs">{record.branch?.code}</Text>
           </Flex>
         )
       });
@@ -188,7 +188,14 @@ const CategoryList = () => {
       </div>
 
       <AppCard
-        title={t('title')}
+        title={
+          <Flex align="center" gap={8}>
+            <span>{t('title')}</span>
+            <Tag className="card-title-tag tag-blue">
+              {data.length}
+            </Tag>
+          </Flex>
+        }
         extra={
           <Space>
             {selectedIds.length > 0 && (
