@@ -7,6 +7,7 @@ import { AppButton } from '@/components/common/AppButton';
 import { SEO } from '@/components/common/SEO/SEO';
 import { usePermissionList } from '../hooks/usePermissionList';
 import type { Permission } from '../data/permission.types';
+import { PermissionGate } from '@/components/common/PermissionGate/PermissionGate';
 
 const { Text } = Typography;
 
@@ -16,8 +17,10 @@ const PermissionList: React.FC = () => {
     total,
     isLoading,
     isFetching,
+    isReady,
     t,
     handleSwitchStatus,
+    handleDelete,
     goToPermissionCreate,
     goToPermissionEdit,
   } = usePermissionList();
@@ -25,11 +28,13 @@ const PermissionList: React.FC = () => {
   const columns = useMemo(
     () => [
       {
-        title: '#',
+        title: t('columns.index', { defaultValue: '#' }),
         key: 'index',
         width: 60,
         align: 'center' as const,
-        render: (_: any, __: any, index: number) => index + 1,
+        render: (_: any, __: any, index: number) => (
+          <Text type="secondary">{index + 1}</Text>
+        ),
       },
       {
         title: t('columns.name'),
@@ -49,6 +54,7 @@ const PermissionList: React.FC = () => {
         title: t('columns.module'),
         dataIndex: 'module',
         key: 'module',
+        width: 150,
         render: (module: string, record: Permission) => (
           <Tag 
             color="blue" 
@@ -62,8 +68,9 @@ const PermissionList: React.FC = () => {
       {
         title: t('columns.actions'),
         key: 'actions_config',
+        width: 300,
         render: (_: any, record: Permission) => (
-          <Space size="small">
+          <Space size="small" wrap>
             <Tag color={record.actions.view ? 'success' : 'default'} variant="filled">
               VIEW
             </Tag>
@@ -97,17 +104,24 @@ const PermissionList: React.FC = () => {
         title: t('columns.action'),
         key: 'action',
         align: 'right' as const,
-        width: 120,
+        width: 150,
         render: (_: any, record: Permission) => (
           <Space size="small">
-            <AppButton type="link" onClick={() => goToPermissionEdit(record._id)}>
-              {t('common.actions.edit', { ns: 'translation' })}
-            </AppButton>
+            <PermissionGate module="permission" action="update">
+              <AppButton type="link" onClick={() => goToPermissionEdit(record._id)}>
+                {t('common.actions.edit', { ns: 'translation' })}
+              </AppButton>
+            </PermissionGate>
+            <PermissionGate module="permission" action="delete">
+              <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
+                {t('common.actions.delete', { ns: 'translation' })}
+              </AppButton>
+            </PermissionGate>
           </Space>
         ),
       },
     ],
-    [t, goToPermissionEdit, handleSwitchStatus]
+    [t, goToPermissionEdit, handleSwitchStatus, handleDelete]
   );
 
   return (
@@ -120,13 +134,12 @@ const PermissionList: React.FC = () => {
             <SafetyCertificateOutlined style={{ color: 'var(--primary-color)' }} />
             <span>{t('permissionList')}</span>
             <Tag
-              color="blue"
               style={{
                 margin: 0,
                 borderRadius: '12px',
                 padding: '0 8px',
-                backgroundColor: 'rgba(24, 144, 255, 0.1)',
-                color: '#1890ff',
+                backgroundColor: 'rgba(211, 146, 154, 0.1)', // Primary color with alpha
+                color: 'var(--primary-color)',
                 border: 'none',
                 fontWeight: 600,
               }}
@@ -136,9 +149,11 @@ const PermissionList: React.FC = () => {
           </Flex>
         }
         extra={
-          <AppButton type="primary" onClick={goToPermissionCreate}>
-            {t('addPermission')}
-          </AppButton>
+          <PermissionGate module="permission" action="create">
+            <AppButton type="primary" onClick={goToPermissionCreate}>
+              {t('addPermission')}
+            </AppButton>
+          </PermissionGate>
         }
         className="permission-card"
       >
@@ -159,8 +174,9 @@ const PermissionList: React.FC = () => {
               columns={columns}
               dataSource={permissions}
               rowKey="_id"
-              loading={isLoading || isFetching}
-              showSkeleton={isLoading && permissions.length === 0}
+              loading={isFetching}
+              showSkeleton={!isReady || (isLoading && permissions.length === 0)}
+              skeletonRows={10}
               pagination={{
                 pageSize: 20,
                 showSizeChanger: false,

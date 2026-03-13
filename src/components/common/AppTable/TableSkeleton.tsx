@@ -1,4 +1,4 @@
-import React from 'react';
+  import React from 'react';
 import { Skeleton, Flex } from 'antd';
 
 interface TableSkeletonProps {
@@ -13,15 +13,16 @@ export const TableSkeleton: React.FC<TableSkeletonProps> = ({
   compact = false
 }) => {
   return (
-    <div className="table-skeleton-wrapper" style={{ padding: compact ? '8px 0' : '16px' }}>
-      <Flex vertical gap={compact ? 8 : 12}>
+    <div className="table-skeleton-wrapper" style={{ width: '100%' }}>
+      <Flex vertical gap={compact ? 8 : 12} style={{ width: '100%' }}>
         {/* Fake Header */}
-        <Flex gap={8} style={{ marginBottom: 4 }}>
+        <Flex gap={8} style={{ marginBottom: 4, width: '100%' }}>
           {Array.from({ length: columns }).map((_, i) => (
             <Skeleton.Button 
               key={`h-${i}`} 
               active 
               size="small" 
+              block
               style={{ flex: 1, height: compact ? 24 : 32, borderRadius: 4 }} 
             />
           ))}
@@ -29,12 +30,13 @@ export const TableSkeleton: React.FC<TableSkeletonProps> = ({
         
         {/* Fake Rows */}
         {Array.from({ length: rows }).map((_, i) => (
-          <Flex key={`r-${i}`} gap={8}>
+          <Flex key={`r-${i}`} gap={8} style={{ width: '100%' }}>
             {Array.from({ length: columns }).map((_, j) => (
-              <Skeleton.Input 
+              <Skeleton.Button 
                 key={`c-${j}`} 
                 active 
                 size="small" 
+                block
                 style={{ flex: 1, height: compact ? 32 : 48, borderRadius: 4 }} 
               />
             ))}

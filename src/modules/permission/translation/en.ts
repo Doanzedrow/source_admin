@@ -3,9 +3,11 @@ export default {
   addPermission: "Add New Permission",
   editPermission: "Edit Permission",
   columns: {
+    index: "#",
     name: "Permission Name",
     module: "Module",
-    actions: "Actions",
+    actions: "Configured Actions",
+    action: "Action",
     status: "Status"
   },
   fields: {
@@ -24,6 +26,8 @@ export default {
   messages: {
     createSuccess: "Permission created successfully",
     updateSuccess: "Permission updated successfully",
+    deleteSuccess: "Permission deleted successfully",
+    updateStatusSuccess: "Status updated successfully",
     error: "An error occurred, please try again later"
   },
   validation: {

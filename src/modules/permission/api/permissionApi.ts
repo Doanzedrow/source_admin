@@ -7,7 +7,7 @@ import type { Endpoint } from '@/utils/api';
 
 const MODULE_NAME = 'permission';
 
-const endpoints: Record<'list' | 'getById' | 'add' | 'edit', Endpoint> = {
+const endpoints: Record<'list' | 'getById' | 'add' | 'edit' | 'delete', Endpoint> = {
   list: {
     endpoint: `/${MODULE_NAME}/list`,
   },
@@ -19,6 +19,9 @@ const endpoints: Record<'list' | 'getById' | 'add' | 'edit', Endpoint> = {
   },
   edit: {
     endpoint: `/${MODULE_NAME}/edit/${PARAMS_KEY}`,
+  },
+  delete: {
+    endpoint: `/${MODULE_NAME}/delete/${PARAMS_KEY}`,
   },
 };
 
@@ -57,6 +60,13 @@ export const permissionApi = baseApi.injectEndpoints({
         { type: TAG_TYPES.PERMISSION, id: 'LIST' },
       ],
     }),
+    deletePermission: builder.mutation<PermissionResponse, string>({
+      query: (id) => ({
+        url: generateEndpointVersionning(endpoints.delete).replace(PARAMS_KEY, id),
+        method: HTTP_METHOD.DELETE,
+      }),
+      invalidatesTags: [{ type: TAG_TYPES.PERMISSION, id: 'LIST' }],
+    }),
   }),
   overrideExisting: false,
 });
@@ -66,4 +76,5 @@ export const {
   useGetPermissionByIdQuery,
   useAddPermissionMutation,
   useEditPermissionMutation,
+  useDeletePermissionMutation,
 } = permissionApi;
