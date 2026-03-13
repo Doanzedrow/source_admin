@@ -84,7 +84,7 @@ export const LayoutSider: React.FC<LayoutSiderProps> = ({
       label: t('users'),
       children: [
         { key: '/users/customers', label: t('customers') },
-        { key: '/users/employees', label: t('employees') },
+        { key: rc(RouteKey.Users).path, icon: rc(RouteKey.Users).icon, label: t('employees') },
       ],
     },
     { key: '/orders', icon: <TransactionOutlined />, label: t('orders') },

@@ -29,6 +29,10 @@ export const useAppNavigate = () => {
   const goToRoleList = () => navigate(rc(RouteKey.Role).path);
   const goToRoleCreate = () => navigate(rc(RouteKey.RoleCreate).path);
   const goToRoleEdit = (id: string) => navigate(rc(RouteKey.RoleEdit).path.replace(':id', id));
+  
+  const goToUserList = () => navigate(rc(RouteKey.Users).path);
+  const goToUserCreate = () => navigate(rc(RouteKey.UserCreate).path);
+  const goToUserEdit = (id: string) => navigate(rc(RouteKey.UserEdit).path.replace(':id', id));
 
   const to = (path: string, options?: any) => navigate(path, options);
 
@@ -53,6 +57,9 @@ export const useAppNavigate = () => {
     goToRoleList,
     goToRoleCreate,
     goToRoleEdit,
+    goToUserList,
+    goToUserCreate,
+    goToUserEdit,
     to,
   };
 };
