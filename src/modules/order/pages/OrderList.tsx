@@ -115,7 +115,7 @@ const OrderList = () => {
         title={
           <Flex align="center" gap={8}>
             <span className="card-title-text">{t('dashboard:orders.title')}</span>
-            <Tag color="blue" className="card-title-tag">{total}</Tag>
+            <Tag  className="card-title-tag">{total}</Tag>
           </Flex>
         }
         extra={

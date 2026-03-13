@@ -57,7 +57,7 @@ const PermissionList: React.FC = () => {
         width: 150,
         render: (module: string, record: Permission) => (
           <Tag 
-            className="card-title-tag tag-blue"
+            className="card-title-tag"
             style={{ cursor: 'pointer' }} 
             onClick={() => goToPermissionEdit(record._id)}
           >

@@ -290,7 +290,7 @@ const ProductList = () => {
         title={
           <Flex align="center" gap={8}>
             <span>{t('title')}</span>
-            <Tag className="card-title-tag tag-blue">
+            <Tag className="card-title-tag">
               {totalProducts}
             </Tag>
           </Flex>

@@ -38,7 +38,7 @@ export const DashboardChart: React.FC = () => {
       title={
         <Flex align="center" gap={8}>
           <span>{t('revenueLabel')}</span>
-          <span className="revenue-badge" style={{ background: '#e6f7ff', color: '#1890ff', padding: '2px 8px', borderRadius: 4, fontSize: 12 }}>
+          <span className="revenue-badge">
             {formatCurrency(data.totalNetRevenue)}
           </span>
         </Flex>

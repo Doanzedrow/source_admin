@@ -71,7 +71,7 @@ const RoleList: React.FC = () => {
         render: (_: any, record: Role) => (
           <Tag 
             color="blue" 
-            className="card-title-tag tag-blue"
+            className="card-title-tag"
           >
             {record.permissions?.length || 0} {t('permissions', { ns: 'translation' })}
           </Tag>
