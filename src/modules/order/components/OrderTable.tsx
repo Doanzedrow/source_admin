@@ -120,10 +120,14 @@ export const OrderTable: React.FC<OrderTableProps> = ({
         if (status === undefined || status === null) return '--';
         
         const statusConfig = getOrderStatus(status as number);
-        if (!statusConfig) return <Tag color="blue" variant="filled">{status}</Tag>;
+        if (!statusConfig) return <Tag color="blue" variant="filled" style={{ borderRadius: '12px' }}>{status}</Tag>;
         
         return (
-          <Tag color={statusConfig.backgroundColor} variant="filled" style={{ color: statusConfig.textColor }}>
+          <Tag 
+            color={statusConfig.backgroundColor} 
+            variant="filled" 
+            style={{ color: statusConfig.textColor, borderRadius: '12px' }}
+          >
             {t(`dashboard:orders.status.${statusConfig.name}`)}
           </Tag>
         );
@@ -137,10 +141,14 @@ export const OrderTable: React.FC<OrderTableProps> = ({
         if (val === undefined || val === null) return '--';
 
         const paymentConfig = getPaymentStatus(val as number);
-        if (!paymentConfig) return <Tag color="cyan" variant="filled">{val}</Tag>;
+        if (!paymentConfig) return <Tag color="cyan" variant="filled" style={{ borderRadius: '12px' }}>{val}</Tag>;
         
         return (
-          <Tag color={paymentConfig.backgroundColor} variant="filled" style={{ color: paymentConfig.textColor }}>
+          <Tag 
+            color={paymentConfig.backgroundColor} 
+            variant="filled" 
+            style={{ color: paymentConfig.textColor, borderRadius: '12px' }}
+          >
             {t(`dashboard:orders.paymentStatus.${paymentConfig.name}`)}
           </Tag>
         );

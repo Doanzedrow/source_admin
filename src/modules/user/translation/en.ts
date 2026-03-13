@@ -46,8 +46,6 @@ export default {
     gender: "Gender",
     address: "Address",
     birthday: "Birthday",
-    avatar: "Avatar",
-    type: "User Type",
   },
   gender: {
     none: "Other",

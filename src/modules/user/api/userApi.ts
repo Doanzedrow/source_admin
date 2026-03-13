@@ -19,7 +19,7 @@ const endpoints: Record<
     endpoint: `/${MODULE_NAME}/get/${PARAMS_KEY}`,
   },
   add: {
-    endpoint: `/${MODULE_NAME}/add`,
+    endpoint: `/${MODULE_NAME}/create`,
   },
   edit: {
     endpoint: `/${MODULE_NAME}/edit/${PARAMS_KEY}`,

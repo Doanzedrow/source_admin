@@ -57,8 +57,8 @@ const PermissionList: React.FC = () => {
         width: 150,
         render: (module: string, record: Permission) => (
           <Tag 
-            className="card-title-tag"
-            style={{ cursor: 'pointer' }} 
+            variant="filled"
+            style={{ borderRadius: '12px', cursor: 'pointer' }} 
             onClick={() => goToPermissionEdit(record._id)}
           >
             {module}
@@ -71,16 +71,16 @@ const PermissionList: React.FC = () => {
         width: 300,
         render: (_: any, record: Permission) => (
           <Space size="small" wrap>
-            <Tag color={record.actions.view ? 'success' : 'default'} variant="filled">
+            <Tag color={record.actions.view ? 'success' : 'default'} variant="filled" style={{ borderRadius: '12px' }}>
               VIEW
             </Tag>
-            <Tag color={record.actions.create ? 'success' : 'default'} variant="filled">
+            <Tag color={record.actions.create ? 'success' : 'default'} variant="filled" style={{ borderRadius: '12px' }}>
               CREATE
             </Tag>
-            <Tag color={record.actions.update ? 'success' : 'default'} variant="filled">
+            <Tag color={record.actions.update ? 'success' : 'default'} variant="filled" style={{ borderRadius: '12px' }}>
               UPDATE
             </Tag>
-            <Tag color={record.actions.delete ? 'success' : 'default'} variant="filled">
+            <Tag color={record.actions.delete ? 'success' : 'default'} variant="filled" style={{ borderRadius: '12px' }}>
               DELETE
             </Tag>
           </Space>

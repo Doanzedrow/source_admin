@@ -50,7 +50,7 @@ const RoleList: React.FC = () => {
               {name}
             </Text>
             {record.isAdmin && (
-              <Tag color="gold" style={{ borderRadius: '4px', fontSize: '10px', lineHeight: '20px' }}>
+              <Tag color="gold" variant="filled" style={{ borderRadius: '12px', fontSize: '10px' }}>
                 ADMIN
               </Tag>
             )}
@@ -69,9 +69,10 @@ const RoleList: React.FC = () => {
         align: 'center' as const,
         width: 150,
         render: (_: any, record: Role) => (
-          <Tag 
-            color="blue" 
-            className="card-title-tag"
+          <Tag
+            color="blue"
+            variant="filled"
+            style={{ borderRadius: '12px' }}
           >
             {record.permissions?.length || 0} {t('permissions', { ns: 'translation' })}
           </Tag>

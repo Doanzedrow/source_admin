@@ -46,8 +46,6 @@ export default {
     gender: "Giới tính",
     address: "Địa chỉ",
     birthday: "Ngày sinh",
-    avatar: "Ảnh đại diện",
-    type: "Loại người dùng",
   },
   gender: {
     none: "Khác",

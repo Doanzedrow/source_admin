@@ -87,7 +87,11 @@ const CategoryList = () => {
         align: 'center' as const,
         width: 120,
         render: (count: number) => (
-          <Tag color="blue" variant="filled" style={{ borderRadius: '12px', padding: '0 12px' }}>
+          <Tag
+            color="blue"
+            variant="filled"
+            style={{ borderRadius: '12px', padding: '0 12px' }}
+          >
             {count || 0}
           </Tag>
         ),
@@ -116,7 +120,11 @@ const CategoryList = () => {
         key: 'type',
         width: 130,
         render: (type: number) => (
-          <Tag color={type === 1 ? 'orange' : 'cyan'} variant="filled">
+          <Tag
+            color={type === 1 ? 'orange' : 'cyan'}
+            variant="filled"
+            style={{ borderRadius: '12px' }}
+          >
             {type === 1 ? t('type.product') : t('type.service')}
           </Tag>
         ),

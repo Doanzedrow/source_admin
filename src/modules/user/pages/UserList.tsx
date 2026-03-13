@@ -90,9 +90,13 @@ const UserList = () => {
         dataIndex: ['role', 'name'],
         key: 'role',
         render: (roleName: string, record: User) => {
-            const role = typeof record.role === 'object' ? record.role?.name : roleName;
-            return <Tag color="blue">{role || t('common.none', { ns: 'translation' })}</Tag>;
-        }
+          const role = typeof record.role === 'object' ? record.role?.name : roleName;
+          return (
+            <Tag color="blue" variant="filled" style={{ borderRadius: '12px' }}>
+              {role || t('common.none', { ns: 'translation' })}
+            </Tag>
+          );
+        },
       },
     ];
 
@@ -112,7 +116,11 @@ const UserList = () => {
         key: 'status',
         align: 'center' as const,
         render: (status: number) => (
-          <Tag color={status === 1 ? 'success' : 'error'} variant="filled" className="card-title-tag">
+          <Tag
+            color={status === 1 ? 'success' : 'default'}
+            variant="filled"
+            style={{ borderRadius: '12px' }}
+          >
             {status === 1 ? t('status.active') : t('status.inactive')}
           </Tag>
         ),

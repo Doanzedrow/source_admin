@@ -13,12 +13,10 @@ export interface User {
   emailVerify: boolean;
   activationKey?: string;
   status: number; // 1: Active, 0: Inactive
-  type?: number;
   role: string | Role;
   isDefault: boolean;
   branch?: string | Branch;
   address?: string;
-  avatar?: any;
   emailAddress?: string;
   phone?: string;
   updatedBy?: string | null;

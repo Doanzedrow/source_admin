@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Row, Col, Select, DatePicker } from 'antd';
+import { Form, Row, Col, Select } from 'antd';
 import { AppInput } from '@/components/common/AppInput/AppInput';
 import { AppButton } from '@/components/common/AppButton';
 import { FormActions } from '@/components/common/FormActions/FormActions';
@@ -7,7 +7,7 @@ import { BranchSelect } from '@/components/common/AppSelect/BranchSelect';
 import { RoleSelect } from '@/components/common/AppSelect/RoleSelect';
 import { useUserForm } from '../hooks/useUserForm';
 import { useAppNavigate } from '@/hooks/useAppNavigate';
-import { AppMediaUpload } from '@/components/common/AppMediaUpload/AppMediaUpload';
+import { AppBirthdayPicker } from '@/components/common/AppDatePicker/AppBirthdayPicker';
 import type { User } from '../data/user.types';
 
 interface UserFormProps {
@@ -42,46 +42,62 @@ export const UserForm: React.FC<UserFormProps> = ({
         scrollToFirstError
       >
         <Row gutter={24}>
-           <Col xs={24} md={16}>
-             <Row gutter={24}>
-                <Col xs={24} md={12}>
-                    <AppInput
-                    label={t('form.userName')}
-                    name="userName"
-                    placeholder={t('form.userName')}
-                    rules={[{ required: true, message: t('common.validation.required', { ns: 'translation', field: t('form.userName') }) }]}
-                    disabled={isEdit}
-                    />
-                </Col>
-                <Col xs={24} md={12}>
-                    <AppInput
-                    label={t('form.fullname')}
-                    name="fullname"
-                    placeholder={t('form.fullname')}
-                    rules={[{ required: true, message: t('common.validation.required', { ns: 'translation', field: t('form.fullname') }) }]}
-                    />
-                </Col>
-             </Row>
-             {!isEdit && (
-                <Row gutter={24}>
-                    <Col xs={24} md={24}>
-                    <AppInput
-                        label={t('form.password')}
-                        name="password"
-                        type="password"
-                        placeholder={t('form.password')}
-                        rules={[{ required: true, message: t('common.validation.required', { ns: 'translation', field: t('form.password') }) }]}
-                    />
-                    </Col>
-                </Row>
-             )}
-           </Col>
-           <Col xs={24} md={8}>
-              <Form.Item label={t('form.avatar')} name="avatar">
-                <AppMediaUpload type="general" />
-              </Form.Item>
-           </Col>
+          <Col xs={24} md={12}>
+            <AppInput
+              label={t('form.userName')}
+              name="userName"
+              placeholder={t('form.userName')}
+              rules={[
+                {
+                  required: true,
+                  message: t('common.validation.required', {
+                    ns: 'translation',
+                    field: t('form.userName'),
+                  }),
+                },
+              ]}
+              disabled={isEdit}
+            />
+          </Col>
+          <Col xs={24} md={12}>
+            <AppInput
+              label={t('form.fullname')}
+              name="fullname"
+              placeholder={t('form.fullname')}
+              rules={[
+                {
+                  required: true,
+                  message: t('common.validation.required', {
+                    ns: 'translation',
+                    field: t('form.fullname'),
+                  }),
+                },
+              ]}
+            />
+          </Col>
         </Row>
+
+        {!isEdit && (
+          <Row gutter={24}>
+            <Col xs={24} md={24}>
+              <AppInput
+                label={t('form.password')}
+                name="password"
+                type="password"
+                placeholder={t('form.password')}
+                rules={[
+                  {
+                    required: true,
+                    message: t('common.validation.required', {
+                      ns: 'translation',
+                      field: t('form.password'),
+                    }),
+                  },
+                ]}
+              />
+            </Col>
+          </Row>
+        )}
 
         <Row gutter={24}>
           <Col xs={24} md={12}>
@@ -147,23 +163,8 @@ export const UserForm: React.FC<UserFormProps> = ({
             </Form.Item>
           </Col>
           <Col xs={24} md={8}>
-            <Form.Item
-              label={t('form.type')}
-              name="type"
-            >
-              <Select size="large">
-                 <Select.Option value={1}>Staff</Select.Option>
-                 <Select.Option value={2}>Manager</Select.Option>
-                 <Select.Option value={3}>Admin</Select.Option>
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={8}>
-            <Form.Item
-              label={t('form.birthday')}
-              name="birthday"
-            >
-              <DatePicker style={{ width: '100%' }} size="large" format="YYYY-MM-DD" />
+            <Form.Item label={t('form.birthday')} name="birthday">
+              <AppBirthdayPicker size="large" />
             </Form.Item>
           </Col>
         </Row>
