@@ -81,14 +81,13 @@ export const AppFilter: React.FC<AppFilterProps> = ({
         {extra && (
           <div
             style={{
-              maxHeight: isExpanded ? '500px' : '0',
+              maxHeight: isExpanded ? '1000px' : '0',
               overflow: 'hidden',
               transition: 'all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)',
-              marginTop: isExpanded ? 16 : 0,
               opacity: isExpanded ? 1 : 0,
             }}
           >
-            <div style={{ borderTop: '1px solid var(--border-color-split)', paddingTop: 16 }}>
+            <div style={{ borderTop: isExpanded ? '1px solid var(--border-color-split)' : 'none', marginTop: isExpanded ? 16 : 0 }}>
               <Row gutter={[16, 16]}>{extra}</Row>
             </div>
           </div>

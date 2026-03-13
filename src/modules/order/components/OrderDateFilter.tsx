@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Space, DatePicker, Radio, Select } from 'antd';
+import { Space, DatePicker, Radio, Select, Flex } from 'antd';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 
@@ -97,7 +97,7 @@ export const OrderDateFilter: React.FC<OrderDateFilterProps> = ({ onChange, defa
   };
 
   return (
-    <Space wrap size="middle">
+    <Space wrap size={16} align="center">
       <Radio.Group 
         value={value} 
         onChange={handlePresetChange} 
@@ -112,12 +112,12 @@ export const OrderDateFilter: React.FC<OrderDateFilterProps> = ({ onChange, defa
         <Radio.Button value="custom">{t('order:filter.custom', 'Tùy chỉnh')}</Radio.Button>
       </Radio.Group>
       
-      <Space size="small">
+      <Flex gap={8} align="center">
         <Select 
           value={startHour} 
           options={hourOptions} 
           onChange={handleStartHourChange}
-          style={{ width: 90 }}
+          style={{ width: 85 }}
           placeholder={t('order:filter.startTime')}
         />
         <span>-</span>
@@ -125,17 +125,17 @@ export const OrderDateFilter: React.FC<OrderDateFilterProps> = ({ onChange, defa
           value={endHour} 
           options={hourOptions} 
           onChange={handleEndHourChange}
-          style={{ width: 90 }}
+          style={{ width: 85 }}
           placeholder={t('order:filter.endTime')}
         />
-      </Space>
+      </Flex>
       
       {value === 'custom' && (
         <RangePicker 
           onChange={handleRangeChange}
           format="YYYY-MM-DD"
           allowClear
-          style={{ width: 280 }}
+          style={{ width: 250 }}
         />
       )}
     </Space>

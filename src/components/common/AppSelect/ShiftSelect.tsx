@@ -3,6 +3,7 @@ import { Select } from 'antd';
 import type { SelectProps } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useGetShiftListQuery } from '@/modules/shift/api/shiftApi';
+import { DEFAULT_PAGE_SIZE } from '@/config/constants';
 
 interface ShiftSelectProps extends Omit<SelectProps, 'options' | 'loading'> {
   // Any additional props if needed
@@ -17,7 +18,7 @@ export const ShiftSelect: React.FC<ShiftSelectProps> = ({
   ...props 
 }) => {
   const { t } = useTranslation(['translation', 'shift']);
-  const { data, isLoading } = useGetShiftListQuery({ page: 1, page_size: 1000 });
+  const { data, isLoading } = useGetShiftListQuery({ page: 1, page_size: DEFAULT_PAGE_SIZE });
 
   const options = useMemo(() => {
     const shifts = data?.result?.data || [];
@@ -37,7 +38,6 @@ export const ShiftSelect: React.FC<ShiftSelectProps> = ({
       optionFilterProp="label"
       options={options}
       style={style}
-      size="large"
       {...props}
     />
   );

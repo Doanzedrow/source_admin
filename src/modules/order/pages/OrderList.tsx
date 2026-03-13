@@ -68,7 +68,7 @@ const OrderList = () => {
           isLoading={isFetching}
           extra={
             <>
-              <Col xs={12} sm={6} md={4}>
+              <Col xs={24} sm={12} md={6}>
                 <Select
                   allowClear
                   style={{ width: '100%' }}
@@ -79,7 +79,7 @@ const OrderList = () => {
                 />
               </Col>
 
-              <Col xs={12} sm={6} md={4}>
+              <Col xs={24} sm={12} md={6}>
                 <Select
                   allowClear
                   style={{ width: '100%' }}
@@ -90,7 +90,7 @@ const OrderList = () => {
                 />
               </Col>
 
-              <Col xs={12} sm={6} md={4}>
+              <Col xs={24} sm={12} md={6}>
                 <ShiftSelect 
                   placeholder={t('filter.shift', { ns: 'shift', defaultValue: 'Chọn ca làm việc' })}
                   value={filters.shiftId}
@@ -98,7 +98,7 @@ const OrderList = () => {
                 />
               </Col>
 
-              <Col xs={12} sm={6} md={4}>
+              <Col xs={24} sm={12} md={6}>
                 <EmployeeSelect 
                   placeholder={t('filter.employee', { ns: 'user', defaultValue: 'Chọn nhân viên' })}
                   value={filters.userId}
@@ -107,7 +107,7 @@ const OrderList = () => {
               </Col>
 
               {isSuperAdmin && (
-                <Col xs={12} sm={6} md={4}>
+                <Col xs={24} sm={12} md={6}>
                   <BranchSelect 
                     placeholder={t('dashboard:columns.branch')} 
                     value={filters.branchId} 
@@ -118,13 +118,13 @@ const OrderList = () => {
             </>
           }
         >
-          <Col xs={24} md={16}>
+          <Col span={24}>
             <OrderDateFilter 
               onChange={handleDateChange}
             />
           </Col>
 
-          <Col xs={24} md={8}>
+          <Col span={24}>
             <AppSearchInput 
               placeholder={t('filter.searchPlaceholder')} 
               onSearch={handleSearch} 

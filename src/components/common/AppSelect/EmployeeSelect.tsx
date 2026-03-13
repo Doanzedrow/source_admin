@@ -3,6 +3,7 @@ import { Select } from 'antd';
 import type { SelectProps } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useGetUserListQuery } from '@/modules/user/api/userApi';
+import { DEFAULT_PAGE_SIZE } from '@/config/constants';
 
 interface EmployeeSelectProps extends Omit<SelectProps, 'options' | 'loading'> {
   // Any additional props if needed
@@ -17,8 +18,8 @@ export const EmployeeSelect: React.FC<EmployeeSelectProps> = ({
   ...props 
 }) => {
   const { t } = useTranslation(['translation', 'user']);
-  // Fetching users with a large page size to use as a select options
-  const { data, isLoading } = useGetUserListQuery({ page: 1, page_size: 1000 });
+  // Fetching users with default page size
+  const { data, isLoading } = useGetUserListQuery({ page: 1, page_size: DEFAULT_PAGE_SIZE });
 
   const options = useMemo(() => {
     const users = data?.result?.data || [];
@@ -38,7 +39,6 @@ export const EmployeeSelect: React.FC<EmployeeSelectProps> = ({
       optionFilterProp="label"
       options={options}
       style={style}
-      size="large"
       {...props}
     />
   );
