@@ -1,11 +1,13 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
 import { useAppNotify } from '@/hooks/useAppNotify';
 import { useAppConfirm } from '@/hooks/useAppConfirm';
 import { 
   useGetOrderListQuery, 
   useDeleteOrderMutation, 
   useBatchDeleteOrdersMutation,
+  useImportOrderMutation,
   generateOrderExportUrl 
 } from '../api/orderApi';
 import { DEFAULT_PAGE_SIZE } from '@/config/constants';
@@ -25,8 +27,8 @@ export const useOrderList = () => {
     status: undefined as number | undefined,
     paymentStatus: undefined as number | undefined,
     branchId: undefined as string | undefined,
-    startDate: undefined as string | undefined,
-    endDate: undefined as string | undefined,
+    startDate: dayjs().format('YYYY-MM-DD'),
+    endDate: dayjs().format('YYYY-MM-DD'),
     type: 0 as number | undefined, // 0: All, 1: Deposit, etc.
   });
 
@@ -49,6 +51,24 @@ export const useOrderList = () => {
 
   const [deleteOrder, { isLoading: isDeleting }] = useDeleteOrderMutation();
   const [batchDeleteOrders, { isLoading: isBatchDeleting }] = useBatchDeleteOrdersMutation();
+  const [importOrder, { isLoading: isImporting }] = useImportOrderMutation();
+
+  const handleImport = useCallback(async (file: File) => {
+    try {
+      await importOrder(file).unwrap();
+      notification.success({
+        title: t('common.messages.success', { ns: 'translation' }),
+        description: t('messages.importSuccess'),
+      });
+      return true;
+    } catch (error: any) {
+      notification.error({
+        title: t('common.messages.error', { ns: 'translation' }),
+        description: error?.data?.message || t('messages.importError'),
+      });
+      return false;
+    }
+  }, [importOrder, notification, t]);
 
   const handleExport = useCallback(async () => {
     try {
@@ -144,7 +164,7 @@ export const useOrderList = () => {
     total: data?.result?.pagination?.total || data?.result?.total || 0,
     metaData: data?.result?.metaData || {},
     filters,
-    isLoading: isLoading || isDeleting || isBatchDeleting || isExporting,
+    isLoading: isLoading || isDeleting || isBatchDeleting || isExporting || isImporting,
     isFetching,
     isReady,
     selectedIds,
@@ -158,6 +178,7 @@ export const useOrderList = () => {
     handleDateChange,
     handleBranchChange,
     handleExport,
+    handleImport,
     refetch,
     resetFilters,
   };

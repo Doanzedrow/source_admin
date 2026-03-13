@@ -5,6 +5,8 @@ export default {
     deleteError: "Failed to delete order",
     batchDeleteSuccess: "Orders deleted successfully",
     batchDeleteError: "Failed to delete orders",
+    importSuccess: "Orders imported successfully",
+    importError: "Failed to import orders",
   },
   columns: {
     index: "No.",
@@ -15,5 +17,8 @@ export default {
     paymentStatus: "Payment",
     createdAt: "Created At",
     branch: "Branch",
+  },
+  filter: {
+    custom: "Custom",
   }
 };

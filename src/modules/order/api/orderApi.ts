@@ -13,7 +13,8 @@ const endpoints: Record<
   | 'getById'
   | 'delete'
   | 'batchDelete'
-  | 'export',
+  | 'export'
+  | 'import',
   Endpoint
 > = {
   listPagination: {
@@ -30,6 +31,9 @@ const endpoints: Record<
   },
   export: {
     endpoint: `/${MODULE_NAME}/export`,
+  },
+  import: {
+    endpoint: `/${MODULE_NAME}/import`,
   },
 };
 
@@ -69,6 +73,18 @@ export const orderApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: TAG_TYPES.ORDER, id: 'LIST' }],
     }),
+    importOrder: builder.mutation<ApiResponse<any>, File>({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        return {
+          url: generateEndpointVersionning(endpoints.import),
+          method: HTTP_METHOD.POST,
+          data: formData,
+        };
+      },
+      invalidatesTags: [{ type: TAG_TYPES.ORDER, id: 'LIST' }],
+    }),
   }),
   overrideExisting: false,
 });
@@ -78,4 +94,5 @@ export const {
   useGetOrderByIdQuery,
   useDeleteOrderMutation,
   useBatchDeleteOrdersMutation,
+  useImportOrderMutation,
 } = orderApi;

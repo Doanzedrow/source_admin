@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { Flex, Select, Col, Tag } from 'antd';
-import { DownloadOutlined } from '@ant-design/icons';
+import { Flex, Select, Col, Tag, Upload, Space } from 'antd';
+import { DownloadOutlined, UploadOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { AppCard } from '@/components/common/AppCard';
 import { SEO } from '@/components/common/SEO/SEO';
@@ -11,7 +11,7 @@ import { AppButton } from '@/components/common/AppButton';
 import { PermissionGate } from '@/components/common/PermissionGate/PermissionGate';
 import { usePermission } from '@/hooks/usePermission';
 import { BranchSelect } from '@/components/common/AppSelect/BranchSelect';
-import { DateFilter } from '@/components/common/DateFilter';
+import { OrderDateFilter } from '../components/OrderDateFilter';
 import { OrderTable } from '../components/OrderTable';
 import { OrderStatus, PaymentStatus } from '../constants/order';
 
@@ -31,6 +31,7 @@ const OrderList = () => {
     handleDateChange,
     handleBranchChange,
     handleExport,
+    handleImport,
     resetFilters,
   } = useOrderList();
   const { isSuperAdmin } = usePermission();
@@ -59,6 +60,12 @@ const OrderList = () => {
         <AppFilter 
           onReset={resetFilters}
         >
+          <Col span={24}>
+            <OrderDateFilter 
+              onChange={handleDateChange}
+            />
+          </Col>
+
           <Col span={6}>
             <AppSearchInput 
               placeholder={t('dashboard:orders.table.orderCode')} 
@@ -98,12 +105,6 @@ const OrderList = () => {
               />
             </Col>
           )}
-
-          <Col span={6}>
-            <DateFilter 
-              onChange={handleDateChange}
-            />
-          </Col>
         </AppFilter>
       </div>
 
@@ -115,15 +116,31 @@ const OrderList = () => {
           </Flex>
         }
         extra={
-          <PermissionGate module="order" action="view">
-            <AppButton 
-              icon={<DownloadOutlined />} 
-              onClick={handleExport} 
-              loading={isLoading && !isFetching}
-            >
-              {t('common.actions.export', { ns: 'translation' })}
-            </AppButton>
-          </PermissionGate>
+          <Space>
+            <PermissionGate module="order" action="view">
+              <Upload
+                accept=".xlsx, .xls"
+                showUploadList={false}
+                beforeUpload={(file) => {
+                  handleImport(file);
+                  return false;
+                }}
+              >
+                <AppButton icon={<UploadOutlined />} loading={isLoading && !isFetching}>
+                  {t('common.actions.import', { ns: 'translation' })}
+                </AppButton>
+              </Upload>
+            </PermissionGate>
+            <PermissionGate module="order" action="view">
+              <AppButton 
+                icon={<DownloadOutlined />} 
+                onClick={handleExport} 
+                loading={isLoading && !isFetching}
+              >
+                {t('common.actions.export', { ns: 'translation' })}
+              </AppButton>
+            </PermissionGate>
+          </Space>
         }
       >
         <OrderTable 
