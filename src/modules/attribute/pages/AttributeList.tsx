@@ -1,5 +1,6 @@
 import { useMemo, memo } from 'react';
-import { Space, Tag, Typography, Col, Flex } from 'antd';
+import { Space, Tag, Typography, Col, Flex, Upload } from 'antd';
+import { DownloadOutlined, UploadOutlined } from '@ant-design/icons';
 import { AppButton } from '@/components/common/AppButton';
 import { AppCard } from '@/components/common/AppCard';
 import { AppTable } from '@/components/common/AppTable';
@@ -29,6 +30,8 @@ const AttributeList = () => {
     handlePageChange,
     handleSearch,
     handleBranchChange,
+    handleExport,
+    handleImport,
     resetFilters,
     total,
     t,
@@ -223,6 +226,29 @@ const AttributeList = () => {
                 </AppButton>
               </PermissionGate>
             )}
+            <PermissionGate module="attribute" action="create">
+              <Upload
+                accept=".xlsx, .xls"
+                showUploadList={false}
+                beforeUpload={(file) => {
+                  handleImport(file);
+                  return false;
+                }}
+              >
+                <AppButton icon={<UploadOutlined />} loading={isLoading && !isFetching}>
+                  {t('common.actions.import', { ns: 'translation' })}
+                </AppButton>
+              </Upload>
+            </PermissionGate>
+            <PermissionGate module="attribute" action="view">
+              <AppButton 
+                icon={<DownloadOutlined />} 
+                onClick={handleExport} 
+                loading={isLoading && !isFetching}
+              >
+                {t('common.actions.export', { ns: 'translation' })}
+              </AppButton>
+            </PermissionGate>
             <PermissionGate module="attribute" action="create">
               <AppButton type="primary" onClick={goToAttributeCreate}>
                 {t('titleCreate')}

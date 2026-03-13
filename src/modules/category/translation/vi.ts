@@ -55,5 +55,7 @@ export default {
     createError: "Thêm danh mục thất bại",
     updateSuccess: "Cập nhật danh mục thành công",
     updateError: "Cập nhật danh mục thất bại",
+    importSuccess: "Nhập dữ liệu danh mục thành công",
+    importError: "Nhập dữ liệu danh mục thất bại"
   }
 };

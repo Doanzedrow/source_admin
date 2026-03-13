@@ -15,7 +15,9 @@ const endpoints: Record<
   | 'edit'
   | 'getById'
   | 'delete'
-  | 'batchDelete',
+  | 'batchDelete'
+  | 'import'
+  | 'export',
   Endpoint
 > = {
   listPagination: {
@@ -39,6 +41,16 @@ const endpoints: Record<
   batchDelete: {
     endpoint: `/${MODULE_NAME}/batchDelete`,
   },
+  import: {
+    endpoint: `/${MODULE_NAME}/import`,
+  },
+  export: {
+    endpoint: `/${MODULE_NAME}/export`,
+  },
+};
+
+export const generateAttributeExportUrl = () => {
+  return generateEndpointVersionning(endpoints.export);
 };
 
 export const attributeApi = baseApi.injectEndpoints({
@@ -102,6 +114,18 @@ export const attributeApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: TAG_TYPES.ATTRIBUTE, id: 'LIST' }],
     }),
+    importAttribute: builder.mutation<ApiResponse<any>, File>({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        return {
+          url: generateEndpointVersionning(endpoints.import),
+          method: HTTP_METHOD.POST,
+          data: formData,
+        };
+      },
+      invalidatesTags: [{ type: TAG_TYPES.ATTRIBUTE, id: 'LIST' }],
+    }),
   }),
   overrideExisting: false,
 });
@@ -114,4 +138,5 @@ export const {
   useUpdateAttributeMutation,
   useDeleteAttributeMutation,
   useBatchDeleteAttributesMutation,
+  useImportAttributeMutation,
 } = attributeApi;

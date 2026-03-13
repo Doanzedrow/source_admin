@@ -58,5 +58,7 @@ export default {
     deleteSuccess: "Xóa biến thể thành công",
     deleteError: "Xóa biến thể thất bại",
     deleteConfirm: "Bạn có chắc chắn muốn xóa biến thể này?",
+    importSuccess: "Nhập dữ liệu biến thể thành công",
+    importError: "Nhập dữ liệu biến thể thất bại"
   }
 };

@@ -55,5 +55,7 @@ export default {
     createError: "Failed to create category",
     updateSuccess: "Category updated successfully",
     updateError: "Failed to update category",
+    importSuccess: "Category imported successfully",
+    importError: "Failed to import category"
   }
 };

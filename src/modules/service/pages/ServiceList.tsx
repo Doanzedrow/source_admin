@@ -298,26 +298,32 @@ const ServiceList = () => {
               </>
             )}
             <PermissionGate module="service" action="create">
-              <Space>
-                <Upload
-                  accept=".xlsx, .xls"
-                  showUploadList={false}
-                  beforeUpload={(file) => {
-                    handleImport(file);
-                    return false;
-                  }}
-                >
-                  <AppButton icon={<UploadOutlined />}>
-                    {t('common.actions.import', { ns: 'translation' })}
-                  </AppButton>
-                </Upload>
-                <AppButton icon={<DownloadOutlined />} onClick={handleExport} loading={isLoading}>
-                  {t('common.actions.export', { ns: 'translation' })}
+              <Upload
+                accept=".xlsx, .xls"
+                showUploadList={false}
+                beforeUpload={(file) => {
+                  handleImport(file);
+                  return false;
+                }}
+              >
+                <AppButton icon={<UploadOutlined />} loading={isLoading && !isFetching}>
+                  {t('common.actions.import', { ns: 'translation' })}
                 </AppButton>
-                <AppButton type="primary" onClick={goToServiceCreate}>
-                  {t('addService')}
-                </AppButton>
-              </Space>
+              </Upload>
+            </PermissionGate>
+            <PermissionGate module="service" action="view">
+              <AppButton 
+                icon={<DownloadOutlined />} 
+                onClick={handleExport} 
+                loading={isLoading && !isFetching}
+              >
+                {t('common.actions.export', { ns: 'translation' })}
+              </AppButton>
+            </PermissionGate>
+            <PermissionGate module="service" action="create">
+              <AppButton type="primary" onClick={goToServiceCreate}>
+                {t('addService')}
+              </AppButton>
             </PermissionGate>
           </Space>
         }

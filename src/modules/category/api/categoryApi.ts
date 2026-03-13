@@ -8,7 +8,7 @@ import type { Category } from '../data/category.types';
 
 const MODULE_NAME = 'category';
 
-const endpoints: Record<'listPagination' | 'switchStatus' | 'create' | 'edit' | 'getById' | 'getAll' | 'delete' | 'batchDelete', Endpoint> = {
+const endpoints: Record<'listPagination' | 'switchStatus' | 'create' | 'edit' | 'getById' | 'getAll' | 'delete' | 'batchDelete' | 'import' | 'export', Endpoint> = {
   listPagination: {
     endpoint: `/${MODULE_NAME}/list-pagination`,
   },
@@ -33,6 +33,16 @@ const endpoints: Record<'listPagination' | 'switchStatus' | 'create' | 'edit' | 
   batchDelete: {
     endpoint: `/${MODULE_NAME}/batchDelete`,
   },
+  import: {
+    endpoint: `/${MODULE_NAME}/import`,
+  },
+  export: {
+    endpoint: `/${MODULE_NAME}/export`,
+  },
+};
+
+export const generateCategoryExportUrl = () => {
+  return generateEndpointVersionning(endpoints.export);
 };
 
 export const categoryApi = baseApi.injectEndpoints({
@@ -105,6 +115,18 @@ export const categoryApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: TAG_TYPES.CATEGORY, id: 'LIST' }],
     }),
+    importCategory: builder.mutation<ApiResponse<any>, File>({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        return {
+          url: generateEndpointVersionning(endpoints.import),
+          method: HTTP_METHOD.POST,
+          data: formData,
+        };
+      },
+      invalidatesTags: [{ type: TAG_TYPES.CATEGORY, id: 'LIST' }],
+    }),
   }),
   overrideExisting: false,
 });
@@ -118,4 +140,5 @@ export const {
   useSwitchCategoryStatusMutation,
   useDeleteCategoryMutation,
   useBatchDeleteCategoriesMutation,
+  useImportCategoryMutation,
 } = categoryApi;

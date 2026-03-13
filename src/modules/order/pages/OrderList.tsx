@@ -117,7 +117,7 @@ const OrderList = () => {
         }
         extra={
           <Space>
-            <PermissionGate module="order" action="view">
+            <PermissionGate module="order" action="create">
               <Upload
                 accept=".xlsx, .xls"
                 showUploadList={false}

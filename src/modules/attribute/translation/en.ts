@@ -53,5 +53,7 @@ export default {
     deleteSuccess: "Delete variant successfully",
     deleteError: "Failed to delete variant",
     deleteConfirm: "Are you sure you want to delete this variant?",
+    importSuccess: "Variant imported successfully",
+    importError: "Failed to import variant"
   }
 };
