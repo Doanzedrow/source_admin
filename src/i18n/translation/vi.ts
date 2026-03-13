@@ -12,6 +12,7 @@ export default {
   logout: "Đăng xuất",
   customers: "Khách hàng",
   employees: "Nhân viên",
+  shifts: "Ca làm việc",
   orders: "Đơn hàng",
   appointments: "Lịch hẹn",
   permissions: "Phân quyền",

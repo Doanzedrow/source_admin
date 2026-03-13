@@ -12,6 +12,7 @@ export default {
   logout: "Logout",
   customers: "Customers",
   employees: "Employees",
+  shifts: "Shifts",
   orders: "Orders",
   appointments: "Appointments",
   permissions: "Permissions",

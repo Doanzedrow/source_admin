@@ -34,6 +34,10 @@ export const useAppNavigate = () => {
   const goToUserCreate = () => navigate(rc(RouteKey.UserCreate).path);
   const goToUserEdit = (id: string) => navigate(rc(RouteKey.UserEdit).path.replace(':id', id));
 
+  const goToShiftList = () => navigate(rc(RouteKey.Shift).path);
+  const goToShiftCreate = () => navigate(rc(RouteKey.ShiftCreate).path);
+  const goToShiftEdit = (id: string) => navigate(rc(RouteKey.ShiftEdit).path.replace(':id', id));
+
   const to = (path: string, options?: any) => navigate(path, options);
 
   return {
@@ -60,6 +64,9 @@ export const useAppNavigate = () => {
     goToUserList,
     goToUserCreate,
     goToUserEdit,
+    goToShiftList,
+    goToShiftCreate,
+    goToShiftEdit,
     to,
   };
 };

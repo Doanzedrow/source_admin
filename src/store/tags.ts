@@ -10,4 +10,5 @@ export const TAG_TYPES = {
   PERMISSION: 'Permission',
   ROLE: 'Role',
   SERVICE: 'Service',
+  SHIFT: 'Shift',
 } as const;
