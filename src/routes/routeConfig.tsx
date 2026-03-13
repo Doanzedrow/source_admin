@@ -27,6 +27,7 @@ export const RouteKey = {
   Service: 'service',
   ServiceCreate: 'service-create',
   ServiceEdit: 'service-edit',
+  Orders: 'orders',
   Settings: 'settings',
   NotFound: 'notfound',
 } as const;
@@ -149,6 +150,16 @@ export const routesArray: RouteConfig[] = [
     allowedRoles: ['superadmin', 'admin'],
     requiredPermission: { module: 'service', action: 'update' },
     component: lazy(() => import('@/modules/service/pages/ServiceUpsert')),
+  },
+  {
+    id: RouteKey.Orders,
+    name: 'Orders',
+    path: '/orders',
+    icon: <Icon.FileTextOutlined />,
+    layout: 'main',
+    allowedRoles: ['superadmin', 'admin'],
+    requiredPermission: { module: 'order', action: 'view' },
+    component: lazy(() => import('@/modules/order/pages/OrderList')),
   },
   {
     id: RouteKey.Attributes,
