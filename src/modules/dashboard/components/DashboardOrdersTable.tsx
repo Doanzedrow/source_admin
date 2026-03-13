@@ -162,25 +162,25 @@ export const DashboardOrdersTable: React.FC<DashboardOrdersTableProps> = ({
         summary={() => {
           if (!data || data.length === 0) return null;
           return (
-            <AppTable.Summary fixed>
+            <AppTable.Summary fixed="top">
               <AppTable.Summary.Row className="summary-row-highlight">
-                <AppTable.Summary.Cell index={0} colSpan={4}>
+                <AppTable.Summary.Cell index={0} colSpan={isSuperAdmin ? 5 : 4}>
                   <strong>{t('orders.table.summaryTotal')}</strong>
                 </AppTable.Summary.Cell>
-                <AppTable.Summary.Cell index={4}>
+                <AppTable.Summary.Cell index={isSuperAdmin ? 5 : 4}>
                   <strong style={{ color: 'var(--primary-color)' }}>{formatCurrency(totalAmount)}</strong>
                 </AppTable.Summary.Cell>
                 {isDeposit && (
                   <>
-                    <AppTable.Summary.Cell index={5}>
+                    <AppTable.Summary.Cell index={isSuperAdmin ? 6 : 5}>
                       <strong style={{ color: 'var(--success-color)' }}>{formatCurrency(depositAmount)}</strong>
                     </AppTable.Summary.Cell>
-                    <AppTable.Summary.Cell index={6}>
+                    <AppTable.Summary.Cell index={isSuperAdmin ? 7 : 6}>
                       <strong style={{ color: 'var(--warning-color)' }}>{formatCurrency(remainingAmount)}</strong>
                     </AppTable.Summary.Cell>
                   </>
                 )}
-                <AppTable.Summary.Cell index={isDeposit ? 7 : 5} colSpan={3} />
+                <AppTable.Summary.Cell index={isDeposit ? (isSuperAdmin ? 8 : 7) : (isSuperAdmin ? 6 : 5)} colSpan={3} />
               </AppTable.Summary.Row>
             </AppTable.Summary>
           );
