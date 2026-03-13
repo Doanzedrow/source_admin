@@ -130,15 +130,17 @@ export const serviceApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: TAG_TYPES.SERVICE, id: 'LIST' }],
     }),
-    importService: builder.mutation<ApiResponse<any>, FormData>({
-      query: (formData) => ({
-        url: generateEndpointVersionning(endpoints.import),
-        method: HTTP_METHOD.POST,
-        data: formData,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }),
+    importService: builder.mutation<ApiResponse<any>, File>({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('type', '2');
+        return {
+          url: generateEndpointVersionning(endpoints.import),
+          method: HTTP_METHOD.POST,
+          data: formData,
+        };
+      },
       invalidatesTags: [{ type: TAG_TYPES.SERVICE, id: 'LIST' }],
     }),
   }),

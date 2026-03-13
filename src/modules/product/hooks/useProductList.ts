@@ -112,10 +112,8 @@ export const useProductList = () => {
   }, [apiParams, notification, t]);
 
   const handleImport = useCallback(async (file: File) => {
-    const formData = new FormData();
-    formData.append('file', file);
     try {
-      await importProduct(formData).unwrap();
+      await importProduct(file).unwrap();
       notification.success({
         title: t('common.messages.success', { ns: 'translation' }),
         description: t('messages.importSuccess', { defaultValue: 'Nhập dữ liệu thành công' }),
