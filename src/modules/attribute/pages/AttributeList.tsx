@@ -44,150 +44,145 @@ const AttributeList = () => {
 
   const { isSuperAdmin } = usePermission();
 
-  const columns = useMemo(
-    () => {
-      const base: any[] = [
-        {
-          title: t('columns.index'),
-          key: 'index',
-          width: 60,
-          align: 'center' as const,
-          render: (_: any, __: any, index: number) => {
-            const rowNumber = (params.page - 1) * params.page_size + index + 1;
-            return <Text type="secondary">{rowNumber}</Text>;
-          },
+  const columns = useMemo(() => {
+    const base: any[] = [
+      {
+        title: t('columns.index'),
+        key: 'index',
+        width: 60,
+        align: 'center' as const,
+        render: (_: any, __: any, index: number) => {
+          const rowNumber = (params.page - 1) * params.page_size + index + 1;
+          return <Text type="secondary">{rowNumber}</Text>;
         },
-        {
-          title: t('columns.code'),
-          dataIndex: 'code',
-          key: 'code',
-          width: 150,
-          render: (code: string, record: Attribute) => (
-            <Text strong onClick={() => goToAttributeEdit(record._id)} className="clickable-code">
-              {code}
+      },
+      {
+        title: t('columns.code'),
+        dataIndex: 'code',
+        key: 'code',
+        width: 150,
+        render: (code: string, record: Attribute) => (
+          <Text strong onClick={() => goToAttributeEdit(record._id)} className="clickable-code">
+            {code}
+          </Text>
+        ),
+      },
+      {
+        title: t('columns.name'),
+        dataIndex: 'name',
+        key: 'name',
+      },
+    ];
+
+    if (isSuperAdmin) {
+      base.push({
+        title: t('columns.branch', { defaultValue: 'Chi nhánh' }),
+        dataIndex: ['branch', 'name'],
+        key: 'branch',
+        width: 200,
+        render: (name: string, record: Attribute) => (
+          <Flex vertical>
+            <Text strong>{name}</Text>
+            <Text type="secondary" style={{ fontSize: '12px' }}>
+              {record.branch?.code}
             </Text>
-          ),
-        },
-        {
-          title: t('columns.name'),
-          dataIndex: 'name',
-          key: 'name',
-        },
-      ];
+          </Flex>
+        ),
+      });
+    }
 
-      if (isSuperAdmin) {
-        base.push({
-          title: t('columns.branch', { defaultValue: 'Chi nhánh' }),
-          dataIndex: ['branch', 'name'],
-          key: 'branch',
-          width: 200,
-          render: (name: string, record: Attribute) => (
-            <Flex vertical>
-              <Text strong>{name}</Text>
-              <Text type="secondary" style={{ fontSize: '12px' }}>{record.branch?.code}</Text>
-            </Flex>
-          )
-        });
-      }
-
-      base.push(
-        {
-          title: t('columns.isMultiple'),
-          dataIndex: 'isMultiple',
-          key: 'isMultiple',
-          align: 'center' as const,
-          render: (val: boolean, record: Attribute) =>
-            val ? (
-              <Flex vertical gap={2} align="center">
-                <Tag color="blue" variant="filled" style={{ width: 'fit-content' }}>
-                  {t('common.yes', { ns: 'translation' })}
-                </Tag>
-                {record.maxSelect > 0 && (
-                  <Text type="secondary" style={{ fontSize: '11px' }}>
-                    {t('columns.maxSelect')}: {record.maxSelect}
-                  </Text>
-                )}
-              </Flex>
-            ) : (
-              <Text type="secondary">-</Text>
-            ),
-        },
-        {
-          title: t('columns.variants'),
-          dataIndex: 'variants',
-          key: 'variants',
-          align: 'center' as const,
-          render: (variants: any[]) => (
-            <Tag color="purple" variant="filled" style={{ borderRadius: '12px' }}>
-              {(variants || []).length}
-            </Tag>
-          ),
-        },
-        {
-          title: t('columns.overridePrice'),
-          dataIndex: 'overridePrice',
-          key: 'overridePrice',
-          align: 'center' as const,
-          render: (val: boolean) =>
-            val ? (
-              <Tag color="orange" variant="filled">
+    base.push(
+      {
+        title: t('columns.isMultiple'),
+        dataIndex: 'isMultiple',
+        key: 'isMultiple',
+        align: 'center' as const,
+        render: (val: boolean, record: Attribute) =>
+          val ? (
+            <Flex vertical gap={2} align="center">
+              <Tag color="blue" variant="filled" style={{ width: 'fit-content' }}>
                 {t('common.yes', { ns: 'translation' })}
               </Tag>
-            ) : (
-              <Text type="secondary">-</Text>
-            ),
-        },
-        {
-          title: t('columns.status'),
-          dataIndex: 'status',
-          key: 'status',
-          align: 'center' as const,
-          render: (status: number) => (
-            <Tag
-              color={status === 1 ? 'success' : 'default'}
-              variant="filled"
-              style={{ borderRadius: '12px' }}
-            >
-              {status === 1 ? t('status.active') : t('status.inactive')}
+              {record.maxSelect > 0 && (
+                <Text type="secondary" style={{ fontSize: '11px' }}>
+                  {t('columns.maxSelect')}: {record.maxSelect}
+                </Text>
+              )}
+            </Flex>
+          ) : (
+            <Text type="secondary">-</Text>
+          ),
+      },
+      {
+        title: t('columns.variants'),
+        dataIndex: 'variants',
+        key: 'variants',
+        align: 'center' as const,
+        render: (variants: any[]) => (
+          <Tag color="purple" variant="filled" style={{ borderRadius: '12px' }}>
+            {(variants || []).length}
+          </Tag>
+        ),
+      },
+      {
+        title: t('columns.overridePrice'),
+        dataIndex: 'overridePrice',
+        key: 'overridePrice',
+        align: 'center' as const,
+        render: (val: boolean) =>
+          val ? (
+            <Tag color="orange" variant="filled">
+              {t('common.yes', { ns: 'translation' })}
             </Tag>
+          ) : (
+            <Text type="secondary">-</Text>
           ),
-        },
-        {
-          title: t('columns.action'),
-          key: 'action',
-          align: 'right' as const,
-          render: (_: unknown, record: Attribute) => (
-            <Space size="small">
-              <PermissionGate module="attribute" action="update">
-                <AppButton type="link" onClick={() => goToAttributeEdit(record._id)}>
-                  {t('common.actions.edit', { ns: 'translation' })}
-                </AppButton>
-              </PermissionGate>
-              <PermissionGate module="attribute" action="delete">
-                <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
-                  {t('common.actions.delete', { ns: 'translation' })}
-                </AppButton>
-              </PermissionGate>
-            </Space>
-          ),
-        }
-      );
+      },
+      {
+        title: t('columns.status'),
+        dataIndex: 'status',
+        key: 'status',
+        align: 'center' as const,
+        render: (status: number) => (
+          <Tag
+            color={status === 1 ? 'success' : 'default'}
+            variant="filled"
+            style={{ borderRadius: '12px' }}
+          >
+            {status === 1 ? t('status.active') : t('status.inactive')}
+          </Tag>
+        ),
+      },
+      {
+        title: t('columns.action'),
+        key: 'action',
+        align: 'right' as const,
+        render: (_: unknown, record: Attribute) => (
+          <Space size="small">
+            <PermissionGate module="attribute" action="update">
+              <AppButton type="link" onClick={() => goToAttributeEdit(record._id)}>
+                {t('common.actions.edit', { ns: 'translation' })}
+              </AppButton>
+            </PermissionGate>
+            <PermissionGate module="attribute" action="delete">
+              <AppButton danger type="link" onClick={() => handleDelete(record._id)}>
+                {t('common.actions.delete', { ns: 'translation' })}
+              </AppButton>
+            </PermissionGate>
+          </Space>
+        ),
+      }
+    );
 
-      return base;
-    },
-    [t, params.page, params.page_size, handleDelete, goToAttributeEdit, isSuperAdmin]
-  );
+    return base;
+  }, [t, params.page, params.page_size, handleDelete, goToAttributeEdit, isSuperAdmin]);
 
   return (
     <div className="attribute-list-wrapper">
       <SEO title={t('title')} />
 
       <div className="sticky-filter">
-        <AppFilter 
-          onReset={resetFilters} 
-          onRefresh={refetch}
-          isLoading={isFetching}
-        >
+        <AppFilter onReset={resetFilters} onRefresh={refetch} isLoading={isFetching}>
           <Col xs={24} md={12}>
             <AppSearchInput
               placeholder={t('filter.keyword')}
@@ -198,7 +193,7 @@ const AttributeList = () => {
           </Col>
           {isSuperAdmin && (
             <Col xs={24} md={6}>
-              <BranchSelect 
+              <BranchSelect
                 value={params.branchId}
                 onChange={handleBranchChange}
                 placeholder={t('filter.branch', { defaultValue: 'Tất cả chi nhánh' })}
@@ -209,7 +204,12 @@ const AttributeList = () => {
       </div>
 
       <AppCard
-        title={t('title')}
+        title={
+          <Flex align="center" gap={8}>
+            <span>{t('title')}</span>
+            <Tag className="card-title-tag">{total}</Tag>
+          </Flex>
+        }
         extra={
           <Space>
             {selectedIds.length > 0 && (
@@ -241,9 +241,9 @@ const AttributeList = () => {
               </Upload>
             </PermissionGate>
             <PermissionGate module="attribute" action="view">
-              <AppButton 
-                icon={<DownloadOutlined />} 
-                onClick={handleExport} 
+              <AppButton
+                icon={<DownloadOutlined />}
+                onClick={handleExport}
                 loading={isLoading && !isFetching}
               >
                 {t('common.actions.export', { ns: 'translation' })}

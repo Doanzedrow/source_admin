@@ -20,6 +20,7 @@ const { Text } = Typography;
 const CategoryList = () => {
   const { 
     data, 
+
     refetch,
     isLoading, 
     isFetching,
@@ -195,7 +196,7 @@ const CategoryList = () => {
           <Flex align="center" gap={8}>
             <span>{t('title')}</span>
             <Tag className="card-title-tag">
-              {data.length}
+              {total}
             </Tag>
           </Flex>
         }

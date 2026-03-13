@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs } from 'antd';
+import { Flex, Tabs, Tag } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { AppCard } from '@/components/common/AppCard';
 import { DateFilter } from '@/components/common/DateFilter';
@@ -17,8 +17,11 @@ export const DashboardOrders: React.FC = () => {
     handlePageChange,
     newOrders,
     depositOrders,
-    draftOrders
+    draftOrders,
   } = useDashboardOrders();
+
+  const activeData = activeTab === 'new' ? newOrders : activeTab === 'deposit' ? depositOrders : draftOrders;
+  const total = activeData.total;
 
   const getPaginationOptions = (total: number) => ({
     current: params.page,
@@ -70,7 +73,14 @@ export const DashboardOrders: React.FC = () => {
   return (
     <AppCard 
       className="dashboard-orders-card" 
-      title={<span style={{ fontWeight: 600 }}>{t('orders.title')}</span>}
+      title={
+        <Flex align="center" gap={8}>
+          <span>{t('orders.title')}</span>
+          <Tag className="card-title-tag">
+            {total}
+          </Tag>
+        </Flex>
+      }
       extra={
         <DateFilter 
           defaultValue="today" 
